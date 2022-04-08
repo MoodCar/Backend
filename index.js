@@ -1,18 +1,16 @@
-// Jenkins Push Test #2
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const express = require('express');
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || 'localhost';
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
+app.get("/", (req, res)=>{
+    res.json({message: "Hello World!"});
+});
 
-app.get('/', (req, res) => {
-    res.send('hello world');
+// 포트넘버 설정
+app.listen(3000, ()=>{
+    console.log("Server is running on port 3000.");
 })
-
-app.listen(PORT,HOST,() => {
-    console.log(`Server Listening on ${HOST}:${PORT}`);
-})
-
-module.exports = app;
