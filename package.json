@@ -12,7 +12,8 @@
     "mocha": "^9.2.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start" : "nodemon index.js"
   },
   "repository": {
     "type": "git",
