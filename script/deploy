@@ -1,5 +1,4 @@
 #!/bin/sh
-ssh ubuntu@3.39.17.18 <<EOF
     cd ~/Backend
     git pull origin master
     curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
