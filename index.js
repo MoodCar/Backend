@@ -1,16 +1,6 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-
+const express = require('express');
+const cors = require('cors');
 const app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.get("/", (req, res)=>{
-    res.json({message: "Hello World!"});
-});
-
-// 포트넘버 설정
-app.listen(3000, ()=>{
-    console.log("Server is running on port 3000.");
-})
+app.use(express.json());
+app.get('/', (req, res) => res.send('linked!'));
+app.listen(3000, () => console.log('Server Up and running at 3000'));
