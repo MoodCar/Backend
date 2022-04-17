@@ -58,7 +58,7 @@ passport.use(new GoogleStrategy({
 function(request, accessToken, refreshToken, profile, done) {
     console.log(accessToken);
     console.log(profile);
-    sql.query("SELECT * FROM user WHERE providerId = ?",[profile.id], 
+    sql.query("SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?",[profile.id], 
     (err,user) => {
         if(err){
             return done(err);
@@ -66,11 +66,11 @@ function(request, accessToken, refreshToken, profile, done) {
         else if(user[0]== undefined){
 
             let newUser = {
+                email : profile.emails[0].value,
+                name : profile.displayName,
                 provider : profile.provider,
                 providerId : profile.id,
                 token : accessToken,
-                name : profile.displayName,
-                email : profile.emails[0].value
             };
 
             sql.query("INSERT INTO user (email,name,token,provider,providerId) VALUES ( ?,?,?,?,?)",
@@ -89,7 +89,7 @@ function(request, accessToken, refreshToken, profile, done) {
 ));
 
 
-/*app.get('/', (req, res) => res.json({message : "Server Linked!"}));*/
+app.get('/', (req, res) => res.json({message : "Server Linked!"}));
 require("./routes/user.routes.js")(app);
 require("./routes/google.routes.js")(app);
 
