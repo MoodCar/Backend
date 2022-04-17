@@ -92,5 +92,7 @@ function(request, accessToken, refreshToken, profile, done) {
 app.get('/', (req, res) => res.json({message : "Server Linked!"}));
 require("./routes/user.routes.js")(app);
 require("./routes/google.routes.js")(app);
+require("./routes/diary.routes.js")(app);
+
 
 app.listen(3000, () => console.log('Server Up and running at 3000'));
