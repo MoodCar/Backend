@@ -7,7 +7,7 @@ exports.write = (req, res)=> {
         if(res2.length === 0){
             res.json({
                 isSuccess: false,
-                code: 400,
+                code: 404,
                 message: "ID does not exist."
             })
         }else{
