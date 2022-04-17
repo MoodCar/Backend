@@ -8,14 +8,14 @@ exports.write = (req, res)=> {
             res.json({
                 isSuccess: false,
                 code: 400,
-                message: "존재하지 않는 아이디입니다."
+                message: "ID does not exist."
             })
         }else{
             if(diary.content === ""){
                 res.json({
                     isSuccess: false,
                     code: 400,
-                    message: "일기 내용을 작성해주시기 바랍니다."
+                    message: "Please write a diary content."
                 })
             }else{
                 sql.query("select * from diary where providerId = ? and written_date = curdate()",
@@ -24,14 +24,14 @@ exports.write = (req, res)=> {
                     res.json({
                         isSuccess: false,
                         code: 400,
-                        message: "이미 오늘 일기를 작성하셨습니다."
+                        message: "You already wrote today's diary."
                     })
                 }else{
                      Diary.write(req.params.providerId, diary,(err,data) => {
                         if(err){
                             res.status(400).send({
                                 message:
-                                err.message || "일기 작성 요청 오류"
+                                err.message || "Diary request error"
                             });
                         }
                         else res.json({
