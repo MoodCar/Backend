@@ -11,7 +11,7 @@ Diary.write = (providerId,diary,result)=>{
       if (err) {
         res.status(400).send({
             message:
-            err.message || "일기 작성 요청 오류"
+            err.message || "Diary request error"
         });
       } 
     console.log("diary:",res.insertId);
