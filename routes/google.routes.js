@@ -10,10 +10,13 @@ module.exports = (app) => {
   // google login 성공과 실패 리다이렉트
   app.get(
     "/auth/google/callback",
-    passport.authenticate("google", {
-      failureRedirect: "/auth/google/fail",
-      successRedirect: "/auth/google/success"
-    }),
+      passport.authenticate("google", {
+        failureRedirect: "/auth/google/fail"
+      }),
+      function(req,res){
+        console.log(req.query);
+        res.status(200).redirect("http://localhost:3000");
+      }
   );
 
   app.get("/auth/google/fail",(req,res) => {
