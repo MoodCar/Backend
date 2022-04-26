@@ -8,17 +8,7 @@ const {
 } = require("../models/diary.model.js");
 const sql = require("../models/db.js");
 
-async function getEmotion(content) {
-  console.log(3);
-  const response = await axios.post("http://3.34.209.23:5000/prediction", {
-    content: content,
-  });
-  console.log(response.data.emotion);
-  console.log(4);
-  return response.data.emotion;
-}
-
-// 일기 작성(수정본)
+// 일기 작성
 exports.write = (req, res) => {
   const diary = new Diary(req.body);
   const idvalid = new idValid(req.body);
@@ -153,7 +143,7 @@ exports.findById = (req,res) => {
               message: "ID does not exist"
           })
       }else{
-          Diary.noList(req.params.providerId,(err,data2)=>{
+          Diary.noList(req.params.providerId,(err,data)=>{
               if(err){
                   res.json({
                       isSuccess: false,
@@ -161,14 +151,14 @@ exports.findById = (req,res) => {
                       message: "request to get diary by providerId is incorrect or corrupt"
                   });
               }
-              if(data2 === 0){
+              if(data === 0){
                   res.json({
                       isSuccess: false,
                       code: 400,
                       message: "There is no diary list"
                   });
               }else{
-                  Diary.getById(req.params.providerId,(err,data3) => {
+                  Diary.getById(req.params.providerId,(err,data) => {
                       if(err){
                           res.json({
                               isSuccess: false,
@@ -179,7 +169,7 @@ exports.findById = (req,res) => {
                           res.json({
                               isSuccess: true,
                               code: 200,
-                              data3
+                              data
                           });
                       }
                   });             
