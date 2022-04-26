@@ -111,66 +111,61 @@ exports.delete = (req, res) => {
             data,
           });
         }
-<<<<<<< HEAD
-    });
-};
-
-// Diary 사용자 아이디 별 조회
-exports.findById = (req,res) => {
-    const idvalid = new idValid(req.body);
-    idValid.validate(req.params.providerId,idvalid,(err,data)=>{
-        if(err){
-            res.json({
-                isSuccess: false,
-                code: 400,
-                message: "request to get diary by providerId is incorrect or corrupt"
-            });
-        }
-        if(data === 0){
-            res.json({
-                isSuccess: false,
-                code: 404,
-                message: "ID does not exist"
-            })
-        }else{
-            Diary.noList(req.params.providerId,(err,data2)=>{
-                if(err){
-                    res.json({
-                        isSuccess: false,
-                        code: 400,
-                        message: "request to get diary by providerId is incorrect or corrupt"
-                    });
-                }
-                if(data2 === 0){
-                    res.json({
-                        isSuccess: false,
-                        code: 400,
-                        message: "There is no diary list"
-                    });
-                }else{
-                    Diary.getById(req.params.providerId,(err,data3) => {
-                        if(err){
-                            res.json({
-                                isSuccess: false,
-                                code: 400,
-                                message: "request to get diary by providerId is incorrect or corrupt"
-                            });
-                        }else{
-                            res.json({
-                                isSuccess: true,
-                                code: 200,
-                                data3
-                            });
-                        }
-                    });             
-                }
-            });
-        }
-    });
-};
-=======
       });
     }
   });
 };
->>>>>>> fcb4c962303ae008f95c40e54b7b3276c4a0af95
+
+// Diary 사용자 아이디 별 조회
+exports.findById = (req,res) => {
+  const idvalid = new idValid(req.body);
+  idValid.validate(req.params.providerId,idvalid,(err,data)=>{
+      if(err){
+          res.json({
+              isSuccess: false,
+              code: 400,
+              message: "request to get diary by providerId is incorrect or corrupt"
+          });
+      }
+      if(data === 0){
+          res.json({
+              isSuccess: false,
+              code: 404,
+              message: "ID does not exist"
+          })
+      }else{
+          Diary.noList(req.params.providerId,(err,data2)=>{
+              if(err){
+                  res.json({
+                      isSuccess: false,
+                      code: 400,
+                      message: "request to get diary by providerId is incorrect or corrupt"
+                  });
+              }
+              if(data2 === 0){
+                  res.json({
+                      isSuccess: false,
+                      code: 400,
+                      message: "There is no diary list"
+                  });
+              }else{
+                  Diary.getById(req.params.providerId,(err,data3) => {
+                      if(err){
+                          res.json({
+                              isSuccess: false,
+                              code: 400,
+                              message: "request to get diary by providerId is incorrect or corrupt"
+                          });
+                      }else{
+                          res.json({
+                              isSuccess: true,
+                              code: 200,
+                              data3
+                          });
+                      }
+                  });             
+              }
+          });
+      }
+  });
+};
