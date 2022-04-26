@@ -61,6 +61,16 @@ Diary.alreadyExist = (providerId,result) =>{
   });
 };
 
+Diary.noList = (providerId,result) =>{
+  sql.query("Select * from diary where providerId = ?",providerId,(err,res)=>{
+    if(res.length === 0){
+      result(null,0);
+    }else{
+      result(null,1);
+    }
+  });
+};
+
 Diary.write = (providerId,diary,result)=>{
     sql.query("INSERT INTO diary(providerId,content) values (?,?)",
     [providerId,diary.content],(err, res)=>{
@@ -100,6 +110,20 @@ Diary.delete = (id, result)=>{
       });
     }
     //console.log("diary:",res);
+    result(null, res);
+  });
+};
+
+Diary.getById = (providerId, result)=>{
+  sql.query("Select * from diary where providerId = ? ", providerId, (err, res)=>{
+    if(err){
+      res.json({
+        isSuccess: false,
+        code: 400,
+        message: "request to get diary by providerId is incorrect or corrupt"
+      });
+    }
+    console.log("diary by providerId:",res);
     result(null, res);
   });
 };
