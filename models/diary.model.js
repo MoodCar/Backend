@@ -114,6 +114,19 @@ Diary.getById = (providerId, result)=>{
   });
 };
 
+Diary.updateEmotion = (id,emotion,result) => {
+  sql.query("update diary set emotion = ? where id = ?",[emotion,id],(err,res) => {
+    if(err){
+      res.json({
+        isSuccess : false,
+        code : 400,
+        message : "request to update emotion by diaryId is incorrect or corrupt"
+      });
+    }
+    result(null,res);
+  });
+};
+
 module.exports = {
   Diary,
   idValid,

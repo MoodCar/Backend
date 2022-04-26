@@ -72,11 +72,22 @@ exports.write = (req, res) => {
                         content: req.body.content,
                       }
                     ).then((response)=>{
-                      res.json({
-                        isSuccess: true,
-                        code: 200,
-                        emotion: response.data.emotion,
-                      });
+                      Diary.updateEmotion(data,response.data.emotion,(err) =>{
+                        if(err){
+                          res.json({
+                            isSuccess: false,
+                            code: 400,
+                            message: "request to create diary is incorrect or corrupt",
+                          });
+                        }
+                        else{
+                          res.json({
+                            isSuccess: true,
+                            code: 200,
+                            emotion: response.data.emotion,
+                          });
+                        }
+                      })
                     })
                   };
                 })
