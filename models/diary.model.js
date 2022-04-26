@@ -61,6 +61,7 @@ Diary.alreadyExist = (providerId,result) =>{
   });
 };
 
+<<<<<<< HEAD
 Diary.noList = (providerId,result) =>{
   sql.query("Select * from diary where providerId = ?",providerId,(err,res)=>{
     if(res.length === 0){
@@ -84,8 +85,10 @@ Diary.write = (providerId,diary,result)=>{
     result(null, res.insertId);
     });
 };
+=======
+>>>>>>> fcb4c962303ae008f95c40e54b7b3276c4a0af95
 
-Diary.write2 = (providerId,diary,result)=>{
+Diary.write = (providerId,diary,result)=>{
   sql.query("INSERT INTO diary(providerId,content) values (?,?)",
   [providerId,diary.content],(err, res)=>{
   if(err){
