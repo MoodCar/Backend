@@ -61,21 +61,8 @@ Diary.alreadyExist = (providerId,result) =>{
   });
 };
 
-Diary.write = (providerId,diary,result)=>{
-    sql.query("INSERT INTO diary(providerId,content) values (?,?)",
-    [providerId,diary.content],(err, res)=>{
-      if (err) {
-        res.status(400).send({
-            message:
-            err.message || "Diary request error"
-        });
-      } 
-    console.log("diary:",res.insertId);
-    result(null, res.insertId);
-    });
-};
 
-Diary.write2 = (providerId,diary,result)=>{
+Diary.write = (providerId,diary,result)=>{
   sql.query("INSERT INTO diary(providerId,content) values (?,?)",
   [providerId,diary.content],(err, res)=>{
   if(err){
