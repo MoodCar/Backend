@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const {
   Diary,
   idValid,
@@ -5,6 +7,16 @@ const {
   contentExist,
 } = require("../models/diary.model.js");
 const sql = require("../models/db.js");
+
+async function getEmotion(content) {
+  console.log(3);
+  const response = await axios.post("http://3.34.209.23:5000/prediction", {
+    content: content,
+  });
+  console.log(response.data.emotion);
+  console.log(4);
+  return response.data.emotion;
+}
 
 // 일기 작성(수정본)
 exports.write = (req, res) => {
@@ -63,20 +75,27 @@ exports.write = (req, res) => {
                     code: 400,
                     message: "request to create diary is incorrect or corrupt",
                   });
-                } else
-                  res.json({
-                    isSuccess: true,
-                    code: 200,
-                    data,
-                  });
-              });
+                } else {
+                    axios.post(
+                      "http://3.34.209.23:5000/prediction",
+                      {
+                        content: req.body.content,
+                      }
+                    ).then((response)=>{
+                      res.json({
+                        isSuccess: true,
+                        code: 200,
+                        emotion: response.data.emotion,
+                      });
+                    })
+                  };
+                })
+              }});
             }
           });
         }
       });
     }
-  });
-};
 
 // Diary 아이디 별 삭제
 exports.delete = (req, res) => {
