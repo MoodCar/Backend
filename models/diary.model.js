@@ -61,21 +61,17 @@ Diary.alreadyExist = (providerId,result) =>{
   });
 };
 
-Diary.write = (providerId,diary,result)=>{
-    sql.query("INSERT INTO diary(providerId,content) values (?,?)",
-    [providerId,diary.content],(err, res)=>{
-      if (err) {
-        res.status(400).send({
-            message:
-            err.message || "Diary request error"
-        });
-      } 
-    console.log("diary:",res.insertId);
-    result(null, res.insertId);
-    });
+Diary.noList = (providerId,result) =>{
+  sql.query("Select * from diary where providerId = ?",providerId,(err,res)=>{
+    if(res.length === 0){
+      result(null,0);
+    }else{
+      result(null,1);
+    }
+  });
 };
 
-Diary.write2 = (providerId,diary,result)=>{
+Diary.write = (providerId,diary,result)=>{
   sql.query("INSERT INTO diary(providerId,content) values (?,?)",
   [providerId,diary.content],(err, res)=>{
   if(err){
@@ -101,6 +97,33 @@ Diary.delete = (id, result)=>{
     }
     //console.log("diary:",res);
     result(null, res);
+  });
+};
+
+Diary.getById = (providerId, result)=>{
+  sql.query("Select * from diary where providerId = ? ", providerId, (err, res)=>{
+    if(err){
+      res.json({
+        isSuccess: false,
+        code: 400,
+        message: "request to get diary by providerId is incorrect or corrupt"
+      });
+    }
+    console.log("diary by providerId:",res);
+    result(null, res);
+  });
+};
+
+Diary.updateEmotion = (id,emotion,result) => {
+  sql.query("update diary set emotion = ? where id = ?",[emotion,id],(err,res) => {
+    if(err){
+      res.json({
+        isSuccess : false,
+        code : 400,
+        message : "request to update emotion by diaryId is incorrect or corrupt"
+      });
+    }
+    result(null,res);
   });
 };
 
