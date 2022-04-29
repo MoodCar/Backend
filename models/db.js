@@ -2,12 +2,7 @@ const mysql = require("mysql");
 const dbConfig = require("../config/dbconfig.js");
 
 // 데이터베이스 connection 객체 생성
-const connection = mysql.createConnection({
-    host: dbConfig.HOST,
-    user: dbConfig.USER,
-    password: dbConfig.PASSWORD,
-    database: dbConfig.DB
-});
+const connection = mysql.createConnection(dbConfig);
 
 
 connection.connect(function(err){
@@ -15,7 +10,7 @@ connection.connect(function(err){
         // mysqlErrorHandling(connection, err);
         console.log("\n\t *** Cannot establish a connection with the database. ***");
 
-        connection = reconnect(connection);
+        reconnect(connection);
     }else {
         console.log("\n\t *** New connection established with the database. ***")
     }
@@ -29,7 +24,7 @@ function reconnect(connection){
     if(connection) connection.destroy();
 
     //- Create a new one
-    var connection = mysql_npm.createConnection(db_config);
+    connection = mysql.createConnection(dbConfig);
 
     //- Try to reconnect
     connection.connect(function(err){
@@ -49,19 +44,19 @@ connection.on('error', function(err) {
     //- The server close the connection.
     if(err.code === "PROTOCOL_CONNECTION_LOST"){    
         console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
-        connection = reconnect(connection);
+        reconnect(connection);
     }
 
     //- Connection in closing
     else if(err.code === "PROTOCOL_ENQUEUE_AFTER_QUIT"){
         console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
-        connection = reconnect(connection);
+        reconnect(connection);
     }
 
     //- Fatal error : connection variable must be recreated
     else if(err.code === "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR"){
         console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
-        connection = reconnect(connection);
+        reconnect(connection);
     }
 
     //- Error because a connection is already being established
@@ -72,7 +67,7 @@ connection.on('error', function(err) {
     //- Anything else
     else{
         console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
-        connection = reconnect(connection);
+        reconnect(connection);
     }
 
 });
