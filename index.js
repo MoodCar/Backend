@@ -95,6 +95,5 @@ require("./routes/google.routes.js")(app);
 require("./routes/diary.routes.js")(app);
 
 
-app.listen(3000, () => console.log('Server Up and running at 3000'));
 
 module.exports = app;

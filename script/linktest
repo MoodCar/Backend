@@ -1,2 +1,2 @@
 #!/bin/bash
-./node_modules/.bin/mocha ./test/test.linked.js --exit
+npm test ./test/test.linked.js --exit
