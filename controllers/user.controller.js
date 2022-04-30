@@ -1,15 +1,21 @@
 const User = require("../models/user.model.js");
 
 
-// User 전체 조회
-exports.findAll = (req,res) => {
-    User.getAll((err,data) => {
-        if(err){
-            res.status(500).send({
-                message:
-                err.message || "Some error occurred while retrieving users"
-            });
-        }
-        else res.send(data);
-    });
+// 전체 유저의 정보 조회
+exports.findAll = async function(req,res) {
+
+    const userInfo = await User.getAllUser();
+    if (!userInfo){
+        return res.status(400).send({
+            isSuccess : false,
+            code : 400,
+            message : "Failed to get Information of Users"
+        })
+    }
+
+    return res.status(200).send({
+        userInfo,
+        isSuccess : true,
+        code : 200,
+    })
 };
