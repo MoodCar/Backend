@@ -1,24 +1,24 @@
-const sql = require("./db.js");
+const {pool} = require("./db.js");
 
-const User = function(user){
-    this.email = user.email;
-    this.location = user.location;
-    this.auth = user.auth;
-}
+// 전체 유저의 정보 조회
 
-// User 전체 조회
-User.getAll = (result) =>{
-    sql.query('SELECT * FROM user',(err,res) => {
-        if(err){
-            console.log("error:",err);
-            result(err,null);
-            return;
+exports.getAllUser = async function(){
+    try{
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log(`##### Connection_pool_GET #####`);
+        try{
+            const getUserQuery = "SELECT * FROM user";
+            const [row] = await connection.query(getUserQuery);
+            connection.release();
+            return row;
+        } catch(err){
+            console.error(`##### getAllUser Query error ##### `);
+            connection.release();
+            return false;
         }
 
-        console.log("user:",res);
-        result(null,res);
-    });
+    }catch(err){
+        console.error(`##### getAllUser DB error #####`);
+        return false;
+    }
 };
-
-
-module.exports = User;
