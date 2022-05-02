@@ -17,7 +17,7 @@ module.exports = (app) => {
       }),
       function(req,res){
         console.log(req.query);
-        res.status(200).redirect("http://localhost:3000");
+        res.status(200).redirect("/checklogin");
       }
   );
 

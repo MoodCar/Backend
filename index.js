@@ -4,6 +4,7 @@ const MySQLStore = require("express-mysql-session")(session);
 const passport = require('passport')
 ,GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const googleconfig = require('./config/googleconfig.js');
 const dbConfig_session = require("./config/dbconfig.session.js");
@@ -11,6 +12,11 @@ const {pool} = require("./models/db.js");
 
 const app = express();
 
+let corsOptions = {
+    origin : 'http://localhost:3000',
+    credentials:true
+}
+app.use(corsOptions);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -77,13 +83,16 @@ async function(request, accessToken, refreshToken, profile, done) {
                 try{
                     const makeNewUserQuery = "SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?";
                     let params = [newUser.email,newUser.name,newUser.token,newUser.provider,newUser.providerId];
-                    let [row] = await connection.query(makeNewUserQuery,params);
+                    await connection.query(makeNewUserQuery,params);
+                    connection.release();
                     return done(null,newUser);
                 }catch{
+                    connection.release();
                     console.log(err);
                 }
             }
             else{
+                connection.release();
                 return done(null,row);
             }
         } catch(err){
@@ -92,6 +101,7 @@ async function(request, accessToken, refreshToken, profile, done) {
             return false;
         }
     }catch(err){
+        connection.release();
         return done(err);
     } 
 

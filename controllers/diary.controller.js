@@ -1,13 +1,55 @@
-const axios = require("axios");
+const Diary = require("../models/diary.model.js");
 
-const {
-  Diary,
-  idValid,
-  diaryIdValid,
-  contentExist,
-} = require("../models/diary.model.js");
-const sql = require("../models/db.js");
+exports.WriteDiary = async function (req,res){
 
+  if(req.body.content < 10 || req.body.content > 10000 || !req.body.content){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Please check content input."
+    })
+  }
+  const checkDiary = await Diary.diaryCheck(req.params.providerId);
+  if(!checkDiary){
+    console.log(1);
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Failed to write diary.(Internal error)"
+    })
+  }
+  else if(checkDiary == "idCheck"){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Check id value."
+    })
+  }
+  else if (checkDiary == "duplicateCheck"){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "You already wrote diary today."
+    })
+  }
+
+  const writeDiary = await Diary.diaryWrite(req.params.providerId,req.body.content);
+  if(Array.isArray(writeDiary) && writeDiary.length === 0){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Failed to write diary.(Internal error2)"
+    })
+  }
+
+  return res.status(200).send({
+    writeDiary,
+    isSuccess : true,
+    code : 200,
+  })
+}
+
+/*
 // 일기 작성
 exports.write = (req, res) => {
   const diary = new Diary(req.body);
@@ -188,4 +230,4 @@ exports.findById = (req,res) => {
           });
       }
   });
-};
+};*/
