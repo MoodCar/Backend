@@ -1,31 +1,105 @@
-const sql = require("./db.js");
+const { pool } = require("./db.js");
+const axios = require("axios");
 
-const Diary = function(diary){
-    this.providerId = diary.providerId;
-    this.content = diary.content;
-}
-
-const idValid = function(idvalid){
-  this.valid = idvalid.valid;
-}
-
-idValid.validate = (providerId,idvalid,result)=>{
-  sql.query("select * from user where providerId = ?",providerId,(err,res)=>{
-    if(res.length === 0){
-      idvalid.valid = 0;
-      result(null,idvalid.valid);
-    }else{
-      idvalid.valid = 1;
-      result(null,idvalid.valid);
+exports.diaryCheck = async function (providerId) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const idValidationQuery = "select * from user where providerId = ?";
+      let params = [providerId];
+      let [row] = await connection.query(idValidationQuery, params);
+      if (!row) {
+        connection.release();
+        return "idCheck";
+      }
+      try {
+        const duplicateCheckQuery =
+          "select * from diary where providerId = ? and written_date = curdate()";
+        let params = [providerId];
+        let [row] = await connection.query(duplicateCheckQuery, params);
+        if (Array.isArray(row) && row.length === 0) {
+          connection.release();
+          return true;
+        } else {
+          connection.release();
+          return "duplicateCheck";
+        }
+      } catch {
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
+      }
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
     }
-  });
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
 };
 
-const diaryIdValid = function(diaryidvalid){
-  this.valid = diaryidvalid.valid;
-}
+exports.diaryWrite = async function (providerId, content) {
+  axios
+    .post("http://3.34.209.23:5000/prediction", {
+      content: content,
+    })
+    .then((response) => {
+      if (!response) {
+        return false;
+      } else {
+        try {
+          const connection = pool.getConnection(async (conn) => conn);
+          console.log(`##### Connection_pool_GET #####`);
+          try {
+            const writeDiaryQuery =
+              "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
+            const params = [providerId, content, response.data.emotion];
+            let [row] = connection.query(writeDiaryQuery, params);
+            console.log(content);
+            console.log(providerId);
+            console.log(row);
+            if (!row) {
+              connection.release();
+              return false;
+            } else {
+              connection.release();
+              return row;
+            }
+          } catch {
+            console.log('a');
+            console.error(`##### Query error ##### `);
+            connection.release();
+            return false;
+          }
+        } catch {
+          console.error(`##### DB error #####`);
+          return false;
+        }
+      }
 
-diaryIdValid.validate = (id,diaryidvalid,result)=>{
+      /*Diary.updateEmotion(data,response.data.emotion,(err) =>{
+      if(err){
+        res.json({
+          isSuccess: false,
+          code: 400,
+          message: "request to create diary is incorrect or corrupt",
+        });
+      }
+      else{
+        res.json({
+          isSuccess: true,
+          code: 200,
+          emotion: response.data.emotion,
+        });
+      }
+    })*/
+    });
+};
+
+/*diaryIdValid.validate = (id,diaryidvalid,result)=>{
   sql.query("select * from diary where id = ?",id,(err,res)=>{
     if(res.length === 0){
       diaryidvalid.valid = 0;
@@ -132,4 +206,4 @@ module.exports = {
   idValid,
   diaryIdValid,
   contentExist
-};
+};*/
