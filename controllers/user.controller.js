@@ -13,6 +13,14 @@ exports.findAll = async function(req,res) {
         })
     }
 
+    if(Array.isArray(userInfo) && userInfo.length === 0){
+        return res.status(400).send({
+            isSuccess : false,
+            code : 400,
+            message : "Failed to get Information of Users(empty)"
+        })
+    }
+
     return res.status(200).send({
         userInfo,
         isSuccess : true,
