@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const googleconfig = require('./config/googleconfig.js');
 const dbConfig_session = require("./config/dbconfig.session.js");
-const sql = require("./models/db.js");
+const {pool} = require("./models/db.js");
 
 const app = express();
 
@@ -55,10 +55,47 @@ passport.use(new GoogleStrategy({
     callbackURL: googleconfig.redirect_urls,
     passReqToCallback: true,
   },
-function(request, accessToken, refreshToken, profile, done) {
+async function(request, accessToken, refreshToken, profile, done) {
     console.log(accessToken);
     console.log(profile);
-    sql.query("SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?",[profile.id], 
+    try{
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log(`##### Connection_pool_GET #####`);
+
+        try{
+            const getGoogleUserQuery = "SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?";
+            let params = [profile.id];
+            let [row] = await connection.query(getGoogleUserQuery,params);
+            if(!row){
+                let newUser = {
+                    email : profile.emails[0].value,
+                    name : profile.displayName,
+                    provider : profile.provider,
+                    providerId : profile.id,
+                    token : accessToken,
+                };
+                try{
+                    const makeNewUserQuery = "SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?";
+                    let params = [newUser.email,newUser.name,newUser.token,newUser.provider,newUser.providerId];
+                    let [row] = await connection.query(makeNewUserQuery,params);
+                    return done(null,newUser);
+                }catch{
+                    console.log(err);
+                }
+            }
+            else{
+                return done(null,row);
+            }
+        } catch(err){
+            console.error(`##### getAllUser Query error ##### `);
+            connection.release();
+            return false;
+        }
+    }catch(err){
+        return done(err);
+    } 
+
+    /*sql.query("SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?",[profile.id], 
     (err,user) => {
         if(err){
             return done(err);
@@ -84,7 +121,7 @@ function(request, accessToken, refreshToken, profile, done) {
         else{
             return done(null,user);
         }
-    });
+    });*/
   }
 ));
 
