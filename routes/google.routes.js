@@ -13,11 +13,11 @@ module.exports = (app) => {
   app.get(
     "/auth/google/callback",
       passport.authenticate("google", {
-        failureRedirect: "/auth/google/fail"
+        failureRedirect: "/auth/google/fail", session : true
       }),
       function(req,res){
         console.log(req.query);
-        res.status(200).redirect("http://localhost:3000");
+        return res.redirect("http://localhost:3000");
       }
   );
 
@@ -30,12 +30,11 @@ module.exports = (app) => {
   // logout
   app.get("/logout", (req, res) => {
     req.logout();
-    res.redirect("/auth/google");
+    return res.redirect("http://localhost:3000");
   });
 
   // login check 
   app.get("/checklogin", (req,res) => {
-
     if(!req.user){
       res.status(400).send({
         isSuccess : false,
