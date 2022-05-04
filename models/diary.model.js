@@ -7,18 +7,18 @@ exports.diaryCheck = async function (providerId) {
     console.log(`##### Connection_pool_GET #####`);
     try {
       const idValidationQuery = "select * from user where providerId = ?";
-      let params = [providerId];
-      let [row] = await connection.query(idValidationQuery, params);
-      if (!row) {
+      let params = providerId;
+      let row = await connection.query(idValidationQuery,params);
+      if (row[0] == '') {
         connection.release();
         return "idCheck";
       }
       try {
         const duplicateCheckQuery =
           "select * from diary where providerId = ? and written_date = curdate()";
-        let params = [providerId];
-        let [row] = await connection.query(duplicateCheckQuery, params);
-        if (Array.isArray(row) && row.length === 0) {
+        let params = providerId;
+        let row = await connection.query(duplicateCheckQuery, params);
+        if (Array.isArray(row[0]) && row[0].length === 0) {
           connection.release();
           return true;
         } else {
@@ -41,63 +41,49 @@ exports.diaryCheck = async function (providerId) {
   }
 };
 
-exports.diaryWrite = async function (providerId, content) {
-  axios
-    .post("http://3.34.209.23:5000/prediction", {
-      content: content,
-    })
-    .then((response) => {
-      if (!response) {
-        return false;
-      } else {
-        try {
-          const connection = pool.getConnection(async (conn) => conn);
-          console.log(`##### Connection_pool_GET #####`);
-          try {
-            const writeDiaryQuery =
-              "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
-            const params = [providerId, content, response.data.emotion];
-            let [row] = connection.query(writeDiaryQuery, params);
-            console.log(content);
-            console.log(providerId);
-            console.log(row);
-            if (!row) {
-              connection.release();
-              return false;
-            } else {
-              connection.release();
-              return row;
-            }
-          } catch {
-            console.log('a');
-            console.error(`##### Query error ##### `);
-            connection.release();
-            return false;
-          }
-        } catch {
-          console.error(`##### DB error #####`);
-          return false;
-        }
-      }
 
-      /*Diary.updateEmotion(data,response.data.emotion,(err) =>{
-      if(err){
-        res.json({
-          isSuccess: false,
-          code: 400,
-          message: "request to create diary is incorrect or corrupt",
-        });
+
+
+
+exports.diaryWrite = async function(providerId, content) {
+ 
+    try {
+      const connection = await pool.getConnection(async (conn) => conn);
+      console.log(`##### Connection_pool_GET #####`);
+      try {
+        let data = null;
+        return axios
+          .post("http://3.34.209.23:5000/prediction", {
+            content: content,
+          })
+          .then(async function(response){
+            if (!response) {
+              return false;
+            }else{
+              const writeDiaryQuery =
+              "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
+              const params = [providerId, content, response.data.emotion];
+              let row = await connection.query(writeDiaryQuery, params);
+              if(row[0] == ''){
+                return false;
+              }else{
+                data = row[0];
+                return data;
+              }
+            }
+      });
+    }catch{
+          console.log('a');
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
       }
-      else{
-        res.json({
-          isSuccess: true,
-          code: 200,
-          emotion: response.data.emotion,
-        });
-      }
-    })*/
-    });
-};
+    }catch {
+      console.error(`##### DB error #####`);
+      return false;
+    }
+   
+  };
 
 /*diaryIdValid.validate = (id,diaryidvalid,result)=>{
   sql.query("select * from diary where id = ?",id,(err,res)=>{

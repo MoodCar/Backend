@@ -2,7 +2,7 @@ const Diary = require("../models/diary.model.js");
 
 exports.WriteDiary = async function (req,res){
 
-  if(req.body.content < 10 || req.body.content > 10000 || !req.body.content){
+  if(req.body.content.length < 10 || req.body.content.length > 10000 || !req.body.content){
     return res.status(400).send({
       isSuccess : false,
       code : 400,
@@ -44,6 +44,7 @@ exports.WriteDiary = async function (req,res){
 
   return res.status(200).send({
     writeDiary,
+    message: 'Writing diary is successfully done',
     isSuccess : true,
     code : 200,
   })
