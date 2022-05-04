@@ -1,5 +1,6 @@
 const Diary = require("../models/diary.model.js");
 
+// 일기 작성
 exports.WriteDiary = async function (req,res){
 
   if(req.body.content.length < 10 || req.body.content.length > 10000 || !req.body.content){
@@ -11,39 +12,38 @@ exports.WriteDiary = async function (req,res){
   }
   const checkDiary = await Diary.diaryCheck(req.params.providerId);
   if(!checkDiary){
-    console.log(1);
-    return res.status(400).send({
+    return res.status(500).send({
       isSuccess : false,
-      code : 400,
-      message : "Failed to write diary.(Internal error)"
+      code : 500,
+      message : "Failed to write diary.(checkDiary)"
     })
   }
   else if(checkDiary == "idCheck"){
-    return res.status(400).send({
+    return res.status(404).send({
       isSuccess : false,
-      code : 400,
+      code : 404,
       message : "Check id value."
     })
   }
   else if (checkDiary == "duplicateCheck"){
-    return res.status(400).send({
+    return res.status(409).send({
       isSuccess : false,
-      code : 400,
+      code : 409,
       message : "You already wrote diary today."
     })
   }
 
-  const writeDiary = await Diary.diaryWrite(req.params.providerId,req.body.content);
-  if(Array.isArray(writeDiary) && writeDiary.length === 0){
-    return res.status(400).send({
+  const writeResult = await Diary.diaryWrite(req.params.providerId,req.body.content);
+  if(!writeResult){
+    return res.status(500).send({
       isSuccess : false,
-      code : 400,
-      message : "Failed to write diary.(Internal error2)"
+      code : 500,
+      message : "Failed to write diary.(writeDiary)"
     })
   }
 
   return res.status(200).send({
-    writeDiary,
+    writeResult,
     message: 'Writing diary is successfully done',
     isSuccess : true,
     code : 200,

@@ -12,13 +12,13 @@ exports.getAllUser = async function(){
             connection.release();
             return row;
         } catch(err){
-            console.error(`##### getAllUser Query error ##### `);
+            console.error(`##### Query error ##### `);
             connection.release();
             return false;
         }
 
     }catch(err){
-        console.error(`##### getAllUser DB error #####`);
+        console.error(`##### DB error #####`);
         return false;
     }
 };

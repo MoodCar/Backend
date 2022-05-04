@@ -8,29 +8,24 @@ exports.diaryCheck = async function (providerId) {
     try {
       const idValidationQuery = "select * from user where providerId = ?";
       let params = providerId;
-      let row = await connection.query(idValidationQuery,params);
-      if (row[0] == '') {
+      let [row] = await connection.query(idValidationQuery,params);
+      if (Array.isArray(row) && row.length === 0) {
         connection.release();
         return "idCheck";
       }
-      try {
-        const duplicateCheckQuery =
-          "select * from diary where providerId = ? and written_date = curdate()";
-        let params = providerId;
-        let row = await connection.query(duplicateCheckQuery, params);
-        if (Array.isArray(row[0]) && row[0].length === 0) {
-          connection.release();
-          return true;
-        } else {
-          connection.release();
-          return "duplicateCheck";
-        }
-      } catch {
-        console.error(`##### Query error ##### `);
+      const duplicateCheckQuery =
+        "select * from diary where providerId = ? and written_date = curdate()";
+      params = providerId;
+      [row] = await connection.query(duplicateCheckQuery, params);
+      if (Array.isArray(row) && row.length === 0) {
         connection.release();
-        return false;
+        return true;
+      } else {
+        connection.release();
+        return "duplicateCheck";
       }
-    } catch {
+    }
+     catch {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
@@ -42,38 +37,26 @@ exports.diaryCheck = async function (providerId) {
 };
 
 
-
-
-
 exports.diaryWrite = async function(providerId, content) {
- 
     try {
       const connection = await pool.getConnection(async (conn) => conn);
       console.log(`##### Connection_pool_GET #####`);
       try {
-        let data = null;
-        return axios
-          .post("http://3.34.209.23:5000/prediction", {
-            content: content,
+        const response = await axios.post("http://3.34.209.23:5000/prediction", {
+            content: content
           })
-          .then(async function(response){
-            if (!response) {
-              return false;
-            }else{
-              const writeDiaryQuery =
-              "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
-              const params = [providerId, content, response.data.emotion];
-              let row = await connection.query(writeDiaryQuery, params);
-              if(row[0] == ''){
-                return false;
-              }else{
-                data = row[0];
-                return data;
-              }
-            }
-      });
-    }catch{
-          console.log('a');
+          const writeDiaryQuery =
+          "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
+          let params = [providerId, content, response.data.emotion];
+          let [row] = await connection.query(writeDiaryQuery, params);
+          params = row.insertId;
+          const getInsertedDiaryQuery =
+          "select id,content,emotion from diary where id = ?";
+          [row] = await connection.query(getInsertedDiaryQuery,params);
+          connection.release();
+          return row;  
+      }
+    catch{
         console.error(`##### Query error ##### `);
         connection.release();
         return false;

@@ -12,6 +12,7 @@
     "express-session": "^1.17.2",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "jest": "^28.0.3",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.15",
@@ -26,7 +27,7 @@
     "mocha": "^9.2.2"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha --exit",
+    "test": "NODE_ENV=test mocha --timeout 10000 --exit",
     "teststart": "NODE_ENV=test nodemon server.js",
     "start": "NODE_ENV=development nodemon server.js"
   },

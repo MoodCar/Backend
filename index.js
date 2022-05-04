@@ -115,34 +115,6 @@ passport.use(
         connection.release();
         return done(err);
       }
-
-      /*sql.query("SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?",[profile.id], 
-    (err,user) => {
-        if(err){
-            return done(err);
-        }
-        else if(user[0]== undefined){
-
-            let newUser = {
-                email : profile.emails[0].value,
-                name : profile.displayName,
-                provider : profile.provider,
-                providerId : profile.id,
-                token : accessToken,
-            };
-
-            sql.query("INSERT INTO user (email,name,token,provider,providerId) VALUES ( ?,?,?,?,?)",
-            [newUser.email,newUser.name,newUser.token,newUser.provider,newUser.providerId],(err,rows) => {
-                if(err){
-                    console.log(err);
-                }
-                return done(null,newUser);
-            })
-        }
-        else{
-            return done(null,user);
-        }
-    });*/
     }
   )
 );
