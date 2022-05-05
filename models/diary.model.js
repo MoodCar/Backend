@@ -1,31 +1,24 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
 
-exports.diaryCheck = async function (providerId) {
+// providerId 유효성 체크
+exports.providerIdCheck = async function (providerId) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
       const idValidationQuery = "select * from user where providerId = ?";
       let params = providerId;
-      let [row] = await connection.query(idValidationQuery,params);
+      let [row] = await connection.query(idValidationQuery, params);
       if (Array.isArray(row) && row.length === 0) {
         connection.release();
         return "idCheck";
       }
-      const duplicateCheckQuery =
-        "select * from diary where providerId = ? and written_date = curdate()";
-      params = providerId;
-      [row] = await connection.query(duplicateCheckQuery, params);
-      if (Array.isArray(row) && row.length === 0) {
+      else{
         connection.release();
         return true;
-      } else {
-        connection.release();
-        return "duplicateCheck";
       }
-    }
-     catch {
+    } catch {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
@@ -36,203 +29,136 @@ exports.diaryCheck = async function (providerId) {
   }
 };
 
-
-exports.diaryWrite = async function(providerId, content) {
-    try {
-      const connection = await pool.getConnection(async (conn) => conn);
-      console.log(`##### Connection_pool_GET #####`);
-      try {
-        const response = await axios.post("http://3.34.209.23:5000/prediction", {
-            content: content
-          })
-          const writeDiaryQuery =
-          "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
-          let params = [providerId, content, response.data.emotion];
-          let [row] = await connection.query(writeDiaryQuery, params);
-          params = row.insertId;
-          const getInsertedDiaryQuery =
-          "select id,content,emotion from diary where id = ?";
-          [row] = await connection.query(getInsertedDiaryQuery,params);
-          connection.release();
-          return row;  
-      }
-    catch{
-        console.error(`##### Query error ##### `);
-        connection.release();
-        return false;
-      }
-    }catch {
-      console.error(`##### DB error #####`);
-      return false;
-    }
-   
-  };
-
-
-
-  exports.diaryIdCheck = async function(id) {
+// providerId 중복 체크 (오늘 작성한 일기가 존재하는지)
+exports.diaryDuplicateCheck = async function(providerId){
+  try{
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
     try{
-      const connection = await pool.getConnection(async (conn) => conn);
-      console.log(`##### Connection_pool_GET #####`);
-      try{
-        const diaryIdValidationQuery = "select * from diary where id = ?";
-        let params = id;
-        let row = await connection.query(diaryIdValidationQuery,params);
-        if (row[0] == '') {
-          connection.release();
-          return "diaryIdCheck";
-        }else{
-          return true;
-        }
-      }catch {
-        console.error(`##### Query error ##### `);
+      const duplicateCheckQuery =
+        "select * from diary where providerId = ? and written_date = curdate()";
+      let params = providerId;
+      let [row] = await connection.query(duplicateCheckQuery, params);
+      if (Array.isArray(row) && row.length === 0) {
         connection.release();
-        return false;
+        return true;
+      } else {
+        connection.release();
+        return "duplicateCheck";
       }
-    }catch {
-      console.error(`##### DB error #####`);
+    }catch{
+      console.error(`##### Query error ##### `);
+      connection.release();
       return false;
     }
+  }catch{
+    console.error(`##### DB error #####`);
+    return false;
   }
+}
 
-
-
-  exports.diaryDelete = async function (id) {
+// 일기 작성
+exports.diaryWrite = async function (providerId, content) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
     try {
-      const connection = await pool.getConnection(async (conn) => conn);
-      console.log(`##### Connection_pool_GET #####`);
-      try {
-        const deleteDiaryQuery = "delete from diary where id = ?";
-        let params = id;
-        let row = await connection.query(deleteDiaryQuery,params);
-        console.log(row[0]);
-        if (row[0] == '') {
-          connection.release();
-          return false;
-        }else{
-          connection.release();
-          return row[0];
-        }
-      } catch {
-        console.error(`##### Query error ##### `);
+      const response = await axios.post("http://3.34.209.23:5000/prediction", {
+        content: content,
+      });
+      const writeDiaryQuery =
+        "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
+      let params = [providerId, content, response.data.emotion];
+      let [row] = await connection.query(writeDiaryQuery, params);
+      params = row.insertId;
+      const getInsertedDiaryQuery =
+        "select id,content,emotion from diary where id = ?";
+      [row] = await connection.query(getInsertedDiaryQuery, params);
+      connection.release();
+      return row;
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
+
+// 존재하는 일기인지 체크
+exports.diaryIdCheck = async function (id) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const diaryIdValidationQuery = "select * from diary where id = ?";
+      let params = id;
+      let [row] = await connection.query(diaryIdValidationQuery, params);
+      if (Array.isArray(row) && row.length === 0) {
+        connection.release();
+        return "diaryIdCheck";
+      } else {
+        connection.release();
+        return true;
+      }
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
+
+// 일기 삭제
+exports.diaryDelete = async function (id) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const deleteDiaryQuery = "delete from diary where id = ?";
+      let params = id;
+      let [row] = await connection.query(deleteDiaryQuery, params);
+      if (row.affectedRows == 1) {
+        connection.release();
+        return true;
+      } else {
         connection.release();
         return false;
       }
     } catch {
-      console.error(`##### DB error #####`);
+      console.error(`##### Query error ##### `);
+      connection.release();
       return false;
     }
-  };
-
-
-  
-
-
-/*diaryIdValid.validate = (id,diaryidvalid,result)=>{
-  sql.query("select * from diary where id = ?",id,(err,res)=>{
-    if(res.length === 0){
-      diaryidvalid.valid = 0;
-      result(null,diaryidvalid.valid);
-    }else{
-      diaryidvalid.valid = 1;
-      result(null,diaryidvalid.valid);
-    }
-  });
-};
-
-const contentExist = function(contentexist){
-  this.exist = contentexist.exist;
-}
-
-contentExist.isExist = (content,contentexist,result) =>{
-  if(content === ""){
-    contentexist.exist = 0;
-    result(null,contentexist.exist);
-  }else{
-    contentexist.exist = 1;
-    result(null,contentexist.exist);
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
   }
 };
 
-Diary.alreadyExist = (providerId,result) =>{
-  sql.query("select * from diary where providerId = ? and written_date = curdate()",providerId,(err,res)=>{
-    if(res.length !== 0){
-      result(null,0);
-    }else{
-      result(null,1);
+// providerId별 일기 조회
+exports.getDiaryByProviderId = async function (providerId) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const getDiaryQuery = "select * from diary where providerId = ?";
+      let params = providerId;
+      let [row] = await connection.query(getDiaryQuery, params);
+      connection.release();
+      return row;
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
     }
-  });
-};
-
-Diary.noList = (providerId,result) =>{
-  sql.query("Select * from diary where providerId = ?",providerId,(err,res)=>{
-    if(res.length === 0){
-      result(null,0);
-    }else{
-      result(null,1);
-    }
-  });
-};
-
-Diary.write = (providerId,diary,result)=>{
-  sql.query("INSERT INTO diary(providerId,content) values (?,?)",
-  [providerId,diary.content],(err, res)=>{
-  if(err){
-      res.json({
-        isSuccess: false,
-        code: 400,
-        message: "request to create diary is incorrect or corrupt"
-      });
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
   }
-  //console.log("diary:",res.insertId);
-  result(null, res.insertId);
-  });
 };
-
-Diary.delete = (id, result)=>{
-  sql.query("DELETE FROM diary WHERE id = ?", id, (err, res)=>{
-    if(err){
-      res.json({
-        isSuccess: false,
-        code: 400,
-        message: "request to delete diary by diaryID is incorrect or corrupt"
-      });
-    }
-    //console.log("diary:",res);
-    result(null, res);
-  });
-};
-
-Diary.getById = (providerId, result)=>{
-  sql.query("Select * from diary where providerId = ? ", providerId, (err, res)=>{
-    if(err){
-      res.json({
-        isSuccess: false,
-        code: 400,
-        message: "request to get diary by providerId is incorrect or corrupt"
-      });
-    }
-    console.log("diary by providerId:",res);
-    result(null, res);
-  });
-};
-
-Diary.updateEmotion = (id,emotion,result) => {
-  sql.query("update diary set emotion = ? where id = ?",[emotion,id],(err,res) => {
-    if(err){
-      res.json({
-        isSuccess : false,
-        code : 400,
-        message : "request to update emotion by diaryId is incorrect or corrupt"
-      });
-    }
-    result(null,res);
-  });
-};
-
-module.exports = {
-  Diary,
-  idValid,
-  diaryIdValid,
-  contentExist
-};*/

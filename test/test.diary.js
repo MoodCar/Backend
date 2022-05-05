@@ -1,85 +1,194 @@
-const request= require('supertest');
-const app = require('../index');
-const assert = require("assert");
+const request = require("supertest");
+const app = require("../index");
+const should = require("should");
+const { pool } = require("../models/db.js");
+
+let Content = { content: "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다." };
+
+async function setTest() {
+    try{
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log(`##### Connection_pool_GET #####`);
+        try{
+            const setTestQuery = "alter table diary auto_increment = 4";
+            await connection.query(setTestQuery);
+        }catch{
+            console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+        }
+    }catch{
+        console.error(`##### DB error #####`);
+    return false;
+    }
+    
+}
+
+setTest();
 
 
-let invalidContent = { "content" : "안녕하세요"};
+describe('GET /diaries/:providerId', () => {
+    it('존재하지 않는 사용자의 일기목록을 가져오는 Test', (done) =>{
+        request(app)
+        .get('/diaries/238470982750914324')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Check id value.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('GET /diaries/:providerId', () => {
+    it('작성된 일기가 없는 사용자의 일기목록 가져오는 Test', (done) =>{
+        request(app)
+        .get('/diaries/785681234')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Diary doesn't exist.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
 
 describe('POST /diaries', () => {
-    it('일기 작성 Test (존재하지 않는 providerId test.)', async() =>{
+    it('일기 작성 Test (존재하지 않는 providerId test.)', (done) =>{
         request(app)
         .post('/diaries/1231231124435')
-        .expect('Content-Type',/json/)
-        .expect(404)
-        .expect(function(err,res){
-            if(err) throw err;
-            assert.equal(res.body,{
-                isSuccess : false,
-                code : 404,
-                message : "Check id value."
-              });
-        })
-    })
-})
+        .send(Content)
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Check id value.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
 
 describe('POST /diaries', () => {
-    it('일기 작성 Test (잘못된 Content)', async() =>{
+    it('일기 작성 Test (잘못된 Content)', (done) =>{
         request(app)
         .post('/diaries/785681234')
-        .expect('Content-Type',/json/)
-        .expect(400)
-        .expect(function(err,res){
-            if(err) throw err;
-            assert.equal(res.body,{
-                isSuccess : false,
-                code : 400,
-                message : "Please check content input."
-              });
-        })
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(400);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Please check content input.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('POST /diaries', () => {
+    it('성공적인 일기 작성 Test', (done) =>{
         request(app)
         .post('/diaries/785681234')
-        .send(invalidContent)
-        .expect('Content-Type',/json/)
-        .expect(400)
-        .expect(function(err,res){
-            if(err) throw err;
-            assert.equal(res.body,{
-                isSuccess : false,
-                code : 400,
-                message : "Please check content input."
-              });
-        })
-    })
-})
+        .send(Content)
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body).should.have.property('writeResult');
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            should.exist(res.body.writeResult[0].id);
+            should.exist(res.body.writeResult[0].emotion);
+            should.exist(res.body.writeResult[0].content);
+            console.log(res.body);
+            done();
+        });
+    });
+});
 
 
 describe('POST /diaries', () => {
-    it('성공적인 일기 작성 Test', async() =>{
+    it('일기 중복 작성 Test', (done) =>{
         request(app)
         .post('/diaries/785681234')
-        .expect('Content-Type',/json/)
-        .expect(200)
-        .expect(function(err,res){
-            if(err) throw err;
-            assert.equal(res.body.isSuccess,true);
-            assert.notEqual(res.body.diaryResult,[]);
-        })
-    })
-})
+        .send(Content)
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(409);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("You already wrote diary today.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
 
-describe('POST /diaries', () => {
-    it('일기 중복 작성 Test (하루에 1개 초과 작성)', async() =>{
+describe('GET /diaries/:providerId', () => {
+    it('일기 목록을 성공적으로 가져오는 Test', (done) =>{
         request(app)
-        .post('/diaries/785681234')
-        .expect('Content-Type',/json/)
-        .expect(409)
-        .expect(function(err,res){
-            if(err) throw err;
-            assert.equal(res.body,{
-                isSuccess : false,
-                code : 409,
-                message : "You already wrote diary today."
-              });
-        })
-    })
-})
+        .get('/diaries/785681234')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body).should.have.property('fetchResult');
+            should.exist(res.body.fetchResult[0].id);
+            should.exist(res.body.fetchResult[0].emotion);
+            should.exist(res.body.fetchResult[0].content);
+            should.exist(res.body.fetchResult[0].providerId);
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('DELETE /diaries/:providerId', () => {
+    it('존재하지 않는 일기를 삭제하는 Test', (done) =>{
+        request(app)
+        .delete('/diaries/details/4575234231')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Check Diary id value.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+
+
+describe('DELETE /diaries/:providerId', () => {
+    it('일기를 정상적으로 삭제하는 Test', (done) =>{
+        request(app)
+        .delete('/diaries/details/4')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body.message).should.be.equal("Deleting diary is successfully done");
+            console.log(res.body);
+            done();
+        });
+    });
+});
