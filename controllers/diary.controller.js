@@ -50,6 +50,44 @@ exports.WriteDiary = async function (req,res){
   })
 }
 
+
+
+
+exports.delete = async function (req,res){
+
+  const checkDiaryId = await Diary.diaryIdCheck(req.params.id);
+  if(!checkDiaryId){
+    console.log(1);
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Failed to delete diary.(Internal error)"
+    })
+  }
+  else if(checkDiaryId == "diaryIdCheck"){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Check Diary id value."
+    })
+  }
+
+  const deleteDiary = await Diary.diaryDelete(req.params.id);
+  if(deleteDiary === false){
+    return res.status(400).send({
+      isSuccess : false,
+      code : 400,
+      message : "Failed to delete diary.(Internal error2)"
+    })
+  }
+
+  return res.status(200).send({
+    deleteDiary,
+    message: 'Deleting diary is successfully done',
+    isSuccess : true,
+    code : 200,
+  })
+}
 /*
 // 일기 작성
 exports.write = (req, res) => {

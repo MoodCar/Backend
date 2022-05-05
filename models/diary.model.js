@@ -68,6 +68,66 @@ exports.diaryWrite = async function(providerId, content) {
    
   };
 
+
+
+  exports.diaryIdCheck = async function(id) {
+    try{
+      const connection = await pool.getConnection(async (conn) => conn);
+      console.log(`##### Connection_pool_GET #####`);
+      try{
+        const diaryIdValidationQuery = "select * from diary where id = ?";
+        let params = id;
+        let row = await connection.query(diaryIdValidationQuery,params);
+        if (row[0] == '') {
+          connection.release();
+          return "diaryIdCheck";
+        }else{
+          return true;
+        }
+      }catch {
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
+      }
+    }catch {
+      console.error(`##### DB error #####`);
+      return false;
+    }
+  }
+
+
+
+  exports.diaryDelete = async function (id) {
+    try {
+      const connection = await pool.getConnection(async (conn) => conn);
+      console.log(`##### Connection_pool_GET #####`);
+      try {
+        const deleteDiaryQuery = "delete from diary where id = ?";
+        let params = id;
+        let row = await connection.query(deleteDiaryQuery,params);
+        console.log(row[0]);
+        if (row[0] == '') {
+          connection.release();
+          return false;
+        }else{
+          connection.release();
+          return row[0];
+        }
+      } catch {
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
+      }
+    } catch {
+      console.error(`##### DB error #####`);
+      return false;
+    }
+  };
+
+
+  
+
+
 /*diaryIdValid.validate = (id,diaryidvalid,result)=>{
   sql.query("select * from diary where id = ?",id,(err,res)=>{
     if(res.length === 0){
