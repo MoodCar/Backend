@@ -32,9 +32,10 @@ CREATE TABLE diary (
     REFERENCES user (providerId) on delete cascade
 );
 
-insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트","google","123124435","qeklnklviqoebbzscklb12312445");
+insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트1","google","123124435","qeklnklviqoebbzscklb12312445");
 insert into user(email,name,provider,providerId,token) values ("qwesad123@gmail.com","테스트2","google","435624563","snklfnalknk123ehilg123756i1z");
 insert into user(email,name,provider,providerId,token) values ("bnlik4tn21@gmail.com","테스트3","google","906457842","v2b98by98c189xhiu5ninanklas");
+insert into user(email,name,provider,providerId,token) values ("46nklnszc@gmail.com","테스트4","google","785681234","43btvny981y98cn1noihjnroiqw");
 
 insert into diary(providerId,content) values ("123124435","그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.");
 insert into diary(providerId,content) values ("435624563","내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.");

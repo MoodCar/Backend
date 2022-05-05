@@ -6,9 +6,9 @@ exports.findAll = async function(req,res) {
 
     const userInfo = await User.getAllUser();
     if (!userInfo){
-        return res.status(400).send({
+        return res.status(500).send({
             isSuccess : false,
-            code : 400,
+            code : 500,
             message : "Failed to get Information of Users"
         })
     }
