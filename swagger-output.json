@@ -1,0 +1,345 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Moodcar",
+    "description": "Moodcar의 Express 서버 API",
+    "version": "1.0.0"
+  },
+  "host": "http://ec2-3-39-17-18.ap-northeast-2.compute.amazonaws.com",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/google": {
+      "get": {
+        "tags": ["Authorization"],
+        "summary": "구글 로그인 호출 API",
+        "description": "구글 로그인 API입니다. 호출 시 구글 인증 페이지로 Redirect됩니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirect to auth/google/callback"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "tags": ["Authorization"],
+        "summary": "구글 로그인 Callback API",
+        "description": "구글 로그인 성공 시에 자동으로 호출되는 Callback API입니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirect to Original Location"
+          },
+          "400": {
+            "description": "Redirect to auth/google/fail"
+          }
+        }
+      }
+    },
+    "/auth/google/fail": {
+      "get": {
+        "tags": ["Authorization"],
+        "summary": "구글 인증 실패 Callback API",
+        "description": "구글 로그인 실패 시 호출되는 콜백API입니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirect to auth/google"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": ["Authorization"],
+        "summary": "로그아웃 API",
+        "description": "인증 세션을 종료하는 로그아웃 API입니다",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirect to Original Location"
+          }
+        }
+      }
+    },
+    "/checklogin": {
+      "get": {
+        "tags": ["Authorization"],
+        "summary": "인증 세션 확인 및 유저 정보",
+        "description": "로그인 상태를 확인하고, 로그인되어 있다면 해당 유저의 정보를 받아옵니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "email": "test@gmail.com",
+                "name": "테스트",
+                "provider": "google",
+                "providerId": "1452389578978927435",
+                "token": "423uncy091nu7b098x17bn039vy48eun0tu12xm908h89"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Login Required."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "전체 사용자 정보",
+        "description": "전체 사용자의 정보를 받아옵니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "userInfo": [
+                  {
+                    "email": "test@gmail.com",
+                    "name": "테스트",
+                    "provider": "google",
+                    "providerId": "12312443546424335",
+                    "token": "qeklnklviqoebbzscklb12312445",
+                    "auth": 0,
+                    "reg_date": "2022-05-04T15:00:00.000Z"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (empty)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Failed to get Information of Users(empty)"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get Information of Users"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaries/{providerId}": {
+      "post": {
+        "tags": ["Diary"],
+        "summary": "일기 작성",
+        "description": "새로운 일기를 작성하는 API입니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "일기를 작성할 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Content",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK ( 아직은 Emotion파트만 구현되어있어서, 추후에 hashtag도 추가될 예정)",
+            "schema": {
+              "example": {
+                "writeResult": [
+                  {
+                    "id": 4,
+                    "content": "제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복"
+                  }
+                ],
+                "message": "Writing diary is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request ( 일기 내용(Request Body)이 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check content input."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found ( 존재하지 않는 사용자 ID에 대한 일기 작성 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 409,
+                "message": "You already wrote diary today."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to write diary."
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Diary"],
+        "summary": "사용자별 일기 정보",
+        "description": "해당 사용자의 일기 작성 기록을 받아오는 API입니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "해당 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK ( hashtag나 contents 등은 추후에 구현시 null 이외의 값 대입 예정)",
+            "schema": {
+              "example": {
+                "fetchResult": [
+                  {
+                    "id": 4,
+                    "providerId": "230570871073345",
+                    "content": "제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복",
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": null,
+                    "hashtag_2": null,
+                    "hashtag_3": null,
+                    "written_date": "2022-05-05T15:00:00.000Z"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found ( 해당 유저가 일기를 작성한 기록이 없거나, 존재하지 않는 providerId에 대한 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value. / Diary doesn't exist"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get diary.(getDiaryByProviderId)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaries/details/{id}": {
+      "delete": {
+        "tags": ["Diary"],
+        "summary": "일기 삭제",
+        "description": "일기를 삭제하는 API입니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "삭제할 일기의 ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "deleteResult": true,
+                "message": "Deleting diary is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found ( 존재하지 않는 일기 삭제 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check Diary id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to delete diary."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

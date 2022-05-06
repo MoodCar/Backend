@@ -5,10 +5,12 @@ const passport = require("passport"),
   GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
 const googleconfig = require("./config/googleconfig.js");
 const dbConfig_session = require("./config/dbconfig.session.js");
 const { pool } = require("./models/db.js");
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-output.json');
 
 const app = express();
 
@@ -80,7 +82,6 @@ passport.use(
             "SELECT email,name,provider,providerId,token FROM user WHERE providerId = ?";
           let params = [profile.id];
           let [row] = await connection.query(getGoogleUserQuery, params);
-          console.log(row.length);
           if (!row.length) {
             let newUser = {
               email: profile.emails[0].value,
@@ -123,5 +124,7 @@ app.get("/", (req, res) => res.json({ message: "Server Linked!" }));
 require("./routes/user.routes.js")(app);
 require("./routes/google.routes.js")(app);
 require("./routes/diary.routes.js")(app);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = app;
