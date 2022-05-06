@@ -70,7 +70,7 @@ exports.diaryWrite = async function (providerId, content) {
         let hashtag1 = "스케이트";
         let hashtag2 = "독서";
         let hashtag3 = "공부";
-        
+
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
         let params = [providerId, content, response.data.emotion, hashtag1,hashtag2,hashtag3];
@@ -97,13 +97,13 @@ exports.diaryWrite = async function (providerId, content) {
 };
 
 // 존재하는 일기인지 체크
-exports.diaryIdCheck = async function (id) {
+exports.diaryIdCheck = async function (Id) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
       const diaryIdValidationQuery = "select * from diary where id = ?";
-      let params = id;
+      let params = Id;
       let [row] = await connection.query(diaryIdValidationQuery, params);
       if (Array.isArray(row) && row.length === 0) {
         connection.release();
@@ -124,13 +124,13 @@ exports.diaryIdCheck = async function (id) {
 };
 
 // 일기 삭제
-exports.diaryDelete = async function (id) {
+exports.diaryDelete = async function (Id) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
       const deleteDiaryQuery = "delete from diary where id = ?";
-      let params = id;
+      let params = Id;
       let [row] = await connection.query(deleteDiaryQuery, params);
       if (row.affectedRows == 1) {
         connection.release();
@@ -171,3 +171,25 @@ exports.getDiaryByProviderId = async function (providerId) {
     return false;
   }
 };
+
+// Id별 일기 세부 내용 조회
+exports.getDiaryById = async function (Id){
+  try{
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try{
+      const getDiaryByIdQuery = "select * from diary where Id = ?";
+      let params = Id;
+      let [row] = await connection.query(getDiaryByIdQuery,params);
+      connection.release();
+      return row;
+    } catch{
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  }catch{
+    console.error(`##### DB error #####`);
+    return false;
+  }
+}

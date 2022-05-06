@@ -44,6 +44,23 @@ describe('GET /diaries/:providerId', () => {
     });
 });
 
+describe('GET /diaries/details/:Id', () => {
+    it('존재하지 않는 일기의 세부 내용을 가져오는 Test', (done) =>{
+        request(app)
+        .get('/diaries/details/238470982750914324')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Check Diary id value.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
 describe('GET /diaries/:providerId', () => {
     it('작성된 일기가 없는 사용자의 일기목록 가져오는 Test', (done) =>{
         request(app)
@@ -61,7 +78,7 @@ describe('GET /diaries/:providerId', () => {
     });
 });
 
-describe('POST /diaries', () => {
+describe('POST /diaries/:providerId', () => {
     it('일기 작성 Test (존재하지 않는 providerId test.)', (done) =>{
         request(app)
         .post('/diaries/1231231124435')
@@ -79,7 +96,7 @@ describe('POST /diaries', () => {
     });
 });
 
-describe('POST /diaries', () => {
+describe('POST /diaries/:providerId', () => {
     it('일기 작성 Test (잘못된 Content)', (done) =>{
         request(app)
         .post('/diaries/785681234')
@@ -96,7 +113,7 @@ describe('POST /diaries', () => {
     });
 });
 
-describe('POST /diaries', () => {
+describe('POST /diaries/:providerId', () => {
     it('성공적인 일기 작성 Test', (done) =>{
         request(app)
         .post('/diaries/785681234')
@@ -121,7 +138,7 @@ describe('POST /diaries', () => {
 });
 
 
-describe('POST /diaries', () => {
+describe('POST /diaries/:providerId', () => {
     it('일기 중복 작성 Test', (done) =>{
         request(app)
         .post('/diaries/785681234')
@@ -163,7 +180,31 @@ describe('GET /diaries/:providerId', () => {
     });
 });
 
-describe('DELETE /diaries/:providerId', () => {
+describe('GET /diaries/details/:Id', () => {
+    it('일기의 세부 내용을 성공적으로 가져오는 Test', (done) =>{
+        request(app)
+        .get('/diaries/details/4')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body).should.have.property('fetchResult');
+            should.exist(res.body.fetchResult[0].id);
+            should.exist(res.body.fetchResult[0].emotion);
+            should.exist(res.body.fetchResult[0].content);
+            should.exist(res.body.fetchResult[0].providerId);
+            should.exist(res.body.fetchResult[0].hashtag_1);
+            should.exist(res.body.fetchResult[0].hashtag_2);
+            should.exist(res.body.fetchResult[0].hashtag_3);
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('DELETE /diaries/details/:Id', () => {
     it('존재하지 않는 일기를 삭제하는 Test', (done) =>{
         request(app)
         .delete('/diaries/details/4575234231')
@@ -182,7 +223,7 @@ describe('DELETE /diaries/:providerId', () => {
 
 
 
-describe('DELETE /diaries/:providerId', () => {
+describe('DELETE /diaries/details/:Id', () => {
     it('일기를 정상적으로 삭제하는 Test', (done) =>{
         request(app)
         .delete('/diaries/details/4')

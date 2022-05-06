@@ -342,6 +342,65 @@
             }
           }
         }
+      },
+      "get":{
+        "tags" : ["Diary"],
+        "summary" : "일기 세부 내용 조회",
+        "description" : "일기 Id로 해당 일기의 세부 내용을 조회하는 API입니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "조회할 일기의 ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses" : {
+          "200":{
+            "description" : "OK",
+            "schema" : {
+              "example" : {
+                "fetchResult": [
+                  {
+                    "id": 4,
+                    "providerId": "230570871073345",
+                    "content": "제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복",
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": "운동",
+                    "hashtag_2": "빨래",
+                    "hashtag_3": "독서",
+                    "written_date": "2022-05-05T15:00:00.000Z"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404" : {
+            "description": "Not Found ( 존재하지 않는 일기 조회 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check Diary id value."
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get diary detail."
+              }
+            }
+          }
+        }
       }
     }
   }

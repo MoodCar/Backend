@@ -129,3 +129,35 @@ exports.fetchDiary = async function (req, res) {
     code: 200,
   });
 };
+
+// 해당 일기의 세부 내용 가져오기
+exports.fetchDiaryDetail = async function (req,res) {
+  const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
+  if (!diaryIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diary.(diaryIdCheck)",
+    });
+  } else if (diaryIdCheck == "diaryIdCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check Diary id value.",
+    });
+  }
+
+  const fetchResult = await Diary.getDiaryById(req.params.id);
+  if(!fetchResult){
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diary detail.(getDiaryById)",
+    });
+  }
+  return res.status(200).send({
+    fetchResult,
+    isSuccess : true,
+    code : 200,
+  })
+}
