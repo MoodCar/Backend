@@ -24,7 +24,9 @@ exports.writeDiary = async function (req, res) {
     });
   }
 
-  const diaryDuplicateCheck = await Diary.diaryDuplicateCheck(req.params.providerId);
+  const diaryDuplicateCheck = await Diary.diaryDuplicateCheck(
+    req.params.providerId
+  );
   if (!diaryDuplicateCheck) {
     return res.status(500).send({
       isSuccess: false,
@@ -54,6 +56,55 @@ exports.writeDiary = async function (req, res) {
   return res.status(200).send({
     writeResult,
     message: "Writing diary is successfully done",
+    isSuccess: true,
+    code: 200,
+  });
+};
+
+// 일기 수정
+exports.updateDiary = async function (req, res) {
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "Please check content input.",
+    });
+  }
+
+  const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
+  if (!diaryIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update Diary.(diaryIdCheck)",
+    });
+  } else if (diaryIdCheck == "diaryIdCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check Diary id value.",
+    });
+  }
+
+  const updateResult = await Diary.diaryUpdate(req.params.id, req.body.content);
+  if (!updateResult) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update diary.(diaryUpdwate)",
+    });
+  }
+  else if(updateResult == "UpdateFail"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "Can't Update. (original value and updating value is same)"
+    })
+  }
+
+  return res.status(200).send({
+    updateResult,
+    message: "Updating diary is successfully done",
     isSuccess: true,
     code: 200,
   });
@@ -94,7 +145,7 @@ exports.deleteDiary = async function (req, res) {
 };
 
 // providerId별 일기 목록 가져오기
-exports.fetchDiary = async function (req, res) {
+exports.fetchDiaryByProviderId = async function (req, res) {
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
@@ -131,13 +182,13 @@ exports.fetchDiary = async function (req, res) {
 };
 
 // 해당 일기의 세부 내용 가져오기
-exports.fetchDiaryDetail = async function (req,res) {
+exports.fetchDiaryDetailById = async function (req, res) {
   const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
   if (!diaryIdCheck) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
-      message: "Failed to get diary.(diaryIdCheck)",
+      message: "Failed to get diary detail.(diaryIdCheck)",
     });
   } else if (diaryIdCheck == "diaryIdCheck") {
     return res.status(404).send({
@@ -148,7 +199,7 @@ exports.fetchDiaryDetail = async function (req,res) {
   }
 
   const fetchResult = await Diary.getDiaryById(req.params.id);
-  if(!fetchResult){
+  if (!fetchResult) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
@@ -157,7 +208,7 @@ exports.fetchDiaryDetail = async function (req,res) {
   }
   return res.status(200).send({
     fetchResult,
-    isSuccess : true,
-    code : 200,
-  })
-}
+    isSuccess: true,
+    code: 200,
+  });
+};

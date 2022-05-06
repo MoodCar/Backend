@@ -73,7 +73,14 @@ exports.diaryWrite = async function (providerId, content) {
 
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
-        let params = [providerId, content, response.data.emotion, hashtag1,hashtag2,hashtag3];
+        let params = [
+          providerId,
+          content,
+          response.data.emotion,
+          hashtag1,
+          hashtag2,
+          hashtag3,
+        ];
         let [row] = await connection.query(writeDiaryQuery, params);
         params = row.insertId;
         const getInsertedDiaryQuery =
@@ -87,7 +94,58 @@ exports.diaryWrite = async function (providerId, content) {
         return false;
       }
     } catch (err) {
-      console.error(`##### Axios Get Error ##### `);
+      console.error(`##### Axios Error ##### `);
+      return "fetchError";
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
+
+// 일기 수정
+exports.diaryUpdate = async function (Id, content) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const response = await axios.post("http://3.34.209.23:5000/prediction", {
+        content: content,
+      });
+      try {
+        let hashtag1 = "스케이트";
+        let hashtag2 = "독서";
+        let hashtag3 = "공부";
+
+        const updateDiaryQuery =
+          "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ? where Id = ? ";
+        let params = [
+          content,
+          response.data.emotion,
+          hashtag1,
+          hashtag2,
+          hashtag3,
+          Id,
+        ];
+        let [row] = await connection.query(updateDiaryQuery, params);
+        if (row.changedRows == 1) {
+          params = Id;
+          const getUpdatedDiaryQuery =
+            "select id,content,emotion,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+          [row] = await connection.query(getUpdatedDiaryQuery, params);
+          connection.release();
+          return row;
+        } else {
+          connection.release();
+          return "UpdateFail";
+        }
+      } catch {
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
+      }
+    } catch {
+      console.error(`##### Axios Error ##### `);
       return "fetchError";
     }
   } catch {
@@ -173,23 +231,23 @@ exports.getDiaryByProviderId = async function (providerId) {
 };
 
 // Id별 일기 세부 내용 조회
-exports.getDiaryById = async function (Id){
-  try{
+exports.getDiaryById = async function (Id) {
+  try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
-    try{
+    try {
       const getDiaryByIdQuery = "select * from diary where Id = ?";
       let params = Id;
-      let [row] = await connection.query(getDiaryByIdQuery,params);
+      let [row] = await connection.query(getDiaryByIdQuery, params);
       connection.release();
       return row;
-    } catch{
+    } catch {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
     }
-  }catch{
+  } catch {
     console.error(`##### DB error #####`);
     return false;
   }
-}
+};
