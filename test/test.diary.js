@@ -111,6 +111,9 @@ describe('POST /diaries', () => {
             should.exist(res.body.writeResult[0].id);
             should.exist(res.body.writeResult[0].emotion);
             should.exist(res.body.writeResult[0].content);
+            should.exist(res.body.writeResult[0].hashtag_1);
+            should.exist(res.body.writeResult[0].hashtag_2);
+            should.exist(res.body.writeResult[0].hashtag_3);
             console.log(res.body);
             done();
         });
@@ -151,6 +154,9 @@ describe('GET /diaries/:providerId', () => {
             should.exist(res.body.fetchResult[0].emotion);
             should.exist(res.body.fetchResult[0].content);
             should.exist(res.body.fetchResult[0].providerId);
+            should.exist(res.body.fetchResult[0].hashtag_1);
+            should.exist(res.body.fetchResult[0].hashtag_2);
+            should.exist(res.body.fetchResult[0].hashtag_3);
             console.log(res.body);
             done();
         });

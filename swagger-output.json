@@ -181,7 +181,10 @@
                   {
                     "id": 4,
                     "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복"
+                    "emotion": "행복",
+                    "hashtag_1" : "스케이트",
+                    "hashtag_2" : "독서",
+                    "hashtag_3" : "공부"
                   }
                 ],
                 "message": "Writing diary is successfully done",
@@ -258,9 +261,9 @@
                     "emotion": "행복",
                     "contents_id": null,
                     "counselor_id": null,
-                    "hashtag_1": null,
-                    "hashtag_2": null,
-                    "hashtag_3": null,
+                    "hashtag_1": "운동",
+                    "hashtag_2": "빨래",
+                    "hashtag_3": "독서",
                     "written_date": "2022-05-05T15:00:00.000Z"
                   }
                 ],

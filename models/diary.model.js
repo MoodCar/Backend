@@ -13,8 +13,7 @@ exports.providerIdCheck = async function (providerId) {
       if (Array.isArray(row) && row.length === 0) {
         connection.release();
         return "idCheck";
-      }
-      else{
+      } else {
         connection.release();
         return true;
       }
@@ -30,11 +29,11 @@ exports.providerIdCheck = async function (providerId) {
 };
 
 // providerId 중복 체크 (오늘 작성한 일기가 존재하는지)
-exports.diaryDuplicateCheck = async function(providerId){
-  try{
+exports.diaryDuplicateCheck = async function (providerId) {
+  try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
-    try{
+    try {
       const duplicateCheckQuery =
         "select * from diary where providerId = ? and written_date = curdate()";
       let params = providerId;
@@ -46,16 +45,16 @@ exports.diaryDuplicateCheck = async function(providerId){
         connection.release();
         return "duplicateCheck";
       }
-    }catch{
+    } catch {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
     }
-  }catch{
+  } catch {
     console.error(`##### DB error #####`);
     return false;
   }
-}
+};
 
 // 일기 작성
 exports.diaryWrite = async function (providerId, content) {
@@ -66,20 +65,30 @@ exports.diaryWrite = async function (providerId, content) {
       const response = await axios.post("http://3.34.209.23:5000/prediction", {
         content: content,
       });
-      const writeDiaryQuery =
-        "INSERT INTO diary(providerId,content,emotion) values (?,?,?)";
-      let params = [providerId, content, response.data.emotion];
-      let [row] = await connection.query(writeDiaryQuery, params);
-      params = row.insertId;
-      const getInsertedDiaryQuery =
-        "select id,content,emotion from diary where id = ?";
-      [row] = await connection.query(getInsertedDiaryQuery, params);
-      connection.release();
-      return row;
-    } catch {
-      console.error(`##### Query error ##### `);
-      connection.release();
-      return false;
+      try {
+        // Dummy data. 실제 해시태그 구현 시 교체 필요.
+        let hashtag1 = "스케이트";
+        let hashtag2 = "독서";
+        let hashtag3 = "공부";
+        
+        const writeDiaryQuery =
+          "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
+        let params = [providerId, content, response.data.emotion, hashtag1,hashtag2,hashtag3];
+        let [row] = await connection.query(writeDiaryQuery, params);
+        params = row.insertId;
+        const getInsertedDiaryQuery =
+          "select id,content,emotion,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+        [row] = await connection.query(getInsertedDiaryQuery, params);
+        connection.release();
+        return row;
+      } catch {
+        console.error(`##### Query error ##### `);
+        connection.release();
+        return false;
+      }
+    } catch (err) {
+      console.error(`##### Axios Get Error ##### `);
+      return "fetchError";
     }
   } catch {
     console.error(`##### DB error #####`);

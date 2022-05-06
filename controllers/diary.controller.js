@@ -43,7 +43,7 @@ exports.writeDiary = async function (req, res) {
     req.params.providerId,
     req.body.content
   );
-  if (!writeResult) {
+  if (!writeResult || writeResult == "fetchError") {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
