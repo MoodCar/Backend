@@ -32,7 +32,8 @@ exports.findAll = async function (req, res) {
   });
 };
 
-exports.getUser = async function (req, res) {
+// 특정 유저의 정보 조회
+exports.getUserInfo = async function (req, res) {
   const providerIdCheck = await User.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
@@ -65,6 +66,7 @@ exports.getUser = async function (req, res) {
   });
 };
 
+// 유저 삭제
 exports.deleteUser = async function (req, res) {
   const providerIdCheck = await User.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
@@ -98,6 +100,7 @@ exports.deleteUser = async function (req, res) {
   });
 };
 
+// 유저 업데이트
 exports.updateUserInfo = async function (req, res) {
   if (isEmpty(req.body.location) || isEmpty(req.body.preference)) {
     return res.status(400).send({

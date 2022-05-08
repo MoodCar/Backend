@@ -28,8 +28,11 @@ async function setTest() {
     return false;
   }
 }
-
-setTest();
+async function testSetting() {
+  await setTest();
+  console.log("Test Setting");
+}
+testSetting();
 
 describe("GET /users", () => {
   it("전체 유저 목록을 가져온다.", (done) => {
@@ -218,9 +221,8 @@ describe("GET /users", () => {
         should.exist(res.body.userInfo[0].token);
         should.not.exist(res.body.userInfo[3]);
         console.log(res.body);
+        testSetting(); // ##### 반드시 옮겨야함 #####
         done();
       });
   });
 });
-
-setTest();

@@ -1,7 +1,6 @@
 const { pool } = require("./db.js");
 
 // 전체 유저의 정보 조회
-
 exports.userGetAll = async function () {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -53,6 +52,7 @@ exports.providerIdCheck = async function (providerId) {
   }
 };
 
+// 개별 유저의 정보 조회
 exports.userFetchInfo = async function (providerId) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -76,6 +76,7 @@ exports.userFetchInfo = async function (providerId) {
   }
 };
 
+// 유저 삭제
 exports.userDelete = async function (providerId) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -104,6 +105,7 @@ exports.userDelete = async function (providerId) {
   }
 };
 
+// 유저 정보 업데이트
 exports.userUpdate = async function (providerId, location, preference) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
