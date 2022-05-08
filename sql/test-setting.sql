@@ -12,6 +12,8 @@ CREATE TABLE user (
     providerId VARCHAR(50) NOT NULL,
     token VARCHAR(200),
     auth INT NOT NULL DEFAULT(0),
+    location VARCHAR(30) DEFAULT(NULL),
+    preference VARCHAR(30) DEFAULT(NULL),
     reg_date DATE DEFAULT(current_date),
     PRIMARY KEY (providerId)
 );

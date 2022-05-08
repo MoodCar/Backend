@@ -99,8 +99,8 @@
     "/users": {
       "get": {
         "tags": ["User"],
-        "summary": "전체 사용자 정보",
-        "description": "전체 사용자의 정보를 받아옵니다.",
+        "summary": "전체 유저 정보",
+        "description": "전체 유저의 정보를 받아옵니다.",
         "parameters": [],
         "responses": {
           "200": {
@@ -140,6 +140,199 @@
                 "isSuccess": false,
                 "code": 500,
                 "message": "Failed to get Information of Users"
+              }
+            }
+          }
+        }
+      }
+    },
+    "users/{providerId}" : {
+      "get" : {
+        "tags" : ["User"],
+        "summary" : "특정 유저 정보",
+        "description" : "특정 유저의 providerId로 유저 정보를 받아옵니다.",
+        "parameters":[
+          {
+            "name": "providerId",
+            "description": "조회 대상 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "example" : {
+                "fetchResult" : [
+                  {
+                    "email": "test123@gmail.com",
+      "name": "테스트1",
+      "provider": "google",
+      "providerId": "123124435",
+      "token": "qeklnklviqoebbzscklb12312445",
+      "auth": 0,
+      "location": "서울",
+      "preference": "음악",
+      "reg_date": "2022-05-07T15:00:00.000Z"
+                  }
+                ],
+                "message" : "Fetching User Information is successfully done",
+                "isSuccess" : true,
+                "code" : 200
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found(존재하지 않는 providerId에 대한 조회 요청)",
+            "schema":{
+              "example":{
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500" : {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to fetch user info."
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : ["User"],
+        "summary" : "유저 삭제",
+        "description" : "특정 유저의 providerId로 해당 유저 정보를 삭제합니다.",
+        "parameters":[
+          {
+            "name": "providerId",
+            "description": "삭제 대상 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses":{
+          "200" : {
+            "description": "OK",
+            "schema" : {
+              "example" : {
+                "deleteResult": true,
+  "message": "Deleting user is successfully done",
+  "isSuccess": true,
+  "code": 200
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found(존재하지 않는 providerId에 대한 삭제 요청)",
+            "schema":{
+              "example":{
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500" : {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to delete user."
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : ["User"],
+        "summary" : "유저 정보 수정",
+        "description" : "특정 유저의 providerId로 해당 유저의 위치, 선호 컨텐츠 정보를 수정합니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "수정 대상 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Content",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "example": "String"
+                },
+                "preference" : {
+                  "example" : "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "200" : {
+            "description": "OK",
+            "schema" : {
+              "example" : {
+                "updateResult": [{
+                  "location" : "서울",
+                  "preference" : "음악"
+                }],
+  "message": "Updating User Information is successfully done",
+  "isSuccess": true,
+  "code": 200
+              }
+            }
+          },
+          "400" : {
+            "description": "Bad Request (위치 및 선호도 정보(Request Body)가 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check input."
+              }
+            }
+          },
+          "404" : {
+            "description": "Not Found (존재하지 않는 사용자 ID에 대한 수정 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Check id value."
+              }
+            }
+          },
+          "409":{
+            "description": "Conflict(동일한 항목, 동일한 내용에 대한 수정 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 409,
+                "message": "Can't Update. (original value and updating value is same)"
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to update User Info."
               }
             }
           }
