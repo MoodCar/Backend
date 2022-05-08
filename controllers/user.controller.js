@@ -1,11 +1,10 @@
 const { diaryDelete } = require("../models/diary.model.js");
 const User = require("../models/user.model.js");
 
-function isEmpty(str){ 
-    if(typeof str == "undefined" || str == null || str == "") 
-    return true; else return false ; 
+function isEmpty(str) {
+  if (typeof str == "undefined" || str == null || str == "") return true;
+  else return false;
 }
-
 
 // 전체 유저의 정보 조회
 exports.findAll = async function (req, res) {
@@ -100,13 +99,12 @@ exports.deleteUser = async function (req, res) {
 };
 
 exports.updateUserInfo = async function (req, res) {
-
-  if(isEmpty(req.body.location) || isEmpty(req.body.preference)){
+  if (isEmpty(req.body.location) || isEmpty(req.body.preference)) {
     return res.status(400).send({
-        isSuccess: false,
-        code: 400,
-        message: "Please check input.",
-      });
+      isSuccess: false,
+      code: 400,
+      message: "Please check input.",
+    });
   }
 
   const providerIdCheck = await User.providerIdCheck(req.params.providerId);
