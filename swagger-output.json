@@ -146,7 +146,7 @@
         }
       }
     },
-    "users/{providerId}" : {
+    "/users/{providerId}" : {
       "get" : {
         "tags" : ["User"],
         "summary" : "특정 유저 정보",
