@@ -212,3 +212,66 @@ exports.fetchDiaryDetailById = async function (req, res) {
     code: 200,
   });
 };
+
+
+// 전체 일기 목록 가져오기
+exports.findAll = async function (req,res){
+
+
+  const getAllResult = await Diary.getAll();
+  if(!getAllResult){
+    return res.status(500).send({
+      isSuccess : false,
+      code : 500,
+      message : "Failed to get all diaries.(getAll)"
+    })
+  }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "There is no diary in Diary table.",
+    });
+  }
+  return res.status(200).send({
+    getAllResult,
+    isSuccess : true,
+    code : 200,
+  })
+}
+
+// 일기 아이디 통한 세부 정보 가져오기
+exports.fetchDiaryByDiaryId = async function (req, res) {
+  const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
+  if (!diaryIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to fetch diary.(diaryIdCheck)",
+    });
+  } else if (diaryIdCheck == "diaryIdCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check Diary id value.",
+    });
+  }
+  const fetchResult = await Diary.getDiaryInfo(req.params.id);
+  if (!fetchResult) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diary.(getDiaryInfo)",
+    });
+  } else if (Array.isArray(fetchResult) && fetchResult.length === 0) {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Diary doesn't exist.",
+    });
+  }
+  return res.status(200).send({
+    fetchResult,
+    isSuccess: true,
+    code: 200,
+  });
+};
