@@ -22,7 +22,7 @@
                     <th>hashtag_2</th>
                     <th>hashtag_3</th>
                     <th>written_date</th>
-                    <th>Action</th>
+                    <th>조치</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,8 +40,6 @@
                         <td><%= diaries[i].written_date %></td>
                         <td>
                             <a href="/admin/diaries/details/<%= diaries[i].id %>" class="btn btn-sm btn-danger">삭제</a>
-                            <a href="/admin/diaries/updatePage/<%= diaries[i].id %>" class="btn btn-sm btn-primary">수정</a>
-                            <a href="/admin/diaries/<%= diaries[i].providerId %>" class="btn btn-sm btn-primary">유저 조회</a>                            
                         </td>
                     </tr>
                 <% } %>
