@@ -274,24 +274,3 @@ exports.getAll = async function () {
 };
 
 
-// 일기 아이디로 세부 정보 가져오기
-exports.getDiaryInfo = async function(id) {
-  try{
-    const connection = await pool.getConnection(async (conn) => conn);
-    console.log(`##### Connection_pool_GET #####`);
-    try{
-      const getDiaryInfoQuery = "select * from diary where id = ?";
-      let params = [id];
-      let [row] = await connection.query(getDiaryInfoQuery,params);
-      connection.release();
-      return row;
-    }catch {
-      console.error(`##### Query error ##### `);
-      connection.release();
-      return false;
-    }
-  }catch {
-    console.error(`##### DB error #####`);
-    return false;
-  }
-}
