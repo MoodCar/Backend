@@ -7,6 +7,7 @@
     "axios": "^0.27.0",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "ejs": "^3.1.7",
     "expect.js": "^0.3.1",
     "express": "^4.17.3",
     "express-mysql-session": "^2.1.7",
