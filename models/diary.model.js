@@ -17,13 +17,15 @@ exports.providerIdCheck = async function (providerId) {
         connection.release();
         return true;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -45,13 +47,15 @@ exports.diaryDuplicateCheck = async function (providerId) {
         connection.release();
         return "duplicateCheck";
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -88,17 +92,20 @@ exports.diaryWrite = async function (providerId, content) {
         [row] = await connection.query(getInsertedDiaryQuery, params);
         connection.release();
         return row;
-      } catch {
+      } catch (err) {
         console.error(`##### Query error ##### `);
+        console.log(err);
         connection.release();
         return false;
       }
     } catch (err) {
       console.error(`##### Axios Error ##### `);
+      console.log(err);
       return "fetchError";
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -139,17 +146,20 @@ exports.diaryUpdate = async function (Id, content) {
           connection.release();
           return "UpdateFail";
         }
-      } catch {
+      } catch (err) {
         console.error(`##### Query error ##### `);
+        console.log(err);
         connection.release();
         return false;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Axios Error ##### `);
+      console.log(err);
       return "fetchError";
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -170,13 +180,15 @@ exports.diaryIdCheck = async function (Id) {
         connection.release();
         return true;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -197,13 +209,15 @@ exports.diaryDelete = async function (Id) {
         connection.release();
         return false;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -219,13 +233,15 @@ exports.getDiaryByProviderId = async function (providerId) {
       let [row] = await connection.query(getDiaryQuery, params);
       connection.release();
       return row;
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -241,13 +257,15 @@ exports.getDiaryById = async function (Id) {
       let [row] = await connection.query(getDiaryByIdQuery, params);
       connection.release();
       return row;
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };

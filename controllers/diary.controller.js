@@ -1,8 +1,13 @@
 const Diary = require("../models/diary.model.js");
 
+function isEmpty(str) {
+  if (typeof str == "undefined" || str == null || str == "") return true;
+  else return false;
+}
+
 // 일기 작성
 exports.writeDiary = async function (req, res) {
-  if (Object.keys(req.body).length === 0) {
+  if (isEmpty(req.body.content)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -63,7 +68,7 @@ exports.writeDiary = async function (req, res) {
 
 // 일기 수정
 exports.updateDiary = async function (req, res) {
-  if (Object.keys(req.body).length === 0) {
+  if (isEmpty(req.body.content)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
