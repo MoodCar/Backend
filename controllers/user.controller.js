@@ -1,4 +1,4 @@
-const { diaryDelete } = require("../models/diary.model.js");
+
 const User = require("../models/user.model.js");
 
 function isEmpty(str) {
