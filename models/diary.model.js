@@ -269,3 +269,26 @@ exports.getDiaryById = async function (Id) {
     return false;
   }
 };
+
+// 전체 일기 목록 조회
+exports.getAll = async function () {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const getAllQuery = "select * from diary";
+      let [row] = await connection.query(getAllQuery);
+      connection.release();
+      return row;
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
+
+

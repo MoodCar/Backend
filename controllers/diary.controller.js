@@ -217,3 +217,30 @@ exports.fetchDiaryDetailById = async function (req, res) {
     code: 200,
   });
 };
+
+
+// 전체 일기 목록 가져오기
+exports.findAll = async function (req,res){
+
+
+  const getAllResult = await Diary.getAll();
+  if(!getAllResult){
+    return res.status(500).send({
+      isSuccess : false,
+      code : 500,
+      message : "Failed to get all diaries.(getAll)"
+    })
+  }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "There is no diary in Diary table.",
+    });
+  }
+  return res.status(200).send({
+    getAllResult,
+    isSuccess : true,
+    code : 200,
+  })
+}
+

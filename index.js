@@ -120,10 +120,15 @@ passport.use(
   )
 );
 
+app.set("views", "./views");
+app.set("view engine", "ejs");
+
 app.get("/", (req, res) => res.json({ message: "Server Linked!" }));
 require("./routes/user.routes.js")(app);
 require("./routes/google.routes.js")(app);
 require("./routes/diary.routes.js")(app);
+
+require("./routes/admin.routes.js")(app);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
