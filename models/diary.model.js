@@ -341,7 +341,7 @@ exports.getSearchResult = async function (providerId,content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try{
-      const diarySearchQuery = "select * from diary where providerId = ? and content like ?";
+      const diarySearchQuery = "select id,providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,written_date from diary where providerId = ? and content like ?";
       content = "%" + content + "%";
       let params = [providerId,content];
       let [row] = await connection.query(diarySearchQuery,params);

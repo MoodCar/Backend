@@ -228,10 +228,10 @@ exports.findAll = async function (req,res){
     return res.status(500).send({
       isSuccess : false,
       code : 500,
-      message : "Failed to get all diaries.(getAll)"
+      message : "Failed to get diaries.(getAll)"
     })
   }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
-    return res.status(404).send({
+    return res.status(400).send({
       isSuccess: false,
       code: 404,
       message: "There is no diary in Diary table.",
@@ -244,13 +244,14 @@ exports.findAll = async function (req,res){
   })
 }
 
+// 일기 검색
 exports.searchDiary = async function(req,res){
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
-      message: "Failed to write diary.(providerIdCheck)",
+      message: "Failed to search diary.(providerIdCheck)",
     });
   } else if (providerIdCheck == "idCheck") {
     return res.status(404).send({
