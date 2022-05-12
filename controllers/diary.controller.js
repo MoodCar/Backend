@@ -244,3 +244,33 @@ exports.findAll = async function (req,res){
   })
 }
 
+exports.searchDiary = async function(req,res){
+  const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
+  if (!providerIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to write diary.(providerIdCheck)",
+    });
+  } else if (providerIdCheck == "idCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check id value.",
+    });
+  }
+
+  const searchResult = await Diary.getSearchResult(req.params.providerId,req.body.content);
+  if(!searchResult){
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to search Diary.(getSearchResult)",
+    });
+  }
+  return res.status(200).send({
+    searchResult,
+    isSuccess: true,
+    code: 200,
+  });
+}

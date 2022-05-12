@@ -284,6 +284,92 @@ describe('GET /diaries/details/:Id', () => {
     });
 });
 
+describe('GET /diaries/searchresults/:providerId', () => {
+    it('존재하지 않는 providerId의 일기를 검색하는 Test', (done) =>{
+        request(app)
+        .get('/diaries/searchresults/4')
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(404);
+            (res.body.isSuccess).should.be.equal(false);
+            (res.body.message).should.be.equal("Check id value.");
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('GET /diaries/searchresults/:providerId', () => {
+    it('빈 컨텐츠를 검색하는 Test', (done) =>{
+        request(app)
+        .get('/diaries/searchresults/906457842')
+        .send({content : ""})
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body).should.have.property('searchResult');
+            should.exist(res.body.searchResult[0].id);
+            should.exist(res.body.searchResult[0].emotion);
+            should.exist(res.body.searchResult[0].content);
+            should.exist(res.body.searchResult[0].providerId);
+            should.exist(res.body.searchResult[0].hashtag_1);
+            should.exist(res.body.searchResult[0].hashtag_2);
+            should.exist(res.body.searchResult[0].hashtag_3);
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('GET /diaries/searchresults/:providerId', () => {
+    it('존재하지 않는 값 검색 Test', (done) =>{
+        request(app)
+        .get('/diaries/searchresults/906457842')
+        .send({content : "행복"})
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body).should.have.property('searchResult');
+            should.not.exist(res.body.searchResult[0]);
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
+describe('GET /diaries/searchresults/:providerId', () => {
+    it('성공적인 검색 Test', (done) =>{
+        request(app)
+        .get('/diaries/searchresults/906457842')
+        .send({content : "그녀"})
+        .end((err,res) => {
+            if(err){
+                throw err;
+            }
+            (res.body.code).should.be.equal(200);
+            (res.body.isSuccess).should.be.equal(true);
+            (res.body).should.have.property('searchResult');
+            should.exist(res.body.searchResult[0].id);
+            should.exist(res.body.searchResult[0].emotion);
+            should.exist(res.body.searchResult[0].content);
+            should.exist(res.body.searchResult[0].providerId);
+            should.exist(res.body.searchResult[0].hashtag_1);
+            should.exist(res.body.searchResult[0].hashtag_2);
+            should.exist(res.body.searchResult[0].hashtag_3);
+            console.log(res.body);
+            done();
+        });
+    });
+});
+
 describe('DELETE /diaries/details/:Id', () => {
     it('존재하지 않는 일기를 삭제하는 Test', (done) =>{
         request(app)

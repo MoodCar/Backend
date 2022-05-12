@@ -336,3 +336,24 @@ exports.getAll = async function () {
 };
 
 
+exports.getSearchResult = async function (providerId,content) {
+  try{
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try{
+      const diarySearchQuery = "select * from diary where providerId = ? and content like ?";
+      content = "%" + content + "%";
+      let params = [providerId,content];
+      let [row] = await connection.query(diarySearchQuery,params);
+      connection.release();
+      return row;
+    }catch(err){
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  }catch(err){
+    console.error(`##### DB error #####`);
+    return false;
+  }
+}
