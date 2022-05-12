@@ -314,13 +314,6 @@ exports.updateEmotion = async function (req,res){
       message: "Failed to update emotion of diary.(diaryEmotionUpdate)",
     });
   }
-  else if(updateResult == "nullEmotion"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "The emotion field of diary is empty. Please request emotion first."
-    })
-  }
   else if(updateResult == "UpdateFail"){
     return res.status(409).send({
       isSuccess : false,
@@ -374,12 +367,6 @@ exports.updateHashtag = async function (req,res){
       code: 500,
       message: "Failed to update hashtag of diary.(diaryHashtagUpdate)",
     });
-  }else if(updateResult == "nullHashtag"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "All 3 hashtags field of diary is empty. Please request hashtags first."
-    })
   }else if(updateResult == "dupArray"){
     return res.status(409).send({
       isSuccess : false,

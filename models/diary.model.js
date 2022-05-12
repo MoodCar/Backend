@@ -365,15 +365,6 @@ exports.diaryEmotionUpdate = async function(id, emotion) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const getEmotionBeforeQuery = 
-        "select emotion from diary where id = ?";
-      let parameter = [id];
-      let [result] = await connection.query(getEmotionBeforeQuery, parameter);
-      if(result[0]['emotion'] == null){
-        connection.release();
-        return "nullEmotion";
-      }
-
       const updateEmotionDiaryQuery =
         "update diary set emotion=? where id = ?";
       let params = [emotion, id];
@@ -421,10 +412,6 @@ exports.diaryHashtagUpdate = async function(id, hashtag_1,hashtag_2,hashtag_3) {
       hashtagAfterList.push(hashtag_2);
       hashtagAfterList.push(hashtag_3);
       
-      if(result[0]['hashtag_1'] == null && result[0]['hashtag_2'] == null && result[0]['hashtag_3'] == null){
-        connection.release();
-        return "nullHashtag";
-      }
       
       let dupArray = false;
         for(let i = 0; i < hashtagAfterList.length; i++){

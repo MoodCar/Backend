@@ -874,8 +874,7 @@
             }
           },
           "409": {
-            "case1":{
-              "description": "Conflict(기존 감정과 동일한데 수정 요청한 경우)",
+            "description": "Conflict(기존 감정과 동일한데 수정 요청한 경우)",
               "schema": {
                 "example": {
                   "isSuccess": false,
@@ -883,17 +882,6 @@
                   "message": "Can't Update. (original value and updating value is same)"
                 }
               }
-            },
-            "case2":{
-              "description": "Conflict(기존 일기의 감정이 등록되어 있지 않은 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "The emotion field of diary is empty. Please request emotion first"
-                }
-              }
-            }
           },
           "500": {
             "description": "Internal Server Error",
@@ -922,35 +910,17 @@
             "type": "string"
           },
           {
-            "name": "Hashtag_1",
+            "name": "Hashtag",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "hashtag_1": {
                   "example": "String"
-                }
-              }
-            }
-          },
-          {
-            "name": "Hashtag_2",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
+                },
                 "hashtag_2": {
                   "example": "String"
-                }
-              }
-            }
-          },
-          {
-            "name": "Hashtag_3",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
+                },
                 "hashtag_3": {
                   "example": "String"
                 }
@@ -999,46 +969,14 @@
             }
           },
           "409": {
-            "case1":{
-              "description": "Conflict(기존 해시태그의 등록 순서와 정보가 모두 동일한데 수정 요청한 경우)",
+            "description": "Conflict(기존 해시태그와 동일한 정보 또는 중복된 해시태그를 통해 수정 요청한 경우)",
               "schema": {
                 "example": {
                   "isSuccess": false,
                   "code": 409,
-                  "message": "Can't Update. (original value and updating value is same)"
+                  "message": "Can't Update. (Updated to same value or Requested with duplicated hashtags)"
                 }
               }
-            },
-            "case2":{
-              "description": "Conflict(기존 일기의 해시태그가 등록되어 있지 않은 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "All 3 hashtags field of diary is empty. Please request hashtags first"
-                }
-              }
-            },
-            "case3":{
-              "description": "Conflict(수정 입력한 해시태그 중 중복된 것이 존재하는 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "Duplicate hashtags exist among the 3 hashtags that have been updated"
-                }
-              }
-            },
-            "case4":{
-              "description": "Conflict(기존 해시태그의 등록 순서만 다를 뿐 정보는 동일한데 수정 요청한 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "The previous 3 hashtags and the 3 updated hashtags information are the same"
-                }
-              }
-            }
           },
           "500": {
             "description": "Internal Server Error",
