@@ -146,12 +146,12 @@
         }
       }
     },
-    "/users/{providerId}" : {
-      "get" : {
-        "tags" : ["User"],
-        "summary" : "특정 유저 정보",
-        "description" : "특정 유저의 providerId로 유저 정보를 받아옵니다.",
-        "parameters":[
+    "/users/{providerId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "특정 유저 정보",
+        "description": "특정 유저의 providerId로 유저 정보를 받아옵니다.",
+        "parameters": [
           {
             "name": "providerId",
             "description": "조회 대상 유저의 providerId Value",
@@ -160,41 +160,41 @@
             "type": "string"
           }
         ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "schema" : {
-              "example" : {
-                "fetchResult" : [
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "fetchResult": [
                   {
                     "email": "test123@gmail.com",
-      "name": "테스트1",
-      "provider": "google",
-      "providerId": "123124435",
-      "token": "qeklnklviqoebbzscklb12312445",
-      "auth": 0,
-      "location": "서울",
-      "preference": "음악",
-      "reg_date": "2022-05-07T15:00:00.000Z"
+                    "name": "테스트1",
+                    "provider": "google",
+                    "providerId": "123124435",
+                    "token": "qeklnklviqoebbzscklb12312445",
+                    "auth": 0,
+                    "location": "서울",
+                    "preference": "음악",
+                    "reg_date": "2022-05-07T15:00:00.000Z"
                   }
                 ],
-                "message" : "Fetching User Information is successfully done",
-                "isSuccess" : true,
-                "code" : 200
+                "message": "Fetching User Information is successfully done",
+                "isSuccess": true,
+                "code": 200
               }
             }
           },
-          "404" : {
-            "description" : "Not Found(존재하지 않는 providerId에 대한 조회 요청)",
-            "schema":{
-              "example":{
+          "404": {
+            "description": "Not Found(존재하지 않는 providerId에 대한 조회 요청)",
+            "schema": {
+              "example": {
                 "isSuccess": false,
                 "code": 404,
                 "message": "Check id value."
               }
             }
           },
-          "500" : {
+          "500": {
             "description": "Internal Server Error",
             "schema": {
               "example": {
@@ -206,11 +206,11 @@
           }
         }
       },
-      "delete" : {
-        "tags" : ["User"],
-        "summary" : "유저 삭제",
-        "description" : "특정 유저의 providerId로 해당 유저 정보를 삭제합니다.",
-        "parameters":[
+      "delete": {
+        "tags": ["User"],
+        "summary": "유저 삭제",
+        "description": "특정 유저의 providerId로 해당 유저 정보를 삭제합니다.",
+        "parameters": [
           {
             "name": "providerId",
             "description": "삭제 대상 유저의 providerId Value",
@@ -219,29 +219,29 @@
             "type": "string"
           }
         ],
-        "responses":{
-          "200" : {
+        "responses": {
+          "200": {
             "description": "OK",
-            "schema" : {
-              "example" : {
+            "schema": {
+              "example": {
                 "deleteResult": true,
-  "message": "Deleting user is successfully done",
-  "isSuccess": true,
-  "code": 200
+                "message": "Deleting user is successfully done",
+                "isSuccess": true,
+                "code": 200
               }
             }
           },
-          "404" : {
-            "description" : "Not Found(존재하지 않는 providerId에 대한 삭제 요청)",
-            "schema":{
-              "example":{
+          "404": {
+            "description": "Not Found(존재하지 않는 providerId에 대한 삭제 요청)",
+            "schema": {
+              "example": {
                 "isSuccess": false,
                 "code": 404,
                 "message": "Check id value."
               }
             }
           },
-          "500" : {
+          "500": {
             "description": "Internal Server Error",
             "schema": {
               "example": {
@@ -253,10 +253,10 @@
           }
         }
       },
-      "patch" : {
-        "tags" : ["User"],
-        "summary" : "유저 정보 수정",
-        "description" : "특정 유저의 providerId로 해당 유저의 위치, 선호 컨텐츠 정보를 수정합니다.",
+      "patch": {
+        "tags": ["User"],
+        "summary": "유저 정보 수정",
+        "description": "특정 유저의 providerId로 해당 유저의 위치, 선호 컨텐츠 정보를 수정합니다.",
         "parameters": [
           {
             "name": "providerId",
@@ -274,29 +274,31 @@
                 "location": {
                   "example": "String"
                 },
-                "preference" : {
-                  "example" : "String"
+                "preference": {
+                  "example": "String"
                 }
               }
             }
           }
         ],
-        "responses":{
-          "200" : {
+        "responses": {
+          "200": {
             "description": "OK",
-            "schema" : {
-              "example" : {
-                "updateResult": [{
-                  "location" : "서울",
-                  "preference" : "음악"
-                }],
-  "message": "Updating User Information is successfully done",
-  "isSuccess": true,
-  "code": 200
+            "schema": {
+              "example": {
+                "updateResult": [
+                  {
+                    "location": "서울",
+                    "preference": "음악"
+                  }
+                ],
+                "message": "Updating User Information is successfully done",
+                "isSuccess": true,
+                "code": 200
               }
             }
           },
-          "400" : {
+          "400": {
             "description": "Bad Request (위치 및 선호도 정보(Request Body)가 존재하지 않음)",
             "schema": {
               "example": {
@@ -306,7 +308,7 @@
               }
             }
           },
-          "404" : {
+          "404": {
             "description": "Not Found (존재하지 않는 사용자 ID에 대한 수정 요청)",
             "schema": {
               "example": {
@@ -316,7 +318,7 @@
               }
             }
           },
-          "409":{
+          "409": {
             "description": "Conflict(동일한 항목, 동일한 내용에 대한 수정 요청)",
             "schema": {
               "example": {
@@ -326,13 +328,64 @@
               }
             }
           },
-          "500":{
+          "500": {
             "description": "Internal Server Error",
             "schema": {
               "example": {
                 "isSuccess": false,
                 "code": 500,
                 "message": "Failed to update User Info."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaries":{
+      "get":{
+        "tags" : ["Diary"],
+        "summary" : "전체 일기",
+        "description" : "서비스에 등록된 모든 일기를 가져오는 API입니다.",
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "getAllResult": [
+                  {
+                    "id": 4,
+                    "content": "제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복",
+                    "contents_id": null,
+			              "counselor_id": null,
+                    "hashtag_1": "스케이트",
+                    "hashtag_2": "독서",
+                    "hashtag_3": "공부",
+                    "written_date": "2022-05-11T15:00:00.000Z"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (등록된 일기가 존재하지 않을 때)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "There is no diary in Diary table."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get diaries.(getAll)"
               }
             }
           }
@@ -679,6 +732,77 @@
                 "isSuccess": false,
                 "code": 500,
                 "message": "Failed to update Diary."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaries/searchresults/{providerId}": {
+      "get": {
+        "tags": ["Diary"],
+        "summary": "일기 검색",
+        "description": "검색 내용을 입력해 일기 검색 결과를 가져오는 API입니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "일기를 검색할 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Content",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "searchResult": [
+                  {
+                    "id": 4,
+                    "providerId": "230570871073345",
+                    "content": "제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복",
+                    "hashtag_1": "운동",
+                    "hashtag_2": "빨래",
+                    "hashtag_3": "독서",
+                    "written_date": "2022-05-11T15:00:00.000Z"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 사용자 providerId로 검색 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to search Diary."
               }
             }
           }

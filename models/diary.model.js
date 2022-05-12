@@ -17,13 +17,15 @@ exports.providerIdCheck = async function (providerId) {
         connection.release();
         return true;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -45,13 +47,15 @@ exports.diaryDuplicateCheck = async function (providerId) {
         connection.release();
         return "duplicateCheck";
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -62,24 +66,19 @@ exports.diaryWrite = async function (providerId, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const response = await axios.post("http://3.34.209.23:5000/prediction", {
+      const response = await axios.post("http://33a640b59dsadasd5c.ngrok.io/prediction", {
         content: content,
       });
       try {
-        // Dummy data. 실제 해시태그 구현 시 교체 필요.
-        let hashtag1 = "스케이트";
-        let hashtag2 = "독서";
-        let hashtag3 = "공부";
-
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
         let params = [
           providerId,
           content,
           response.data.emotion,
-          hashtag1,
-          hashtag2,
-          hashtag3,
+          response.data.hashtag_1,
+          response.data.hashtag_2,
+          response.data.hashtag_3,
         ];
         let [row] = await connection.query(writeDiaryQuery, params);
         params = row.insertId;
@@ -88,17 +87,44 @@ exports.diaryWrite = async function (providerId, content) {
         [row] = await connection.query(getInsertedDiaryQuery, params);
         connection.release();
         return row;
-      } catch {
+      } catch (err) {
         console.error(`##### Query error ##### `);
+        console.log(err);
         connection.release();
         return false;
       }
     } catch (err) {
       console.error(`##### Axios Error ##### `);
-      return "fetchError";
+      console.log(err);
+
+      // Dummy data. colab 서버 작동안할때는 임의의 더미데이터 집어넣어줌
+      let hashtag_1 = "스케이트";
+      let hashtag_2 = "독서";
+      let hashtag_3 = "공부";
+      let emotion = "행복";
+      const writeDiaryQuery =
+          "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
+      let params = [
+        providerId,
+        content,
+        emotion,
+        hashtag_1,
+        hashtag_2,
+        hashtag_3,
+      ];
+        let [row] = await connection.query(writeDiaryQuery, params);
+        params = row.insertId;
+        const getInsertedDiaryQuery =
+          "select id,content,emotion,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+        [row] = await connection.query(getInsertedDiaryQuery, params);
+        connection.release();
+        return row;
+      
+      //return "fetchError";
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -109,22 +135,18 @@ exports.diaryUpdate = async function (Id, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const response = await axios.post("http://3.34.209.23:5000/prediction", {
+      const response = await axios.post("http://33a640b59d1232135c.ngrok.io/prediction", {
         content: content,
       });
       try {
-        let hashtag1 = "스케이트";
-        let hashtag2 = "독서";
-        let hashtag3 = "공부";
-
         const updateDiaryQuery =
           "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ? where Id = ? ";
         let params = [
           content,
           response.data.emotion,
-          hashtag1,
-          hashtag2,
-          hashtag3,
+          response.data.hashtag_1,
+          response.data.hashtag_2,
+          response.data.hashtag_3,
           Id,
         ];
         let [row] = await connection.query(updateDiaryQuery, params);
@@ -139,17 +161,49 @@ exports.diaryUpdate = async function (Id, content) {
           connection.release();
           return "UpdateFail";
         }
-      } catch {
+      } catch (err) {
         console.error(`##### Query error ##### `);
+        console.log(err);
         connection.release();
         return false;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Axios Error ##### `);
-      return "fetchError";
+      console.log(err);
+
+      // Dummy data. colab 서버 작동안할때는 임의의 더미데이터 집어넣어줌
+      let hashtag_1 = "스케이트";
+      let hashtag_2 = "독서";
+      let hashtag_3 = "공부";
+      let emotion = "행복";
+
+      const updateDiaryQuery =
+          "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ? where Id = ? ";
+        let params = [
+          content,
+          emotion,
+          hashtag_1,
+          hashtag_2,
+          hashtag_3,
+          Id,
+        ];
+        let [row] = await connection.query(updateDiaryQuery, params);
+        if (row.changedRows == 1) {
+          params = Id;
+          const getUpdatedDiaryQuery =
+            "select id,content,emotion,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+          [row] = await connection.query(getUpdatedDiaryQuery, params);
+          connection.release();
+          return row;
+        } else {
+          connection.release();
+          return "UpdateFail";
+        }
+      //return "fetchError";
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -170,13 +224,15 @@ exports.diaryIdCheck = async function (Id) {
         connection.release();
         return true;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -197,13 +253,15 @@ exports.diaryDelete = async function (Id) {
         connection.release();
         return false;
       }
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -219,13 +277,15 @@ exports.getDiaryByProviderId = async function (providerId) {
       let [row] = await connection.query(getDiaryQuery, params);
       connection.release();
       return row;
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -241,13 +301,15 @@ exports.getDiaryById = async function (Id) {
       let [row] = await connection.query(getDiaryByIdQuery, params);
       connection.release();
       return row;
-    } catch {
+    } catch (err) {
       console.error(`##### Query error ##### `);
+      console.log(err);
       connection.release();
       return false;
     }
-  } catch {
+  } catch (err) {
     console.error(`##### DB error #####`);
+    console.log(err);
     return false;
   }
 };
@@ -274,3 +336,24 @@ exports.getAll = async function () {
 };
 
 
+exports.getSearchResult = async function (providerId,content) {
+  try{
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try{
+      const diarySearchQuery = "select id,providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,written_date from diary where providerId = ? and content like ?";
+      content = "%" + content + "%";
+      let params = [providerId,content];
+      let [row] = await connection.query(diarySearchQuery,params);
+      connection.release();
+      return row;
+    }catch(err){
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  }catch(err){
+    console.error(`##### DB error #####`);
+    return false;
+  }
+}

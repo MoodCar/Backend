@@ -1,8 +1,13 @@
 const Diary = require("../models/diary.model.js");
 
+function isEmpty(str) {
+  if (typeof str == "undefined" || str == null || str == "") return true;
+  else return false;
+}
+
 // 일기 작성
 exports.writeDiary = async function (req, res) {
-  if (Object.keys(req.body).length === 0) {
+  if (isEmpty(req.body.content)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -63,7 +68,7 @@ exports.writeDiary = async function (req, res) {
 
 // 일기 수정
 exports.updateDiary = async function (req, res) {
-  if (Object.keys(req.body).length === 0) {
+  if (isEmpty(req.body.content)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -223,10 +228,10 @@ exports.findAll = async function (req,res){
     return res.status(500).send({
       isSuccess : false,
       code : 500,
-      message : "Failed to get all diaries.(getAll)"
+      message : "Failed to get diaries.(getAll)"
     })
   }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
-    return res.status(404).send({
+    return res.status(400).send({
       isSuccess: false,
       code: 404,
       message: "There is no diary in Diary table.",
@@ -239,3 +244,34 @@ exports.findAll = async function (req,res){
   })
 }
 
+// 일기 검색
+exports.searchDiary = async function(req,res){
+  const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
+  if (!providerIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to search diary.(providerIdCheck)",
+    });
+  } else if (providerIdCheck == "idCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check id value.",
+    });
+  }
+
+  const searchResult = await Diary.getSearchResult(req.params.providerId,req.body.content);
+  if(!searchResult){
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to search Diary.(getSearchResult)",
+    });
+  }
+  return res.status(200).send({
+    searchResult,
+    isSuccess: true,
+    code: 200,
+  });
+}
