@@ -278,7 +278,7 @@ exports.searchDiary = async function(req,res){
 
 
 exports.updateEmotion = async function (req,res){
-  if (Object.keys(req.body.emotion).length === 0) {
+  if (isEmpty(req.body.emotion)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -339,7 +339,7 @@ exports.updateEmotion = async function (req,res){
 
 
 exports.updateHashtag = async function (req,res){
-  if (Object.keys(req.body.hashtag_1).length === 0 || Object.keys(req.body.hashtag_2).length === 0 || Object.keys(req.body.hashtag_3).length === 0) {
+  if (isEmpty(req.body.hashtag_1) || isEmpty(req.body.hashtag_2) || isEmpty(req.body.hashtag_3)) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,

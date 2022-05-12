@@ -808,6 +808,250 @@
           }
         }
       }
+    },
+    "/diaries/emotions/{id}": {
+      "patch": {
+        "tags": ["Diary"],
+        "summary": "일기 감정 수정",
+        "description": "수정할 감정을 입력해 일기 감정을 수정하는 API입니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "감정을 수정할 일기의 ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Emotion",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "emotion": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "updateResult": [
+                  {
+                    "id": 3,
+                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "행복"
+                  }
+                ],
+                "message": "Updating emotion of diary is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (일기 감정(Request Body)이 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check emotion input."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 일기의 감정 수정 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check Diary id value."
+              }
+            }
+          },
+          "409": {
+            "case1":{
+              "description": "Conflict(기존 감정과 동일한데 수정 요청한 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "Can't Update. (original value and updating value is same)"
+                }
+              }
+            },
+            "case2":{
+              "description": "Conflict(기존 일기의 감정이 등록되어 있지 않은 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "The emotion field of diary is empty. Please request emotion first"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to update emotion of diary."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaries/hashtags/{id}": {
+      "patch": {
+        "tags": ["Diary"],
+        "summary": "일기 해시태그 수정",
+        "description": "수정할 해시태그를 입력해 일기 해시태그를 수정하는 API입니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "해시태그를 수정할 일기의 ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Hashtag_1",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashtag_1": {
+                  "example": "String"
+                }
+              }
+            }
+          },
+          {
+            "name": "Hashtag_2",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashtag_2": {
+                  "example": "String"
+                }
+              }
+            }
+          },
+          {
+            "name": "Hashtag_3",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashtag_3": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "updateResult": [
+                  {
+                    "id": 3,
+                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
+                    "hashtag_1": "학교",
+                    "hashtag_2": "졸업",
+                    "hashtag_3": "방황"
+                  }
+                ],
+                "message": "Updating hashtag of diary is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (일기 해시태그(Request Body)가 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check hashtag input."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 일기의 해시태그 수정 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check Diary id value."
+              }
+            }
+          },
+          "409": {
+            "case1":{
+              "description": "Conflict(기존 해시태그의 등록 순서와 정보가 모두 동일한데 수정 요청한 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "Can't Update. (original value and updating value is same)"
+                }
+              }
+            },
+            "case2":{
+              "description": "Conflict(기존 일기의 해시태그가 등록되어 있지 않은 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "All 3 hashtags field of diary is empty. Please request hashtags first"
+                }
+              }
+            },
+            "case3":{
+              "description": "Conflict(수정 입력한 해시태그 중 중복된 것이 존재하는 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "Duplicate hashtags exist among the 3 hashtags that have been updated"
+                }
+              }
+            },
+            "case4":{
+              "description": "Conflict(기존 해시태그의 등록 순서만 다를 뿐 정보는 동일한데 수정 요청한 경우)",
+              "schema": {
+                "example": {
+                  "isSuccess": false,
+                  "code": 409,
+                  "message": "The previous 3 hashtags and the 3 updated hashtags information are the same"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to update hashtag of diary."
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
