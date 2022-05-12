@@ -275,3 +275,136 @@ exports.searchDiary = async function(req,res){
     code: 200,
   });
 }
+
+
+exports.updateEmotion = async function (req,res){
+  if (Object.keys(req.body.emotion).length === 0) {
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "Please check emotion input.",
+    });
+  }
+
+  const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
+  if (!diaryIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update emotion of diary.(diaryIdCheck)",
+    });
+  } else if (diaryIdCheck == "diaryIdCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check Diary id value.",
+    });
+  }
+
+
+  const updateResult = await Diary.diaryEmotionUpdate(
+    req.params.id,
+    req.body.emotion
+  );
+
+  if (!updateResult) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update emotion of diary.(diaryEmotionUpdate)",
+    });
+  }
+  else if(updateResult == "nullEmotion"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "The emotion field of diary is empty. Please request emotion first."
+    })
+  }
+  else if(updateResult == "UpdateFail"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "Can't Update. (original value and updating value is same)"
+    })
+  }
+  
+  return res.status(200).send({
+    updateResult,
+    message: "Updating emotion of diary is successfully done",
+    isSuccess: true,
+    code: 200,
+  });
+}
+
+
+exports.updateHashtag = async function (req,res){
+  if (Object.keys(req.body.hashtag_1).length === 0 || Object.keys(req.body.hashtag_2).length === 0 || Object.keys(req.body.hashtag_3).length === 0) {
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "Please check hashtag input.",
+    });
+  }
+
+  const diaryIdCheck = await Diary.diaryIdCheck(req.params.id);
+  if (!diaryIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update hashtag of diary.(diaryIdCheck)",
+    });
+  } else if (diaryIdCheck == "diaryIdCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check Diary id value.",
+    });
+  }
+  
+  const updateResult = await Diary.diaryHashtagUpdate(
+    req.params.id,
+    req.body.hashtag_1,
+    req.body.hashtag_2,
+    req.body.hashtag_3
+  );
+  if (!updateResult) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to update hashtag of diary.(diaryHashtagUpdate)",
+    });
+  }else if(updateResult == "nullHashtag"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "All 3 hashtags field of diary is empty. Please request hashtags first."
+    })
+  }else if(updateResult == "dupArray"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "Duplicate hashtags exist among the 3 hashtags that have been updated"
+    })
+  }else if(updateResult == "sameArray"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "The previous 3 hashtags and the 3 updated hashtags information are the same"
+    })
+  }else if(updateResult == "UpdateFail"){
+    return res.status(409).send({
+      isSuccess : false,
+      code : 409,
+      message : "Can't Update. (original value and updating value is same)"
+    })
+  }
+
+  return res.status(200).send({
+    updateResult,
+    message: "Updating hashtag of diary is successfully done",
+    isSuccess: true,
+    code: 200
+  });
+}
+

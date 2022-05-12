@@ -357,3 +357,121 @@ exports.getSearchResult = async function (providerId,content) {
     return false;
   }
 }
+
+
+//일기 감정 수정
+exports.diaryEmotionUpdate = async function(id, emotion) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const getEmotionBeforeQuery = 
+        "select emotion from diary where id = ?";
+      let parameter = [id];
+      let [result] = await connection.query(getEmotionBeforeQuery, parameter);
+      if(result[0]['emotion'] == null){
+        connection.release();
+        return "nullEmotion";
+      }
+
+      const updateEmotionDiaryQuery =
+        "update diary set emotion=? where id = ?";
+      let params = [emotion, id];
+      let [row] = await connection.query(updateEmotionDiaryQuery, params);
+      if(row.changedRows === 1){
+        params = id;
+        const getUpdatedEmotionQuery =
+        "select id,content,emotion from diary where id = ?";
+        [row] = await connection.query(getUpdatedEmotionQuery, params);
+        connection.release();
+        return row;
+      }else{
+        connection.release();
+        return "UpdateFail";
+      }
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
+
+
+//일기 해시태그 수정
+exports.diaryHashtagUpdate = async function(id, hashtag_1,hashtag_2,hashtag_3) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      let hashtagBeforeList = [];
+      const getHashtagsBeforeQuery = 
+        "select hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+      let parameter = [id];
+      let [result] = await connection.query(getHashtagsBeforeQuery, parameter);
+      hashtagBeforeList.push(result[0]['hashtag_1']);
+      hashtagBeforeList.push(result[0]['hashtag_2']);
+      hashtagBeforeList.push(result[0]['hashtag_3']);
+  
+      let hashtagAfterList = [];
+      hashtagAfterList.push(hashtag_1);
+      hashtagAfterList.push(hashtag_2);
+      hashtagAfterList.push(hashtag_3);
+      
+      if(result[0]['hashtag_1'] == null && result[0]['hashtag_2'] == null && result[0]['hashtag_3'] == null){
+        connection.release();
+        return "nullHashtag";
+      }
+      
+      let dupArray = false;
+        for(let i = 0; i < hashtagAfterList.length; i++){
+          const currElem = hashtagAfterList[i];
+          for(let j = i+1; j < hashtagAfterList.length; j++){
+            if(currElem === hashtagAfterList[j]) {
+              dupArray = true;
+              break;
+            }
+          }
+      }
+      if(dupArray){
+        connection.release();
+        return "dupArray";
+      }
+
+      hashtagBeforeList.sort();
+      hashtagAfterList.sort();
+      
+      const sameArray = (JSON.stringify(hashtagBeforeList) === JSON.stringify(hashtagAfterList));
+      if(sameArray){
+        connection.release();
+        return "sameArray";
+      }
+
+      const updateHashtagDiaryQuery =
+        "update diary set hashtag_1=?,hashtag_2=?,hashtag_3=? where id = ?";
+      let params = [hashtag_1,hashtag_2,hashtag_3,id];
+      let [row] = await connection.query(updateHashtagDiaryQuery, params);
+      if(row.changedRows === 1){
+        params = id;
+        const getUpdatedHashtagQuery =
+        "select id,content,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
+        [row] = await connection.query(getUpdatedHashtagQuery, params);
+        connection.release();
+        return row;
+      }else{
+        connection.release();
+        return "UpdateFail";
+      }
+    } catch {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
