@@ -185,9 +185,9 @@ exports.diaryUpdate = async function (Id, content) {
       console.log(err);
 
       // Dummy data. colab 서버 작동안할때는 임의의 더미데이터 집어넣어줌
-      let hashtag_1 = "스케이트";
-      let hashtag_2 = "독서";
-      let hashtag_3 = "공부";
+      let hashtag_1 = "강의";
+      let hashtag_2 = "영화";
+      let hashtag_3 = "떡볶이";
       let emotion = "행복";
 
       const updateDiaryQuery =
