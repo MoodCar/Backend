@@ -1,6 +1,18 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
 
+function sleep(ms) {
+  const wakeUpTime = Date.now() + ms;
+  while (Date.now() < wakeUpTime) {}
+}
+
+async function test() {
+  console.log("before");
+  await sleep(3000);
+  console.log("after");
+  console.log("done!");
+}
+
 // providerId 유효성 체크
 exports.providerIdCheck = async function (providerId) {
   try {
@@ -97,10 +109,11 @@ exports.diaryWrite = async function (providerId, content) {
       console.error(`##### Axios Error ##### `);
       console.log(err);
 
+      test();
       // Dummy data. colab 서버 작동안할때는 임의의 더미데이터 집어넣어줌
-      let hashtag_1 = "스케이트";
-      let hashtag_2 = "독서";
-      let hashtag_3 = "공부";
+      let hashtag_1 = "강의";
+      let hashtag_2 = "영화";
+      let hashtag_3 = "떡볶이";
       let emotion = "행복";
       const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
