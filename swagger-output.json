@@ -369,7 +369,7 @@
                     "hashtag_1": "여행",
                     "hashtag_2": "스페인",
                     "hashtag_3": "비행기",
-                    "written_date": "2022-05-16T15:00:00.000Z"
+                    "written_date": "2022-05-16"
                   },
                   {
                       "id": 2,
@@ -388,7 +388,7 @@
                       "hashtag_1": "마스크",
                       "hashtag_2": "빨래",
                       "hashtag_3": "카페",
-                      "written_date": "2022-05-16T15:00:00.000Z"
+                      "written_date": "2022-05-16"
                   },
                   {
                       "id": 3,
@@ -407,7 +407,7 @@
                       "hashtag_1": "독서",
                       "hashtag_2": "청소",
                       "hashtag_3": "게임",
-                      "written_date": "2022-05-16T15:00:00.000Z"
+                      "written_date": "2022-05-16"
                   }
                 ],
                 "isSuccess": true,
@@ -553,7 +553,26 @@
                     "hashtag_1": "여행",
                     "hashtag_2": "스페인",
                     "hashtag_3": "비행기",
-                    "written_date": "2022-05-16T15:00:00.000Z"
+                    "written_date": "2022-05-16"
+                  },
+                  {
+                    "id": 2,
+                    "providerId": "435624563",
+                    "content": "내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.",
+                    "emotion": "행복",
+                    "happy_score": 11.5,
+                    "fear_score": 8.7,
+                    "disgust_score": 5.7,
+                    "anger_score": 44.8,
+                    "neutral_score": 3.7,
+                    "surprise_score": 3.3,
+                    "sad_score": 22.3,
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": "마스크",
+                    "hashtag_2": "빨래",
+                    "hashtag_3": "카페",
+                    "written_date": "2022-05-16"
                   }
                 ],
                 "isSuccess": true,
@@ -668,7 +687,7 @@
                     "hashtag_1": "여행",
                     "hashtag_2": "스페인",
                     "hashtag_3": "비행기",
-                    "written_date": "2022-05-16T15:00:00.000Z"
+                    "written_date": "2022-05-16"
                   }
                 ],
                 "isSuccess": true,
@@ -728,17 +747,6 @@
             "description": "OK",
             "schema": {
               "example": {
-                "updateResult": [
-                  {
-                    "id": 4,
-                    "providerId": "230570871073345",
-                    "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복",
-                    "hashtag_1": "운동",
-                    "hashtag_2": "빨래",
-                    "hashtag_3": "독서"
-                  }
-                ],
                 "message": "Updating diary is successfully done",
                 "isSuccess": true,
                 "code": 200
@@ -828,7 +836,17 @@
                     "hashtag_1": "운동",
                     "hashtag_2": "빨래",
                     "hashtag_3": "독서",
-                    "written_date": "2022-05-11T15:00:00.000Z"
+                    "written_date": "2022-05-11"
+                  },
+                  {
+                    "id": 5,
+                    "providerId": "230570871073345",
+                    "content": "나는 정말 행복해요",
+                    "emotion": "슬픔",
+                    "hashtag_1": "소주",
+                    "hashtag_2": "회식",
+                    "hashtag_3": "야근",
+                    "written_date": "2022-05-11"
                   }
                 ],
                 "isSuccess": true,

@@ -95,17 +95,9 @@ exports.updateDiary = async function (req, res) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
-      message: "Failed to update diary.(diaryUpdwate)",
+      message: "Failed to update diary.(diaryUpdate)",
     });
   }
-  else if(updateResult == "UpdateFail"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "Can't Update. (original value and updating value is same)"
-    })
-  }
-
   return res.status(200).send({
     message: "Updating diary is successfully done",
     isSuccess: true,
