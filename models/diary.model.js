@@ -7,10 +7,7 @@ function sleep(ms) {
 }
 
 async function test() {
-  console.log("before");
   await sleep(7000);
-  console.log("after");
-  console.log("done!");
 }
 
 // providerId 유효성 체크
@@ -72,6 +69,35 @@ exports.diaryDuplicateCheck = async function (providerId) {
   }
 };
 
+// 존재하는 일기인지 체크
+exports.diaryIdCheck = async function (Id) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const diaryIdValidationQuery = "select * from diary where id = ?";
+      let params = Id;
+      let [row] = await connection.query(diaryIdValidationQuery, params);
+      if (Array.isArray(row) && row.length === 0) {
+        connection.release();
+        return "diaryIdCheck";
+      } else {
+        connection.release();
+        return true;
+      }
+    } catch (err) {
+      console.error(`##### Query error ##### `);
+      console.log(err);
+      connection.release();
+      return false;
+    }
+  } catch (err) {
+    console.error(`##### DB error #####`);
+    console.log(err);
+    return false;
+  }
+};
+
 // 일기 작성
 exports.diaryWrite = async function (providerId, content) {
   try {
@@ -82,7 +108,9 @@ exports.diaryWrite = async function (providerId, content) {
       const response = await axios.post("http://33a640b59dsadasd5c.ngrok.io/prediction", {
         content: content,
       });*/
+      test();
       try {
+        // dummy data. 모델 연결 안되어있을 시 사용
         let dummy_emotion = "행복";
         let dummy_hashtag_1 = "강의";
         let dummy_hashtag_2 = "영화";
@@ -193,34 +221,6 @@ exports.diaryUpdate = async function (Id, content) {
   }
 };
 
-// 존재하는 일기인지 체크
-exports.diaryIdCheck = async function (Id) {
-  try {
-    const connection = await pool.getConnection(async (conn) => conn);
-    console.log(`##### Connection_pool_GET #####`);
-    try {
-      const diaryIdValidationQuery = "select * from diary where id = ?";
-      let params = Id;
-      let [row] = await connection.query(diaryIdValidationQuery, params);
-      if (Array.isArray(row) && row.length === 0) {
-        connection.release();
-        return "diaryIdCheck";
-      } else {
-        connection.release();
-        return true;
-      }
-    } catch (err) {
-      console.error(`##### Query error ##### `);
-      console.log(err);
-      connection.release();
-      return false;
-    }
-  } catch (err) {
-    console.error(`##### DB error #####`);
-    console.log(err);
-    return false;
-  }
-};
 
 // 일기 삭제
 exports.diaryDelete = async function (Id) {
