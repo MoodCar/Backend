@@ -353,15 +353,46 @@
               "example": {
                 "getAllResult": [
                   {
-                    "id": 4,
-                    "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복",
-                    "contents_id": null,
-			              "counselor_id": null,
-                    "hashtag_1": "스케이트",
-                    "hashtag_2": "독서",
-                    "hashtag_3": "공부",
-                    "written_date": "2022-05-11T15:00:00.000Z"
+                    "id": 1,
+                    "providerId": "123124435",
+                    "content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
+                    "emotion": "놀람",
+                    "happy_score": 22.3,
+                    "fear_score": 11.5,
+                    "disgust_score": 8.7,
+                    "anger_score": 5.7,
+                    "neutral_score": 44.8,
+                    "surprise_score": 3.7,
+                    "sad_score": 3.3,
+                    "written_date": "2022-05-16T15:00:00.000Z"
+                  },
+                  {
+                      "id": 2,
+                      "providerId": "435624563",
+                      "content": "내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.",
+                      "emotion": "행복",
+                      "happy_score": 11.5,
+                      "fear_score": 8.7,
+                      "disgust_score": 5.7,
+                      "anger_score": 44.8,
+                      "neutral_score": 3.7,
+                      "surprise_score": 3.3,
+                      "sad_score": 22.3,
+                      "written_date": "2022-05-16T15:00:00.000Z"
+                  },
+                  {
+                      "id": 3,
+                      "providerId": "906457842",
+                      "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
+                      "emotion": "중립",
+                      "happy_score": 8.7,
+                      "fear_score": 5.7,
+                      "disgust_score": 44.8,
+                      "anger_score": 3.7,
+                      "neutral_score": 3.3,
+                      "surprise_score": 22.3,
+                      "sad_score": 11.5,
+                      "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
                 "isSuccess": true,
@@ -491,16 +522,18 @@
               "example": {
                 "fetchResult": [
                   {
-                    "id": 4,
-                    "providerId": "230570871073345",
-                    "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복",
-                    "contents_id": null,
-                    "counselor_id": null,
-                    "hashtag_1": "운동",
-                    "hashtag_2": "빨래",
-                    "hashtag_3": "독서",
-                    "written_date": "2022-05-05T15:00:00.000Z"
+                    "id": 1,
+                    "providerId": "123124435",
+                    "content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
+                    "emotion": "놀람",
+                    "happy_score": 22.3,
+                    "fear_score": 11.5,
+                    "disgust_score": 8.7,
+                    "anger_score": 5.7,
+                    "neutral_score": 44.8,
+                    "surprise_score": 3.7,
+                    "sad_score": 3.3,
+                    "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
                 "isSuccess": true,
@@ -599,16 +632,18 @@
               "example": {
                 "fetchResult": [
                   {
-                    "id": 4,
-                    "providerId": "230570871073345",
-                    "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복",
-                    "contents_id": null,
-                    "counselor_id": null,
-                    "hashtag_1": "운동",
-                    "hashtag_2": "빨래",
-                    "hashtag_3": "독서",
-                    "written_date": "2022-05-05T15:00:00.000Z"
+                    "id": 1,
+                    "providerId": "123124435",
+                    "content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
+                    "emotion": "놀람",
+                    "happy_score": 22.3,
+                    "fear_score": 11.5,
+                    "disgust_score": 8.7,
+                    "anger_score": 5.7,
+                    "neutral_score": 44.8,
+                    "surprise_score": 3.7,
+                    "sad_score": 3.3,
+                    "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
                 "isSuccess": true,
