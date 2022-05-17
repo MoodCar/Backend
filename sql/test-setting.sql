@@ -2,6 +2,7 @@ SET foreign_key_checks = 0;
 
 DROP TABLE if exists user;
 DROP TABLE if exists diary;
+DROP TABLE if exists emotion_score;
 
 set foreign_key_checks = 1;
 
@@ -47,7 +48,7 @@ CREATE TABLE emotion_score(
     PRIMARY KEY (id),
     FOREIGN KEY (diary_id)
     REFERENCES diary (id) on delete cascade
-)
+);
 
 insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트1","google","123124435","qeklnklviqoebbzscklb12312445");
 insert into user(email,name,provider,providerId,token) values ("qwesad123@gmail.com","테스트2","google","435624563","snklfnalknk123ehilg123756i1z");
@@ -57,7 +58,9 @@ insert into user(email,name,provider,providerId,token) values ("46nklnszc@gmail.
 insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("123124435","그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.","놀람", "여행","스페인","비행기");
 insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("435624563","내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.","행복","마스크","빨래","카페");
 insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임");
+insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,written_date) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임","2022-05-15");
 
 insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (1,22.3,11.5,8.7,5.7,44.8,3.7,3.3);
 insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (2,11.5,8.7,5.7,44.8,3.7,3.3,22.3);
 insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (3,8.7,5.7,44.8,3.7,3.3,22.3,11.5);
+insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (4,8.7,5.7,44.8,3.7,3.3,22.3,11.5);
