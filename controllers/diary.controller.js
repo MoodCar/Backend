@@ -59,7 +59,6 @@ exports.writeDiary = async function (req, res) {
   }
 
   return res.status(200).send({
-    writeResult,
     message: "Writing diary is successfully done",
     isSuccess: true,
     code: 200,
