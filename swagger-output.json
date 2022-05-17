@@ -364,6 +364,11 @@
                     "neutral_score": 44.8,
                     "surprise_score": 3.7,
                     "sad_score": 3.3,
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": "여행",
+                    "hashtag_2": "스페인",
+                    "hashtag_3": "비행기",
                     "written_date": "2022-05-16T15:00:00.000Z"
                   },
                   {
@@ -378,6 +383,11 @@
                       "neutral_score": 3.7,
                       "surprise_score": 3.3,
                       "sad_score": 22.3,
+                      "contents_id": null,
+                      "counselor_id": null,
+                      "hashtag_1": "마스크",
+                      "hashtag_2": "빨래",
+                      "hashtag_3": "카페",
                       "written_date": "2022-05-16T15:00:00.000Z"
                   },
                   {
@@ -392,6 +402,11 @@
                       "neutral_score": 3.3,
                       "surprise_score": 22.3,
                       "sad_score": 11.5,
+                      "contents_id": null,
+                      "counselor_id": null,
+                      "hashtag_1": "독서",
+                      "hashtag_2": "청소",
+                      "hashtag_3": "게임",
                       "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
@@ -533,6 +548,11 @@
                     "neutral_score": 44.8,
                     "surprise_score": 3.7,
                     "sad_score": 3.3,
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": "여행",
+                    "hashtag_2": "스페인",
+                    "hashtag_3": "비행기",
                     "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
@@ -643,6 +663,11 @@
                     "neutral_score": 44.8,
                     "surprise_score": 3.7,
                     "sad_score": 3.3,
+                    "contents_id": null,
+                    "counselor_id": null,
+                    "hashtag_1": "여행",
+                    "hashtag_2": "스페인",
+                    "hashtag_3": "비행기",
                     "written_date": "2022-05-16T15:00:00.000Z"
                   }
                 ],
