@@ -423,16 +423,6 @@
             "description": "OK",
             "schema": {
               "example": {
-                "writeResult": [
-                  {
-                    "id": 4,
-                    "content": "제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복",
-                    "hashtag_1": "스케이트",
-                    "hashtag_2": "독서",
-                    "hashtag_3": "공부"
-                  }
-                ],
                 "message": "Writing diary is successfully done",
                 "isSuccess": true,
                 "code": 200

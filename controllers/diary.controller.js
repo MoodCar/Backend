@@ -107,7 +107,6 @@ exports.updateDiary = async function (req, res) {
   }
 
   return res.status(200).send({
-    updateResult,
     message: "Updating diary is successfully done",
     isSuccess: true,
     code: 200,

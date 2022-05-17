@@ -10,6 +10,19 @@ async function test() {
   await sleep(7000);
 }
 
+// dummy data. 모델 연결 안되어있을 시 사용
+let dummy_emotion = "행복";
+let dummy_hashtag_1 = "강의";
+let dummy_hashtag_2 = "영화";
+let dummy_hashtag_3 = "떡볶이";
+let dummy_happy_score = 56.3;
+let dummy_fear_score = 11.2;
+let dummy_disgust_score = 5.1;
+let dummy_anger_score = 1.3;
+let dummy_neutral_score = 21.1;
+let dummy_surprise_score = 2.7;
+let dummy_sad_score = 2.3;
+
 // providerId 유효성 체크
 exports.providerIdCheck = async function (providerId) {
   try {
@@ -110,19 +123,6 @@ exports.diaryWrite = async function (providerId, content) {
       });*/
       test();
       try {
-        // dummy data. 모델 연결 안되어있을 시 사용
-        let dummy_emotion = "행복";
-        let dummy_hashtag_1 = "강의";
-        let dummy_hashtag_2 = "영화";
-        let dummy_hashtag_3 = "떡볶이";
-        let dummy_happy_score = 56.3;
-        let dummy_fear_score = 11.2;
-        let dummy_disgust_score = 5.1;
-        let dummy_anger_score = 1.3;
-        let dummy_neutral_score = 21.1;
-        let dummy_surprise_score = 2.7;
-        let dummy_sad_score = 2.3;
-
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
         /* 실제 코드
@@ -148,8 +148,8 @@ exports.diaryWrite = async function (providerId, content) {
         const putEmotionScoreQuery =
           "insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (?,?,?,?,?,?,?,?)";
         params = [insertId, dummy_happy_score,dummy_fear_score,dummy_disgust_score,dummy_anger_score,dummy_neutral_score,dummy_surprise_score,dummy_sad_score];
-        // params = [insertId, response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score]
-        [row] = await connection.query(putEmotionScoreQuery, params);
+        // params = [insertId, response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score];
+        await connection.query(putEmotionScoreQuery, params);
         connection.release();
         return "Success";
       } catch (err) {
@@ -176,33 +176,38 @@ exports.diaryUpdate = async function (Id, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      /*
+      /* 나중에 모델 배포시 실제 ngrok 주소 넣어야함.
       const response = await axios.post("http://33a640b59d1232135c.ngrok.io/prediction", {
         content: content,
       });*/
+      test();
       try {
         const updateDiaryQuery =
           "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ? where Id = ? ";
-        let params = [
+        /* let params = [
           content,
           response.data.emotion,
           response.data.hashtag_1,
           response.data.hashtag_2,
           response.data.hashtag_3,
           Id,
-        ];
-        let [row] = await connection.query(updateDiaryQuery, params);
-        if (row.changedRows == 1) {
-          params = Id;
-          const getUpdatedDiaryQuery =
-            "select id,content,emotion,hashtag_1,hashtag_2,hashtag_3 from diary where id = ?";
-          [row] = await connection.query(getUpdatedDiaryQuery, params);
-          connection.release();
-          return row;
-        } else {
-          connection.release();
-          return "UpdateFail";
-        }
+        ];*/
+        let params = [
+          content,
+          dummy_emotion,
+          dummy_hashtag_1,
+          dummy_hashtag_2,
+          dummy_hashtag_3,
+          Id
+        ]
+        await connection.query(updateDiaryQuery, params);
+        const updateEmotionScoreQuery = 
+        " update emotion_score set happy_score = ?,fear_score = ?,disgust_score = ?,anger_score = ?,neutral_score = ?,surprise_score = ?,sad_score = ? where Id = ?";
+        params = [dummy_happy_score,dummy_fear_score,dummy_disgust_score,dummy_anger_score,dummy_neutral_score,dummy_surprise_score,dummy_sad_score,Id];
+        //params = [response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score, Id];
+        await connection.query(updateEmotionScoreQuery, params);
+        connection.release();
+        return "Success";
       } catch (err) {
         console.error(`##### Query error ##### `);
         console.log(err);
