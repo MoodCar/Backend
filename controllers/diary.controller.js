@@ -350,7 +350,6 @@ exports.updateHashtag = async function (req,res){
     });
   }
   return res.status(200).send({
-    updateResult,
     message: "Updating hashtag of diary is successfully done",
     isSuccess: true,
     code: 200

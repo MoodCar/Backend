@@ -908,13 +908,6 @@
             "description": "OK",
             "schema": {
               "example": {
-                "updateResult": [
-                  {
-                    "id": 3,
-                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
-                    "emotion": "행복"
-                  }
-                ],
                 "message": "Updating emotion of diary is successfully done",
                 "isSuccess": true,
                 "code": 200
@@ -940,16 +933,6 @@
                 "message": "Check Diary id value."
               }
             }
-          },
-          "409": {
-            "description": "Conflict(기존 감정과 동일한데 수정 요청한 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "Can't Update. (original value and updating value is same)"
-                }
-              }
           },
           "500": {
             "description": "Internal Server Error",
@@ -1001,15 +984,6 @@
             "description": "OK",
             "schema": {
               "example": {
-                "updateResult": [
-                  {
-                    "id": 3,
-                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
-                    "hashtag_1": "학교",
-                    "hashtag_2": "졸업",
-                    "hashtag_3": "방황"
-                  }
-                ],
                 "message": "Updating hashtag of diary is successfully done",
                 "isSuccess": true,
                 "code": 200
@@ -1035,16 +1009,6 @@
                 "message": "Check Diary id value."
               }
             }
-          },
-          "409": {
-            "description": "Conflict(기존 해시태그와 동일한 정보 또는 중복된 해시태그를 통해 수정 요청한 경우)",
-              "schema": {
-                "example": {
-                  "isSuccess": false,
-                  "code": 409,
-                  "message": "Can't Update. (Updated to same value or Requested with duplicated hashtags)"
-                }
-              }
           },
           "500": {
             "description": "Internal Server Error",
