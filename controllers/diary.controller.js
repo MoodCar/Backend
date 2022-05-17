@@ -304,16 +304,7 @@ exports.updateEmotion = async function (req,res){
       message: "Failed to update emotion of diary.(diaryEmotionUpdate)",
     });
   }
-  else if(updateResult == "UpdateFail"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "Can't Update. (original value and updating value is same)"
-    })
-  }
-  
   return res.status(200).send({
-    updateResult,
     message: "Updating emotion of diary is successfully done",
     isSuccess: true,
     code: 200,
@@ -357,26 +348,7 @@ exports.updateHashtag = async function (req,res){
       code: 500,
       message: "Failed to update hashtag of diary.(diaryHashtagUpdate)",
     });
-  }else if(updateResult == "dupArray"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "Duplicate hashtags exist among the 3 hashtags that have been updated"
-    })
-  }else if(updateResult == "sameArray"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "The previous 3 hashtags and the 3 updated hashtags information are the same"
-    })
-  }else if(updateResult == "UpdateFail"){
-    return res.status(409).send({
-      isSuccess : false,
-      code : 409,
-      message : "Can't Update. (original value and updating value is same)"
-    })
   }
-
   return res.status(200).send({
     updateResult,
     message: "Updating hashtag of diary is successfully done",

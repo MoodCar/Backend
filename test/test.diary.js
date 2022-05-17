@@ -8,6 +8,15 @@ let Content = {
     "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
 };
 let updateContent = { content: "너와 함께라면 나는 언제나 행복해" };
+let emotion = {
+  emotion: "슬픔",
+};
+
+let hashtag = {
+    hashtag_1 : "김밥",
+    hashtag_2 : "소풍",
+    hashtag_3 : "회식"
+};
 
 async function setTest() {
   try {
@@ -204,6 +213,120 @@ describe("PATCH /diaries/:providerId", () => {
       });
   });
 });
+
+describe("PATCH /diaries/emotions/:Id", () => {
+  it("일기 감정만 수정 실패 Test (수정할 감정 입력x)", (done) => {
+    request(app)
+      .patch("/diaries/emotions/5")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.message.should.be.equal("Please check emotion input.");
+        res.body.code.should.be.equal(400);
+        res.body.isSuccess.should.be.equal(false);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("PATCH /diaries/emotions/:Id", () => {
+  it("일기 감정만 수정 실패 Test (존재하지 않는 DiaryId)", (done) => {
+    request(app)
+      .patch("/diaries/emotions/2389418927")
+      .send(emotion)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.message.should.be.equal("Check Diary id value.");
+        res.body.code.should.be.equal(404);
+        res.body.isSuccess.should.be.equal(false);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("PATCH /diaries/emotions/:Id", () => {
+  it("일기 감정만 수정 성공 Test", (done) => {
+    request(app)
+      .patch("/diaries/emotions/5")
+      .send(emotion)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.message.should.be.equal(
+          "Updating emotion of diary is successfully done"
+        );
+        res.body.code.should.be.equal(200);
+        res.body.isSuccess.should.be.equal(true);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("PATCH /diaries/hashtags/:id", () => {
+    it("일기 해시태그 수정 실패 Test (hashtag 입력 존재x)", (done) => {
+      request(app)
+        .patch("/diaries/hashtags/5")
+        .end((err, res) => {
+          if (err) {
+            throw err;
+          }
+          res.body.message.should.be.equal(
+            "Please check hashtag input."
+          );
+          res.body.code.should.be.equal(400);
+          res.body.isSuccess.should.be.equal(false);
+          console.log(res.body);
+          done();
+        });
+    });
+  });
+
+  describe("PATCH /diaries/hashtags/:id", () => {
+    it("일기 해시태그 수정 실패 Test (존재하지 않는 DiaryId)", (done) => {
+      request(app)
+        .patch("/diaries/hashtags/42957209")
+        .send(hashtag)
+        .end((err, res) => {
+          if (err) {
+            throw err;
+          }
+          res.body.message.should.be.equal(
+            "Check Diary id value."
+          );
+          res.body.code.should.be.equal(404);
+          res.body.isSuccess.should.be.equal(false);
+          console.log(res.body);
+          done();
+        });
+    });
+  });
+
+  describe("PATCH /diaries/hashtags/:id", () => {
+    it("일기 해시태그 수정 성공 Test", (done) => {
+      request(app)
+        .patch("/diaries/hashtags/5")
+        .send(hashtag)
+        .end((err, res) => {
+          if (err) {
+            throw err;
+          }
+          res.body.message.should.be.equal(
+            "Updating hashtag of diary is successfully done"
+          );
+          res.body.code.should.be.equal(200);
+          res.body.isSuccess.should.be.equal(true);
+          console.log(res.body);
+          done();
+        });
+    });
+  });
 
 describe("GET /diaries/:providerId", () => {
   it("일기 목록을 성공적으로 가져오는 Test", (done) => {
