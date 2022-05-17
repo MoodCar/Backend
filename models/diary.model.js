@@ -257,7 +257,7 @@ exports.getDiaryByProviderId = async function (providerId) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const getDiaryQuery = "select * from diary where providerId = ?";
+      const getDiaryQuery = "select d.id,d.providerId,d.content,d.emotion,e.happy_score,e.fear_score,e.disgust_score,e.anger_score,e.neutral_score,e.surprise_score,e.sad_score,d.written_date from diary as d left join emotion_score as e on d.id = e.diary_id where providerId = ?;";
       let params = providerId;
       let [row] = await connection.query(getDiaryQuery, params);
       connection.release();
@@ -281,7 +281,7 @@ exports.getDiaryById = async function (Id) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const getDiaryByIdQuery = "select * from diary where Id = ?";
+      const getDiaryByIdQuery = "select d.id,d.providerId,d.content,d.emotion,e.happy_score,e.fear_score,e.disgust_score,e.anger_score,e.neutral_score,e.surprise_score,e.sad_score,d.written_date from diary as d left join emotion_score as e on d.id = e.diary_id where d.id = ?;";
       let params = Id;
       let [row] = await connection.query(getDiaryByIdQuery, params);
       connection.release();
@@ -305,7 +305,7 @@ exports.getAll = async function () {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const getAllQuery = "select * from diary";
+      const getAllQuery = "select d.id,d.providerId,d.content,d.emotion,e.happy_score,e.fear_score,e.disgust_score,e.anger_score,e.neutral_score,e.surprise_score,e.sad_score,d.written_date from diary as d left join emotion_score as e on d.id = e.diary_id;";
       let [row] = await connection.query(getAllQuery);
       connection.release();
       return row;
