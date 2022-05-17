@@ -141,15 +141,9 @@ describe('POST /diaries/:providerId', () => {
             if(err){
                 throw err;
             }
-            (res.body).should.have.property('writeResult');
+            (res.body.message).should.be.equal('Writing diary is successfully done');
             (res.body.code).should.be.equal(200);
             (res.body.isSuccess).should.be.equal(true);
-            should.exist(res.body.writeResult[0].id);
-            should.exist(res.body.writeResult[0].emotion);
-            should.exist(res.body.writeResult[0].content);
-            should.exist(res.body.writeResult[0].hashtag_1);
-            should.exist(res.body.writeResult[0].hashtag_2);
-            should.exist(res.body.writeResult[0].hashtag_3);
             console.log(res.body);
             done();
         });
@@ -175,6 +169,7 @@ describe('POST /diaries/:providerId', () => {
     });
 });
 
+/*
 describe('PATCH /diaries/:providerId', () => {
     it('일기 수정 실패 Test(잘못된 Content)', (done) =>{
         request(app)
@@ -233,7 +228,7 @@ describe('PATCH /diaries/:providerId', () => {
         });
     });
 });
-
+*/
 
 
 describe('GET /diaries/:providerId', () => {
