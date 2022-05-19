@@ -1080,6 +1080,236 @@
           }
         }
       }
+    },
+    "/feedbacks/emotions":{
+      "post": {
+        "tags": ["Feedback"],
+        "summary": "감정 피드백 등록",
+        "description": "새로운 감정 피드백을 등록하는 API입니다.",
+        "parameters": [
+          {
+            "name": "Emotion Feedback Information",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "diary_content": {
+                  "example": "String"
+                },
+                "emotion_original": {
+                  "example": "String"
+                },
+                "emotion_changed": {
+                  "example": "String"
+                },
+                "opinion": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "message": "POST Emotion Feedback is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (감정 피드백 내용(Request Body)이 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check input."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to POST Emotion Feedback"
+              }
+            }
+          }
+        }
+      },
+      "get":{
+        "tags" : ["Feedback"],
+        "summary" : "전체 감정 피드백",
+        "description" : "서비스에 등록된 모든 감정 피드백을 가져오는 API입니다.",
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "emotionFeedbackResult": [
+                  {
+                    "id": 1,
+                    "diary_content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처바싹 말라버린다.",
+                    "emotion_original": "놀람",
+                    "emotion_changed": "행복",
+                    "opinion": "수정 바랍니다."
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (등록된 감정 피드백이 존재하지 않을 때)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Failed to get Information of Emotion Feedback(empty)"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get Information of Emotion Feedback"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feedbacks/hashtags":{
+      "post": {
+        "tags": ["Feedback"],
+        "summary": "해시태그 피드백 등록",
+        "description": "새로운 해시태그 피드백을 등록하는 API입니다.",
+        "parameters": [
+          {
+            "name": "Hashtag Feedback Information",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "diary_content": {
+                  "example": "String"
+                },
+                "hashtag1_original": {
+                  "example": "String"
+                },
+                "hashtag1_changed": {
+                  "example": "String"
+                },
+                "hashtag2_original": {
+                  "example": "String"
+                },
+                "hashtag2_changed": {
+                  "example": "String"
+                },
+                "hashtag3_original": {
+                  "example": "String"
+                },
+                "hashtag3_changed": {
+                  "example": "String"
+                },
+                "opinion": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "message": "POST Hashtag Feedback is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (해시태그 피드백 내용(Request Body)이 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Please check input."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to POST Hashtag Feedback"
+              }
+            }
+          }
+        }
+      },
+      "get":{
+        "tags" : ["Feedback"],
+        "summary" : "전체 해시태그 피드백",
+        "description" : "서비스에 등록된 모든 해시태그 피드백을 가져오는 API입니다.",
+        "responses" : {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "hashtagFeedbackResult": [
+                  {
+                    "id": 1,
+                    "diary_content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처바싹 말라버린다.",
+                    "hashtag1_original": "여행",
+                    "hashtag2_original": "스페인",
+                    "hashtag3_original": "비행기",
+                    "hashtag1_changed": "사랑",
+                    "hashtag2_changed": "소망",
+                    "hashtag3_changed": "응원",
+                    "opinion": "수정 바랍니다."
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (등록된 해시태그 피드백이 존재하지 않을 때)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Failed to get Information of Hashtag Feedback(empty)"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get Information of Hashtag Feedback"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

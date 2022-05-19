@@ -129,6 +129,7 @@ require("./routes/google.routes.js")(app);
 require("./routes/diary.routes.js")(app);
 
 require("./routes/admin.routes.js")(app);
+require("./routes/feedback.routes.js")(app);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
