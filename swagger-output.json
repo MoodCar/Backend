@@ -1022,6 +1022,64 @@
           }
         }
       }
+    },
+    "/diaries/today/{providerId}":{
+      "get" : {
+        "tags": ["Diary"],
+        "summary": "오늘 일기 작성 정보",
+        "description": "사용자 Id를 기반으로 오늘 작성된 일기가 있는지 없는지 여부를 반환합니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "일기를 검색할 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses" : {
+          "200": {
+            "description": "OK (오늘 작성한 일기가 존재하지 않으니, 작성해도 됨)" ,
+            "schema": {
+              "example": {
+                "message": "No diary is written today. continue to write diary.",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (오늘 작성한 일기가 이미 존재)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Today's diary already exists."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 providerId에 대한 조회 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get today's result."
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

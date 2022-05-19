@@ -420,3 +420,30 @@ exports.diaryHashtagUpdate = async function (
     return false;
   }
 };
+
+exports.getDiaryToday = async function(providerId){
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try{
+      const getDiaryWrittenTodayQuery = "select * from diary where providerId = ? and written_date = curdate()"
+      let params = providerId
+      const [row] = await connection.query(getDiaryWrittenTodayQuery,params);
+      if(Array.isArray(row) && row.length === 0){
+        connection.release();
+        return "Success";
+      }
+      else{
+        connection.release();
+        return "Duplicate";
+      }
+    }catch(err){
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  }catch(err){
+    console.error(`##### DB error #####`);
+    return false;
+  }
+}

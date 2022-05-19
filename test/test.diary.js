@@ -143,6 +143,40 @@ describe("POST /diaries/:providerId", () => {
   });
 });
 
+describe("GET /diaries/today/:providerId", () => {
+  it("TodayResult 실패 Test (존재하지 않는 providerId)", (done) => {
+    request(app)
+      .get("/diaries/today/785681285237489169421834")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(404);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Check id value.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("GET /diaries/today/:providerId", () => {
+  it("TodayResult 성공 Test (오늘 작성한 일기 존재x)", (done) => {
+    request(app)
+      .get("/diaries/today/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(200);
+        res.body.isSuccess.should.be.equal(true);
+        res.body.message.should.be.equal("No diary is written today. continue to write diary.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
 describe("POST /diaries/:providerId", () => {
   it("성공적인 일기 작성 Test", (done) => {
     request(app)
@@ -155,6 +189,23 @@ describe("POST /diaries/:providerId", () => {
         res.body.message.should.be.equal("Writing diary is successfully done");
         res.body.code.should.be.equal(200);
         res.body.isSuccess.should.be.equal(true);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("GET /diaries/today/:providerId", () => {
+  it("TodayResult 성공 Test (오늘 작성된 일기 존재)", (done) => {
+    request(app)
+      .get("/diaries/today/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(400);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Today's diary already exists.");
         console.log(res.body);
         done();
       });
