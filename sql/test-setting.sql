@@ -3,6 +3,8 @@ SET foreign_key_checks = 0;
 DROP TABLE if exists user;
 DROP TABLE if exists diary;
 DROP TABLE if exists emotion_score;
+DROP TABLE if exists feedback_emotion;
+DROP TABLE if exists feedback_hashtag;
 
 set foreign_key_checks = 1;
 
@@ -48,6 +50,28 @@ CREATE TABLE emotion_score(
     PRIMARY KEY (id),
     FOREIGN KEY (diary_id)
     REFERENCES diary (id) on delete cascade
+);
+
+CREATE TABLE feedback_emotion(
+    id INT NOT NULL AUTO_INCREMENT,
+    diary_content VARCHAR(10000) NOT NULL,
+    emotion_original VARCHAR(20),
+    emotion_changed VARCHAR(20),
+    opinion VARCHAR(2000),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE feedback_hashtag(
+    id INT NOT NULL AUTO_INCREMENT,
+    diary_content VARCHAR(10000) NOT NULL,
+    hashtag1_original VARCHAR(20),
+    hashtag2_original VARCHAR(20),
+    hashtag3_original VARCHAR(20),
+    hashtag1_changed VARCHAR(20),
+    hashtag2_changed VARCHAR(20),
+    hashtag3_changed VARCHAR(20),
+    opinion VARCHAR(2000),
+    PRIMARY KEY (id)
 );
 
 insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트1","google","123124435","qeklnklviqoebbzscklb12312445");
