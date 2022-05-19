@@ -223,7 +223,7 @@ exports.findAll = async function (req,res){
   }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
     return res.status(400).send({
       isSuccess: false,
-      code: 404,
+      code: 400,
       message: "There is no diary in Diary table.",
     });
   }
@@ -356,3 +356,40 @@ exports.updateHashtag = async function (req,res){
   });
 }
 
+exports.getTodayInfo = async function(req,res){
+  const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
+  if (!providerIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get today's diary info.(providerIdCheck)",
+    });
+  } else if (providerIdCheck == "idCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check id value.",
+    });
+  }
+
+  const getTodayResult = await Diary.getDiaryToday(req.params.providerId);
+  if(!getTodayResult){
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get today's result.(getDiaryToday)",
+    });
+  }
+  else if (getTodayResult == "Duplicate"){
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "Today's diary already exists.",
+    });
+  }
+  return res.status(200).send({
+    message: "No diary is written today. continue to write diary.",
+    isSuccess: true,
+    code: 200
+  })
+}
