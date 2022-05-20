@@ -1,2 +1,3 @@
 #!/bin/bash
 npm test ./test/test.user.js --exit
+npm run testsetting ./test/test.setting.user.js

@@ -7,32 +7,6 @@ let updateInfo = {
   location: "서울",
   preference: "음악",
 };
-async function setTest() {
-  try {
-    const connection = await pool.getConnection(async (conn) => conn);
-    console.log(`##### Connection_pool_GET #####`);
-    try {
-      const setTestUserQuery =
-        "insert ignore into user(email,name,provider,providerId,token) values ('46nklnszc@gmail.com','테스트4','google','785681234','43btvny981y98cn1noihjnroiqw')";
-      await connection.query(setTestUserQuery);
-      connection.release();
-    } catch (err) {
-      console.error(`##### Query error ##### `);
-      console.log(err);
-      connection.release();
-      return false;
-    }
-  } catch (err) {
-    console.error(`##### DB error #####`);
-    console.log(err);
-    return false;
-  }
-}
-async function testSetting() {
-  await setTest();
-  console.log("Test Setting");
-}
-testSetting();
 
 describe("GET /users", () => {
   it("전체 유저 목록을 가져온다.", (done) => {
@@ -221,7 +195,6 @@ describe("GET /users", () => {
         should.exist(res.body.userInfo[0].token);
         should.not.exist(res.body.userInfo[3]);
         console.log(res.body);
-        testSetting(); // ##### 반드시 옮겨야함 #####
         done();
       });
   });

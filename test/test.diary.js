@@ -18,26 +18,6 @@ let hashtag = {
     hashtag_3 : "회식"
 };
 
-async function setTest() {
-  try {
-    const connection = await pool.getConnection(async (conn) => conn);
-    console.log(`##### Connection_pool_GET #####`);
-    try {
-      const setTestQuery = "alter table diary auto_increment = 5";
-      await connection.query(setTestQuery);
-      connection.release();
-    } catch {
-      console.error(`##### Query error ##### `);
-      connection.release();
-      return false;
-    }
-  } catch {
-    console.error(`##### DB error #####`);
-    return false;
-  }
-}
-
-setTest();
 
 describe("GET /diaries/:providerId", () => {
   it("존재하지 않는 사용자의 일기목록을 가져오는 Test", (done) => {

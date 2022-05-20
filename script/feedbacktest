@@ -1,2 +1,3 @@
 #!/bin/bash
+npm run testsetting ./test/test.setting.feedback.js
 npm test ./test/test.feedback.js --exit
