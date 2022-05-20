@@ -2,6 +2,7 @@ const { pool } = require("../models/db.js");
 
 async function setTest() {
     try {
+      console.log(4);
       const connection = await pool.getConnection(async (conn) => conn);
       console.log(`##### Connection_pool_GET #####`);
       try {
