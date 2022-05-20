@@ -1,7 +1,6 @@
 const request = require("supertest");
 const app = require("../index");
 const should = require("should");
-const { pool } = require("../models/db.js");
 
 let updateInfo = {
   location: "서울",

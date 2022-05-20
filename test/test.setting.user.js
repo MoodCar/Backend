@@ -1,5 +1,4 @@
 const { pool } = require("../models/db.js");
-const log = require('why-is-node-running')
 
 async function setTest() {
   try {

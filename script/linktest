@@ -1,2 +1,2 @@
-#!/bin/bash -li
+#!/bin/bash
 npm test ./test/test.linked.js --exit
