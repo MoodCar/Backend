@@ -5,6 +5,7 @@ function isEmpty(str) {
   else return false;
 }
 
+
 exports.getAllEmotionFeedback = async function (req, res) {
   const emotionFeedbackResult = await feedback.getEmotionFeedbackInfo();
   if (!emotionFeedbackResult) {

@@ -7,7 +7,7 @@ module.exports = app =>{
     app.delete("/diaries/details/:id",diary.deleteDiary);
     app.get("/diaries/details/:id", diary.fetchDiaryDetailById);
     app.patch("/diaries/details/:id",diary.updateDiary);
-    app.get("/diaries/searchresults/:providerId",diary.searchDiary);
+    app.post("/diaries/searchresults/:providerId",diary.searchDiary);
     app.get("/diaries/today/:providerId", diary.getTodayInfo);
     app.patch("/diaries/emotions/:id",diary.updateEmotion);
     app.patch("/diaries/hashtags/:id",diary.updateHashtag);
