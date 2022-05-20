@@ -438,10 +438,10 @@ describe("GET /diaries/details/:Id", () => {
   });
 });
 
-describe("GET /diaries/searchresults/:providerId", () => {
+describe("POST /diaries/searchresults/:providerId", () => {
   it("존재하지 않는 providerId의 일기를 검색하는 Test", (done) => {
     request(app)
-      .get("/diaries/searchresults/4")
+      .post("/diaries/searchresults/4")
       .end((err, res) => {
         if (err) {
           throw err;
@@ -455,10 +455,10 @@ describe("GET /diaries/searchresults/:providerId", () => {
   });
 });
 
-describe("GET /diaries/searchresults/:providerId", () => {
+describe("POST /diaries/searchresults/:providerId", () => {
   it("빈 컨텐츠를 검색하는 Test", (done) => {
     request(app)
-      .get("/diaries/searchresults/906457842")
+      .post("/diaries/searchresults/906457842")
       .send({ content: "" })
       .end((err, res) => {
         if (err) {
@@ -487,10 +487,10 @@ describe("GET /diaries/searchresults/:providerId", () => {
   });
 });
 
-describe("GET /diaries/searchresults/:providerId", () => {
+describe("POST /diaries/searchresults/:providerId", () => {
   it("존재하지 않는 값 검색 Test", (done) => {
     request(app)
-      .get("/diaries/searchresults/906457842")
+      .post("/diaries/searchresults/906457842")
       .send({ content: "행복" })
       .end((err, res) => {
         if (err) {
@@ -506,10 +506,10 @@ describe("GET /diaries/searchresults/:providerId", () => {
   });
 });
 
-describe("GET /diaries/searchresults/:providerId", () => {
+describe("POST /diaries/searchresults/:providerId", () => {
   it("성공적인 검색 Test", (done) => {
     request(app)
-      .get("/diaries/searchresults/906457842")
+      .post("/diaries/searchresults/906457842")
       .send({ content: "그녀" })
       .end((err, res) => {
         if (err) {

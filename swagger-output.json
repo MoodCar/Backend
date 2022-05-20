@@ -797,7 +797,7 @@
       }
     },
     "/diaries/searchresults/{providerId}": {
-      "get": {
+      "post": {
         "tags": ["Diary"],
         "summary": "일기 검색",
         "description": "검색 내용을 입력해 일기 검색 결과를 가져오는 API입니다.",
