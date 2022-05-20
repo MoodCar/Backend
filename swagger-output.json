@@ -12,7 +12,7 @@
     "/auth/google": {
       "get": {
         "tags": ["Authorization"],
-        "summary": "구글 로그인 호출 API",
+        "summary": "구글 로그인 호출 API - Frontend",
         "description": "구글 로그인 API입니다. 호출 시 구글 인증 페이지로 Redirect됩니다.",
         "parameters": [],
         "responses": {
@@ -25,7 +25,7 @@
     "/auth/google/callback": {
       "get": {
         "tags": ["Authorization"],
-        "summary": "구글 로그인 Callback API",
+        "summary": "구글 로그인 Callback API - 호출x",
         "description": "구글 로그인 성공 시에 자동으로 호출되는 Callback API입니다.",
         "parameters": [],
         "responses": {
@@ -41,7 +41,7 @@
     "/auth/google/fail": {
       "get": {
         "tags": ["Authorization"],
-        "summary": "구글 인증 실패 Callback API",
+        "summary": "구글 인증 실패 Callback API - 호출x",
         "description": "구글 로그인 실패 시 호출되는 콜백API입니다.",
         "parameters": [],
         "responses": {
@@ -54,7 +54,7 @@
     "/logout": {
       "get": {
         "tags": ["Authorization"],
-        "summary": "로그아웃 API",
+        "summary": "로그아웃 API - Frontend",
         "description": "인증 세션을 종료하는 로그아웃 API입니다",
         "parameters": [],
         "responses": {
@@ -67,7 +67,7 @@
     "/checklogin": {
       "get": {
         "tags": ["Authorization"],
-        "summary": "인증 세션 확인 및 유저 정보",
+        "summary": "인증 세션 확인 및 유저 정보 - Frontend",
         "description": "로그인 상태를 확인하고, 로그인되어 있다면 해당 유저의 정보를 받아옵니다.",
         "parameters": [],
         "responses": {
@@ -99,7 +99,7 @@
     "/users": {
       "get": {
         "tags": ["User"],
-        "summary": "전체 유저 정보",
+        "summary": "전체 유저 정보 - Admin",
         "description": "전체 유저의 정보를 받아옵니다.",
         "parameters": [],
         "responses": {
@@ -115,7 +115,7 @@
                     "providerId": "12312443546424335",
                     "token": "qeklnklviqoebbzscklb12312445",
                     "auth": 0,
-                    "reg_date": "2022-05-04T15:00:00.000Z"
+                    "reg_date": "2022-05-04"
                   }
                 ],
                 "isSuccess": true,
@@ -149,7 +149,7 @@
     "/users/{providerId}": {
       "get": {
         "tags": ["User"],
-        "summary": "특정 유저 정보",
+        "summary": "특정 유저 정보 - Frontend",
         "description": "특정 유저의 providerId로 유저 정보를 받아옵니다.",
         "parameters": [
           {
@@ -175,7 +175,7 @@
                     "auth": 0,
                     "location": "서울",
                     "preference": "음악",
-                    "reg_date": "2022-05-07T15:00:00.000Z"
+                    "reg_date": "2022-05-07"
                   }
                 ],
                 "message": "Fetching User Information is successfully done",
@@ -208,7 +208,7 @@
       },
       "delete": {
         "tags": ["User"],
-        "summary": "유저 삭제",
+        "summary": "유저 삭제 - Admin, Frontend",
         "description": "특정 유저의 providerId로 해당 유저 정보를 삭제합니다.",
         "parameters": [
           {
@@ -255,7 +255,7 @@
       },
       "patch": {
         "tags": ["User"],
-        "summary": "유저 정보 수정",
+        "summary": "유저 정보 수정 - Frontend",
         "description": "특정 유저의 providerId로 해당 유저의 위치, 선호 컨텐츠 정보를 수정합니다.",
         "parameters": [
           {
@@ -344,7 +344,7 @@
     "/diaries":{
       "get":{
         "tags" : ["Diary"],
-        "summary" : "전체 일기",
+        "summary" : "전체 일기 - Admin",
         "description" : "서비스에 등록된 모든 일기를 가져오는 API입니다.",
         "responses" : {
           "200": {
@@ -441,7 +441,7 @@
     "/diaries/{providerId}": {
       "post": {
         "tags": ["Diary"],
-        "summary": "일기 작성",
+        "summary": "일기 작성 - Frontend",
         "description": "새로운 일기를 작성하는 API입니다.",
         "parameters": [
           {
@@ -519,7 +519,7 @@
       },
       "get": {
         "tags": ["Diary"],
-        "summary": "사용자별 일기 정보",
+        "summary": "사용자별 일기 정보 - Frontend",
         "description": "해당 사용자의 일기 작성 기록을 받아오는 API입니다.",
         "parameters": [
           {
@@ -606,7 +606,7 @@
     "/diaries/details/{id}": {
       "delete": {
         "tags": ["Diary"],
-        "summary": "일기 삭제",
+        "summary": "일기 삭제 - Admin, Frontend",
         "description": "일기를 삭제하는 API입니다.",
         "parameters": [
           {
@@ -653,7 +653,7 @@
       },
       "get": {
         "tags": ["Diary"],
-        "summary": "일기 세부 내용 조회",
+        "summary": "일기 세부 내용 조회 - Frontend",
         "description": "일기 Id로 해당 일기의 세부 내용을 조회하는 API입니다.",
         "parameters": [
           {
@@ -719,7 +719,7 @@
       },
       "patch": {
         "tags": ["Diary"],
-        "summary": "일기 수정",
+        "summary": "일기 수정 - Frontend",
         "description": "수정할 내용을 입력해 일기를 수정하는 API입니다.",
         "parameters": [
           {
@@ -799,7 +799,7 @@
     "/diaries/searchresults/{providerId}": {
       "post": {
         "tags": ["Diary"],
-        "summary": "일기 검색",
+        "summary": "일기 검색 - Frontend",
         "description": "검색 내용을 입력해 일기 검색 결과를 가져오는 API입니다.",
         "parameters": [
           {
@@ -880,7 +880,7 @@
     "/diaries/emotions/{id}": {
       "patch": {
         "tags": ["Diary"],
-        "summary": "일기 감정 수정",
+        "summary": "일기 감정 수정 - Frontend",
         "description": "수정할 감정을 입력해 일기 감정을 수정하는 API입니다.",
         "parameters": [
           {
@@ -950,7 +950,7 @@
     "/diaries/hashtags/{id}": {
       "patch": {
         "tags": ["Diary"],
-        "summary": "일기 해시태그 수정",
+        "summary": "일기 해시태그 수정 - Frontend",
         "description": "수정할 해시태그를 입력해 일기 해시태그를 수정하는 API입니다.",
         "parameters": [
           {
@@ -1026,7 +1026,7 @@
     "/diaries/today/{providerId}":{
       "get" : {
         "tags": ["Diary"],
-        "summary": "오늘 일기 작성 정보",
+        "summary": "오늘 일기 작성 정보 - Frontend",
         "description": "사용자 Id를 기반으로 오늘 작성된 일기가 있는지 없는지 여부를 반환합니다.",
         "parameters": [
           {
@@ -1084,7 +1084,7 @@
     "/feedbacks/emotions":{
       "post": {
         "tags": ["Feedback"],
-        "summary": "감정 피드백 등록",
+        "summary": "감정 피드백 등록 - Frontend",
         "description": "새로운 감정 피드백을 등록하는 API입니다.",
         "parameters": [
           {
@@ -1144,7 +1144,7 @@
       },
       "get":{
         "tags" : ["Feedback"],
-        "summary" : "전체 감정 피드백",
+        "summary" : "전체 감정 피드백 - Admin",
         "description" : "서비스에 등록된 모든 감정 피드백을 가져오는 API입니다.",
         "responses" : {
           "200": {
@@ -1191,7 +1191,7 @@
     "/feedbacks/hashtags":{
       "post": {
         "tags": ["Feedback"],
-        "summary": "해시태그 피드백 등록",
+        "summary": "해시태그 피드백 등록 - Frontend",
         "description": "새로운 해시태그 피드백을 등록하는 API입니다.",
         "parameters": [
           {
@@ -1263,7 +1263,7 @@
       },
       "get":{
         "tags" : ["Feedback"],
-        "summary" : "전체 해시태그 피드백",
+        "summary" : "전체 해시태그 피드백 - Admin",
         "description" : "서비스에 등록된 모든 해시태그 피드백을 가져오는 API입니다.",
         "responses" : {
           "200": {
