@@ -54,4 +54,46 @@ module.exports = app =>{
             })
     });
 
+    app.get("/admin/feedbacks/emotions", (req, res) => {
+        axios.get("http://localhost:3000/feedbacks/emotions")
+            .then(response => {
+                if(response.data.emotionFeedbackResult.length === 0){
+                    return res.status(404).send({
+                        isSuccess : false,
+                        code : 404,
+                        message : "There is no emotion feedback."
+                      });
+                }
+                res.render('feedbackEmotionList', {
+                    title: 'Emotion Feedback List',
+                    feedbackEmotion: response.data.emotionFeedbackResult
+                })
+            })
+            .catch(error => {
+                console.log('error: ', error);
+            })
+    }
+    );
+
+    app.get("/admin/feedbacks/hashtags", (req, res) => {
+        axios.get("http://localhost:3000/feedbacks/hashtags")
+            .then(response => {
+                if(response.data.hashtagFeedbackResult.length === 0){
+                    return res.status(404).send({
+                        isSuccess : false,
+                        code : 404,
+                        message : "There is no hashtag feedback."
+                      });
+                }
+                res.render('feedbackHashtagList', {
+                    title: 'Hashtag Feedback List',
+                    feedbackHashtag: response.data.hashtagFeedbackResult
+                })
+            })
+            .catch(error => {
+                console.log('error: ', error);
+            })
+    }
+    );
+
 };
