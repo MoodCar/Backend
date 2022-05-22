@@ -1039,17 +1039,7 @@
         ],
         "responses" : {
           "200": {
-            "description": "OK (오늘 작성한 일기가 존재하지 않으니, 작성해도 됨)" ,
-            "schema": {
-              "example": {
-                "message": "No diary is written today. continue to write diary.",
-                "isSuccess": true,
-                "code": 200
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (오늘 작성한 일기가 이미 존재)",
+            "description": "OK (오늘 작성한 일기가 존재함)" ,
             "schema": {
               "example": {
                 "getTodayResult": [
@@ -1066,9 +1056,19 @@
                     "written_date": "2022-05-22"
                   }
                 ],
+                "message": "Today's diary already exists.",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (오늘 작성한 일기가 존재하지 않음)",
+            "schema": {
+              "example": {
                 "isSuccess": false,
                 "code": 400,
-                "message": "Today's diary already exists."
+                "message": "No diary is written today. continue to write diary."
               }
             }
           },
