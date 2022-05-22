@@ -435,7 +435,7 @@ exports.getDiaryToday = async function(providerId){
       }
       else{
         connection.release();
-        return "Duplicate";
+        return row;
       }
     }catch(err){
       console.error(`##### Query error ##### `);

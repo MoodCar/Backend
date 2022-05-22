@@ -208,19 +208,16 @@ exports.fetchDiaryDetailById = async function (req, res) {
   });
 };
 
-
 // 전체 일기 목록 가져오기
-exports.findAll = async function (req,res){
-
-
+exports.findAll = async function (req, res) {
   const getAllResult = await Diary.getAll();
-  if(!getAllResult){
+  if (!getAllResult) {
     return res.status(500).send({
-      isSuccess : false,
-      code : 500,
-      message : "Failed to get diaries.(getAll)"
-    })
-  }else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diaries.(getAll)",
+    });
+  } else if (Array.isArray(getAllResult) && getAllResult.length === 0) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -229,13 +226,13 @@ exports.findAll = async function (req,res){
   }
   return res.status(200).send({
     getAllResult,
-    isSuccess : true,
-    code : 200,
-  })
-}
+    isSuccess: true,
+    code: 200,
+  });
+};
 
 // 일기 검색
-exports.searchDiary = async function(req,res){
+exports.searchDiary = async function (req, res) {
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
@@ -251,8 +248,11 @@ exports.searchDiary = async function(req,res){
     });
   }
 
-  const searchResult = await Diary.getSearchResult(req.params.providerId,req.body.content);
-  if(!searchResult){
+  const searchResult = await Diary.getSearchResult(
+    req.params.providerId,
+    req.body.content
+  );
+  if (!searchResult) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
@@ -264,10 +264,9 @@ exports.searchDiary = async function(req,res){
     isSuccess: true,
     code: 200,
   });
-}
+};
 
-
-exports.updateEmotion = async function (req,res){
+exports.updateEmotion = async function (req, res) {
   if (isEmpty(req.body.emotion)) {
     return res.status(400).send({
       isSuccess: false,
@@ -291,7 +290,6 @@ exports.updateEmotion = async function (req,res){
     });
   }
 
-
   const updateResult = await Diary.diaryEmotionUpdate(
     req.params.id,
     req.body.emotion
@@ -309,11 +307,14 @@ exports.updateEmotion = async function (req,res){
     isSuccess: true,
     code: 200,
   });
-}
+};
 
-
-exports.updateHashtag = async function (req,res){
-  if (isEmpty(req.body.hashtag_1) || isEmpty(req.body.hashtag_2) || isEmpty(req.body.hashtag_3)) {
+exports.updateHashtag = async function (req, res) {
+  if (
+    isEmpty(req.body.hashtag_1) ||
+    isEmpty(req.body.hashtag_2) ||
+    isEmpty(req.body.hashtag_3)
+  ) {
     return res.status(400).send({
       isSuccess: false,
       code: 400,
@@ -335,7 +336,7 @@ exports.updateHashtag = async function (req,res){
       message: "Check Diary id value.",
     });
   }
-  
+
   const updateResult = await Diary.diaryHashtagUpdate(
     req.params.id,
     req.body.hashtag_1,
@@ -352,11 +353,11 @@ exports.updateHashtag = async function (req,res){
   return res.status(200).send({
     message: "Updating hashtag of diary is successfully done",
     isSuccess: true,
-    code: 200
+    code: 200,
   });
-}
+};
 
-exports.getTodayInfo = async function(req,res){
+exports.getTodayInfo = async function (req, res) {
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
@@ -373,23 +374,24 @@ exports.getTodayInfo = async function(req,res){
   }
 
   const getTodayResult = await Diary.getDiaryToday(req.params.providerId);
-  if(!getTodayResult){
+  if (!getTodayResult) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
       message: "Failed to get today's result.(getDiaryToday)",
     });
-  }
-  else if (getTodayResult == "Duplicate"){
+  } else if (getTodayResult == "Success") {
     return res.status(400).send({
-      isSuccess: false,
-      code: 400,
-      message: "Today's diary already exists.",
+      message: "No diary is written today. continue to write diary.",
+      isSuccess: true,
+      code: 200,
     });
   }
-  return res.status(200).send({
-    message: "No diary is written today. continue to write diary.",
-    isSuccess: true,
-    code: 200
-  })
-}
+
+  return res.status(400).send({
+    getTodayResult,
+    isSuccess: false,
+    code: 400,
+    message: "Today's diary already exists.",
+  });
+};
