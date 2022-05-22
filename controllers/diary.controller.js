@@ -380,17 +380,18 @@ exports.getTodayInfo = async function (req, res) {
       code: 500,
       message: "Failed to get today's result.(getDiaryToday)",
     });
-  } else if(getTodayResult == "Fail"){
-    res.status(400).send({
-    isSuccess: false,
-    code: 400,
-    message: "No diary is written today. continue to write diary.",
-  })};
+  } else if (getTodayResult == "Fail") {
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "No diary is written today. continue to write diary.",
+    });
+  }
 
   return res.status(200).send({
-      getTodayResult,
-      message: "Today's diary already exists.",
-      isSuccess: true,
-      code: 200,
-    });
-  };
+    getTodayResult,
+    message: "Today's diary already exists.",
+    isSuccess: true,
+    code: 200,
+  });
+};
