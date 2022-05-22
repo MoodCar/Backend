@@ -431,7 +431,7 @@ exports.getDiaryToday = async function(providerId){
       const [row] = await connection.query(getDiaryWrittenTodayQuery,params);
       if(Array.isArray(row) && row.length === 0){
         connection.release();
-        return "Fail";
+        return "Success";
       }
       else{
         connection.release();

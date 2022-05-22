@@ -380,10 +380,10 @@ exports.getTodayInfo = async function (req, res) {
       code: 500,
       message: "Failed to get today's result.(getDiaryToday)",
     });
-  } else if (getTodayResult == "Fail") {
-    return res.status(400).send({
-      isSuccess: false,
-      code: 400,
+  } else if (getTodayResult == "Success") {
+    return res.status(201).send({
+      isSuccess: true,
+      code: 201,
       message: "No diary is written today. continue to write diary.",
     });
   }

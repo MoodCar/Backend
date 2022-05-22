@@ -147,8 +147,8 @@ describe("GET /diaries/today/:providerId", () => {
         if (err) {
           throw err;
         }
-        res.body.code.should.be.equal(400);
-        res.body.isSuccess.should.be.equal(false);
+        res.body.code.should.be.equal(201);
+        res.body.isSuccess.should.be.equal(true);
         res.body.message.should.be.equal("No diary is written today. continue to write diary.");
         console.log(res.body);
         done();
