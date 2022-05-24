@@ -182,6 +182,16 @@ describe("GET /diaries/today/:providerId", () => {
         if (err) {
           throw err;
         }
+        res.body.should.have.property("getTodayResult");
+        should.exist(res.body.getTodayResult[0].id);
+        should.exist(res.body.getTodayResult[0].providerId);
+        should.exist(res.body.getTodayResult[0].content);
+        should.exist(res.body.getTodayResult[0].emotion);
+        should.exist(res.body.getTodayResult[0].contents_id);
+        should.exist(res.body.getTodayResult[0].type);
+        should.exist(res.body.getTodayResult[0].name);
+        should.exist(res.body.getTodayResult[0].publisher);
+        should.exist(res.body.getTodayResult[0].url);
         res.body.code.should.be.equal(200);
         res.body.isSuccess.should.be.equal(true);
         res.body.message.should.be.equal("Today's diary already exists.");

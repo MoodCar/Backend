@@ -1048,12 +1048,11 @@
                     "providerId": "785681234",
                     "content": "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
                     "emotion": "행복",
-                    "contents_id": null,
-                    "counselor_id": null,
-                    "hashtag_1": "강의",
-                    "hashtag_2": "영화",
-                    "hashtag_3": "떡볶이",
-                    "written_date": "2022-05-22"
+                    "contents_id": "384",
+                    "type": "음악",
+                    "name": "Happy Town",
+                    "publisher": "MapleStory OST",
+                    "url": "https://www.youtube.com/watch?v=hbl-i0lhMcI&ab_channel=yeonH"
                   }
                 ],
                 "message": "Today's diary already exists.",
