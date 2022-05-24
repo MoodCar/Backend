@@ -474,6 +474,7 @@ exports.getDiaryToday = async function(providerId){
       const getDiaryWrittenTodayQuery = "select d.id,d.providerId,d.content,d.emotion,d.contents_id,c.type,c.name,c.publisher,c.url from diary as d left join content as c on d.contents_id = c.id where d.providerId = ? and d.written_date = curdate();"
       let params = providerId
       const [row] = await connection.query(getDiaryWrittenTodayQuery,params);
+      console.log(row);
       if(Array.isArray(row) && row.length === 0){
         connection.release();
         return "Success";

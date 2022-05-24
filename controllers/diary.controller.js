@@ -381,6 +381,7 @@ exports.getTodayInfo = async function (req, res) {
       message: "Failed to get today's result.(getDiaryToday)",
     });
   } else if (getTodayResult == "Success") {
+    console.log("Success");
     return res.status(201).send({
       isSuccess: true,
       code: 201,
