@@ -4,6 +4,8 @@
 <br/>
 
 ## Introduction
+추후에 작성 예정.
+
 <br/>
 
 
@@ -27,11 +29,16 @@
 <br/>
 
 ## System Architecture
-
+대략적인 Architecture 구조도입니다.
+<img src="./.github/images/architecture diagram.jpeg">
+1. Nginx가 메인 서버의 앞단에서 리버스 프록시로 작동
+2. Node.js Express를 사용하여 메인 API서버 구현
+3. 데이터베이스로 MySQL 사용. 배포용 데이터베이스와 테스트용 데이터베이스를 분리 운영
+4. Colab을 통한 모델 학습, Flask를 사용해 API형태로 배포
 <br/>
 
 ## CI/CD
-
+<img src="./.github/images/cicd diagram.jpeg">
 <br/>
 
 ##  API 문서
