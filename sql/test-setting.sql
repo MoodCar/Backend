@@ -74,18 +74,6 @@ CREATE TABLE feedback_hashtag(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE feedback_hashtag(
-    id INT NOT NULL AUTO_INCREMENT,
-    diary_content VARCHAR(10000) NOT NULL,
-    hashtag1_original VARCHAR(20),
-    hashtag2_original VARCHAR(20),
-    hashtag3_original VARCHAR(20),
-    hashtag1_changed VARCHAR(20),
-    hashtag2_changed VARCHAR(20),
-    hashtag3_changed VARCHAR(20),
-    opinion VARCHAR(2000),
-    PRIMARY KEY (id)
-);
 
 CREATE TABLE content(
     id INT NOT NULL AUTO_INCREMENT,
