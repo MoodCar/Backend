@@ -74,15 +74,38 @@ CREATE TABLE feedback_hashtag(
     PRIMARY KEY (id)
 );
 
+CREATE TABLE feedback_hashtag(
+    id INT NOT NULL AUTO_INCREMENT,
+    diary_content VARCHAR(10000) NOT NULL,
+    hashtag1_original VARCHAR(20),
+    hashtag2_original VARCHAR(20),
+    hashtag3_original VARCHAR(20),
+    hashtag1_changed VARCHAR(20),
+    hashtag2_changed VARCHAR(20),
+    hashtag3_changed VARCHAR(20),
+    opinion VARCHAR(2000),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE content(
+    id INT NOT NULL AUTO_INCREMENT,
+    type varchar(30),
+    emotion varchar(30),
+    name varchar(50),
+    publisher varchar(50),
+    url varchar(300),
+    PRIMARY KEY(id)
+);
+
 insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트1","google","123124435","qeklnklviqoebbzscklb12312445");
 insert into user(email,name,provider,providerId,token) values ("qwesad123@gmail.com","테스트2","google","435624563","snklfnalknk123ehilg123756i1z");
 insert into user(email,name,provider,providerId,token) values ("bnlik4tn21@gmail.com","테스트3","google","906457842","v2b98by98c189xhiu5ninanklas");
 insert into user(email,name,provider,providerId,token) values ("46nklnszc@gmail.com","테스트4","google","785681234","43btvny981y98cn1noihjnroiqw");
 
-insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("123124435","그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.","놀람", "여행","스페인","비행기");
-insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("435624563","내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.","행복","마스크","빨래","카페");
-insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임");
-insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,written_date) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임","2022-05-15");
+insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values ("123124435","그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.","놀람", "여행","스페인","비행기","285");
+insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values ("435624563","내가 지금 기억할 수 있는 것은, 그녀가 그다지 미인이 아니었다는 사실 뿐이다. 왠지 조금 이상하기도 하다.","행복","마스크","빨래","카페","123");
+insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임","3");
+insert into diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id,written_date) values ("906457842","그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.","중립","독서","청소","게임","57","2022-05-15");
 
 insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (1,22.3,11.5,8.7,5.7,44.8,3.7,3.3);
 insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (2,11.5,8.7,5.7,44.8,3.7,3.3,22.3);

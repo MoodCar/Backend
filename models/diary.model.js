@@ -1,5 +1,6 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
+const { response } = require("../index.js");
 
 function sleep(ms) {
   const wakeUpTime = Date.now() + ms;
@@ -8,6 +9,10 @@ function sleep(ms) {
 
 async function test() {
   await sleep(7000);
+}
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // dummy data. 모델 연결 안되어있을 시 사용
@@ -117,14 +122,26 @@ exports.diaryWrite = async function (providerId, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      /* 나중에 모델 배포시 실제 ngrok 주소 넣어야함.
-      const response = await axios.post("http://33a640b59dsadasd5c.ngrok.io/prediction", {
+      /* 나중에 모델 배포시 실제주소로 변경.
+      const response = await axios.post("http://3.39.173.28:5000/prediction", {
         content: content,
       });*/
       test();
       try {
+        const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+        //let params = response.data.emotion;
+        let params = dummy_emotion;
+        let [row] = await connection.query(getEmotionCountQuery,params);
+        let count = row[0].count;
+        let randNum = rand(1,count) - 1;
+        const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+        params = [dummy_emotion, randNum];
+        //params = [response.data.emotion, randNum];
+        [row] = await connection.query(getContentQuery,params);
+        let contentNumber = row[0].id;
+        
         const writeDiaryQuery =
-          "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3) values (?,?,?,?,?,?)";
+          "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values (?,?,?,?,?,?,?)";
         /* 실제 코드
           let params = [
           providerId,
@@ -133,17 +150,19 @@ exports.diaryWrite = async function (providerId, content) {
           response.data.hashtag_1,
           response.data.hashtag_2,
           response.data.hashtag_3,
+          contentNumber
         ];*/
         // 더미데이터
-        let params = [
+        params = [
           providerId,
           content,
           dummy_emotion,
           dummy_hashtag_1,
           dummy_hashtag_2,
           dummy_hashtag_3,
+          contentNumber
         ];
-        let [row] = await connection.query(writeDiaryQuery, params);
+        [row] = await connection.query(writeDiaryQuery, params);
         let insertId = row.insertId;
         const putEmotionScoreQuery =
           "insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (?,?,?,?,?,?,?,?)";
@@ -187,13 +206,25 @@ exports.diaryUpdate = async function (Id, content) {
     console.log(`##### Connection_pool_GET #####`);
     try {
       /* 나중에 모델 배포시 실제 ngrok 주소 넣어야함.
-      const response = await axios.post("http://33a640b59d1232135c.ngrok.io/prediction", {
+      const response = await axios.post("http://3.39.173.28:5000/prediction", {
         content: content,
       });*/
       test();
       try {
+        const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+        //let params = response.data.emotion;
+        let params = dummy_emotion;
+        let [row] = await connection.query(getEmotionCountQuery,params);
+        let count = row[0].count;
+        let randNum = rand(1,count) - 1;
+        const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+        params = [dummy_emotion, randNum];
+        //params = [response.data.emotion, randNum];
+        [row] = await connection.query(getContentQuery,params);
+        let contentNumber = row[0].id;
+
         const updateDiaryQuery =
-          "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ? where Id = ? ";
+          "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ?,contents_id = ? where Id = ? ";
         /* let params = [
           content,
           response.data.emotion,
@@ -201,13 +232,15 @@ exports.diaryUpdate = async function (Id, content) {
           response.data.hashtag_2,
           response.data.hashtag_3,
           Id,
+          contentNumber
         ];*/
-        let params = [
+        params = [
           content,
           dummy_emotion,
           dummy_hashtag_1,
           dummy_hashtag_2,
           dummy_hashtag_3,
+          contentNumber,
           Id,
         ];
         await connection.query(updateDiaryQuery, params);
@@ -377,8 +410,20 @@ exports.diaryEmotionUpdate = async function (id, emotion) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const updateEmotionDiaryQuery = "update diary set emotion=? where id = ?";
-      let params = [emotion, id];
+      const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+      //let params = response.data.emotion;
+      let params = emotion;
+      let [row] = await connection.query(getEmotionCountQuery,params);
+      let count = row[0].count;
+      let randNum = rand(1,count) - 1;
+      const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+      params = [dummy_emotion, randNum];
+      //params = [response.data.emotion, randNum];
+      [row] = await connection.query(getContentQuery,params);
+      let contentNumber = row[0].id;
+
+      const updateEmotionDiaryQuery = "update diary set emotion=?, contents_id = ? where id = ?";
+      params = [emotion, contentNumber, id];
       await connection.query(updateEmotionDiaryQuery, params);
       connection.release();
       return "Success";
