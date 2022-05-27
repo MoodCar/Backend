@@ -127,18 +127,20 @@ exports.diaryWrite = async function (providerId, content) {
       });*/
       test();
       try {
-        const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+        const getEmotionCountQuery =
+          "SELECT count(*) as count FROM content WHERE emotion = ?";
         //let params = response.data.emotion;
         let params = dummy_emotion;
-        let [row] = await connection.query(getEmotionCountQuery,params);
+        let [row] = await connection.query(getEmotionCountQuery, params);
         let count = row[0].count;
-        let randNum = rand(1,count) - 1;
-        const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+        let randNum = rand(1, count) - 1;
+        const getContentQuery =
+          "SELECT * FROM content WHERE emotion = ? limit ?,1";
         params = [dummy_emotion, randNum];
         //params = [response.data.emotion, randNum];
-        [row] = await connection.query(getContentQuery,params);
+        [row] = await connection.query(getContentQuery, params);
         let contentNumber = row[0].id;
-        
+
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values (?,?,?,?,?,?,?)";
         /* 실제 코드
@@ -159,7 +161,7 @@ exports.diaryWrite = async function (providerId, content) {
           dummy_hashtag_1,
           dummy_hashtag_2,
           dummy_hashtag_3,
-          contentNumber
+          contentNumber,
         ];
         [row] = await connection.query(writeDiaryQuery, params);
         let insertId = row.insertId;
@@ -210,16 +212,18 @@ exports.diaryUpdate = async function (Id, content) {
       });*/
       test();
       try {
-        const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+        const getEmotionCountQuery =
+          "SELECT count(*) as count FROM content WHERE emotion = ?";
         //let params = response.data.emotion;
         let params = dummy_emotion;
-        let [row] = await connection.query(getEmotionCountQuery,params);
+        let [row] = await connection.query(getEmotionCountQuery, params);
         let count = row[0].count;
-        let randNum = rand(1,count) - 1;
-        const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+        let randNum = rand(1, count) - 1;
+        const getContentQuery =
+          "SELECT * FROM content WHERE emotion = ? limit ?,1";
         params = [dummy_emotion, randNum];
         //params = [response.data.emotion, randNum];
-        [row] = await connection.query(getContentQuery,params);
+        [row] = await connection.query(getContentQuery, params);
         let contentNumber = row[0].id;
 
         const updateDiaryQuery =
@@ -409,19 +413,22 @@ exports.diaryEmotionUpdate = async function (id, emotion) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      const getEmotionCountQuery = "SELECT count(*) as count FROM content WHERE emotion = ?";
+      const getEmotionCountQuery =
+        "SELECT count(*) as count FROM content WHERE emotion = ?";
       //let params = response.data.emotion;
       let params = emotion;
-      let [row] = await connection.query(getEmotionCountQuery,params);
+      let [row] = await connection.query(getEmotionCountQuery, params);
       let count = row[0].count;
-      let randNum = rand(1,count) - 1;
-      const getContentQuery = "SELECT * FROM content WHERE emotion = ? limit ?,1";
+      let randNum = rand(1, count) - 1;
+      const getContentQuery =
+        "SELECT * FROM content WHERE emotion = ? limit ?,1";
       params = [dummy_emotion, randNum];
       //params = [response.data.emotion, randNum];
-      [row] = await connection.query(getContentQuery,params);
+      [row] = await connection.query(getContentQuery, params);
       let contentNumber = row[0].id;
 
-      const updateEmotionDiaryQuery = "update diary set emotion=?, contents_id = ? where id = ?";
+      const updateEmotionDiaryQuery =
+        "update diary set emotion=?, contents_id = ? where id = ?";
       params = [emotion, contentNumber, id];
       await connection.query(updateEmotionDiaryQuery, params);
       connection.release();
@@ -465,42 +472,45 @@ exports.diaryHashtagUpdate = async function (
   }
 };
 
-exports.getDiaryToday = async function(providerId){
+// 오늘 작성된 일기 존재여부
+exports.getDiaryToday = async function (providerId) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
-    try{
-      const getDiaryWrittenTodayQuery = "select d.id,d.providerId,d.content,d.emotion,d.contents_id,c.type,c.name,c.publisher,c.url from diary as d left join content as c on d.contents_id = c.id where d.providerId = ? and d.written_date = curdate();"
+    try {
+      const getDiaryWrittenTodayQuery =
+        "select d.id,d.providerId,d.content,d.emotion,d.contents_id,c.type,c.name,c.publisher,c.url from diary as d left join content as c on d.contents_id = c.id where d.providerId = ? and d.written_date = curdate();";
       let params = providerId;
-      const [row] = await connection.query(getDiaryWrittenTodayQuery,params);
-      if(Array.isArray(row) && row.length === 0){
+      const [row] = await connection.query(getDiaryWrittenTodayQuery, params);
+      if (Array.isArray(row) && row.length === 0) {
         connection.release();
         return "Success";
-      }
-      else{
+      } else {
         connection.release();
         return row;
       }
-    }catch(err){
+    } catch (err) {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
     }
-  }catch(err){
+  } catch (err) {
     console.error(`##### DB error #####`);
     return false;
   }
-}
+};
 
-exports.getEmotionCount = async function(providerId){
-  try{
+// 특정 사용자의 감정별 일기 개수
+exports.getEmotionCount = async function (providerId) {
+  try {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
-    try{
-      const getEmotionCountQuery = "SELECT e.emotion, IFNULL(d.CNT, 0) AS 'count' FROM emotion AS e LEFT OUTER JOIN ( SELECT emotion, COUNT(*) AS CNT FROM diary where providerId = ? GROUP BY emotion ) AS d ON e.emotion = d.emotion ORDER BY e.emotion";
+    try {
+      const getEmotionCountQuery =
+        "SELECT e.emotion, IFNULL(d.CNT, 0) AS 'count' FROM emotion AS e LEFT OUTER JOIN ( SELECT emotion, COUNT(*) AS CNT FROM diary where providerId = ? GROUP BY emotion ) AS d ON e.emotion = d.emotion ORDER BY e.emotion";
       let params = providerId;
-      const [row] = await connection.query(getEmotionCountQuery,params);
-      let fearCount =  await row[0].count;
+      const [row] = await connection.query(getEmotionCountQuery, params);
+      let fearCount = await row[0].count;
       let surpriseCount = await row[1].count;
       let angryCount = await row[2].count;
       let sadCount = await row[3].count;
@@ -509,23 +519,46 @@ exports.getEmotionCount = async function(providerId){
       let disgustCount = await row[6].count;
       let countResult = [];
       countResult.push({
-        "공포" : fearCount,
-        "놀람" : surpriseCount,
-        "분노" : angryCount,
-        "슬픔" : sadCount,
-        "중립" : neutralCount,
-        "행복" : happyCount,
-        "혐오" : disgustCount
-      })
+        공포: fearCount,
+        놀람: surpriseCount,
+        분노: angryCount,
+        슬픔: sadCount,
+        중립: neutralCount,
+        행복: happyCount,
+        혐오: disgustCount,
+      });
       connection.release();
       return countResult;
-    }catch(err){
+    } catch (err) {
       console.error(`##### Query error ##### `);
       connection.release();
       return false;
     }
-  }catch(err){
+  } catch (err) {
     console.error(`##### DB error #####`);
     return false;
   }
-}
+};
+
+// 특정 사용자의 감정에 따른 일기 목록
+exports.getDiaryByEmotion = async function (emotion, providerId) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try {
+      const getDiaryByEmotionQuery =
+        "SELECT * from diary where providerId = ? and emotion = ?";
+      let params = [providerId, emotion];
+      const [row] = await connection.query(getDiaryByEmotionQuery, params);
+      connection.release();
+      return row;
+    } catch (err) {
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  } catch (err) {
+    console.error(`##### DB error #####`);
+    return false;
+  }
+};
