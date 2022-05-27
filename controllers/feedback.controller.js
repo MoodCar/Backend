@@ -5,7 +5,7 @@ function isEmpty(str) {
   else return false;
 }
 
-
+// 전체 감정 피드백
 exports.getAllEmotionFeedback = async function (req, res) {
   const emotionFeedbackResult = await feedback.getEmotionFeedbackInfo();
   if (!emotionFeedbackResult) {
@@ -34,6 +34,7 @@ exports.getAllEmotionFeedback = async function (req, res) {
   });
 };
 
+// 전체 해시태그 피드백
 exports.getAllHashtagFeedback = async function (req, res) {
   const hashtagFeedbackResult = await feedback.getHashtagFeedbackInfo();
   if (!hashtagFeedbackResult) {
@@ -62,6 +63,7 @@ exports.getAllHashtagFeedback = async function (req, res) {
   });
 };
 
+// 감정 피드백 등록
 exports.postEmotionFeedback = async function (req, res) {
   if (
     isEmpty(req.body.diary_content) ||
@@ -94,6 +96,7 @@ exports.postEmotionFeedback = async function (req, res) {
   });
 };
 
+// 해시태그 피드백 등록
 exports.postHashtagFeedback = async function (req, res) {
   if (
     isEmpty(req.body.diary_content) ||

@@ -266,6 +266,7 @@ exports.searchDiary = async function (req, res) {
   });
 };
 
+// 일기 감정 수정
 exports.updateEmotion = async function (req, res) {
   if (isEmpty(req.body.emotion)) {
     return res.status(400).send({
@@ -309,6 +310,7 @@ exports.updateEmotion = async function (req, res) {
   });
 };
 
+// 일기 해시태그 수정
 exports.updateHashtag = async function (req, res) {
   if (
     isEmpty(req.body.hashtag_1) ||
@@ -357,6 +359,7 @@ exports.updateHashtag = async function (req, res) {
   });
 };
 
+// 오늘 작성한 일기 존재여부
 exports.getTodayInfo = async function (req, res) {
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
@@ -397,8 +400,8 @@ exports.getTodayInfo = async function (req, res) {
   });
 };
 
-
-exports.fetchEmotionCount = async function(req,res){
+// 특정 사용자의 감정별 일기 개수
+exports.fetchEmotionCount = async function (req, res) {
   const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
   if (!providerIdCheck) {
     return res.status(500).send({
@@ -415,7 +418,7 @@ exports.fetchEmotionCount = async function(req,res){
   }
 
   const emotionCountResult = await Diary.getEmotionCount(req.params.providerId);
-  if(!emotionCountResult){
+  if (!emotionCountResult) {
     return res.status(500).send({
       isSuccess: false,
       code: 500,
@@ -427,5 +430,53 @@ exports.fetchEmotionCount = async function(req,res){
     isSuccess: true,
     code: 200,
   });
+};
 
-}
+// 특정 사용자의 감정별 일기 목록
+exports.getDiaryByEmotion = async function (req, res) {
+  const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
+  if (!providerIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diary by emotion.(providerIdCheck)",
+    });
+  } else if (providerIdCheck == "idCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check id value.",
+    });
+  }
+  let checkEmotion = 0;
+  let arr = ["공포", "행복", "중립", "혐오", "슬픔", "분노", "놀람"];
+  arr.forEach((emotion) => {
+    if (req.body.emotion == emotion) {
+      checkEmotion = 1;
+    }
+  });
+  if (!checkEmotion) {
+    return res.status(400).send({
+      isSuccess: false,
+      code: 400,
+      message: "Check Emotion Input.",
+    });
+  }
+
+  const getDiaryResult = await Diary.getDiaryByEmotion(
+    req.body.emotion,
+    req.params.providerId
+  );
+  if (!getDiaryResult) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get diary by emotion.(getDiaryByEmotion)",
+    });
+  }
+  return res.status(200).send({
+    getDiaryResult,
+    isSuccess: true,
+    code: 200,
+  });
+};

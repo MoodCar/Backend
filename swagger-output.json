@@ -947,6 +947,97 @@
         }
       }
     },
+    "/diaries/emotions/{providerId}":{
+      "post" : {
+        "tags" : ["Diary"],
+        "summary" : "사용자의 감정별 일기 목록 - Frontend",
+        "description": "감정을 입력해 특정 사용자의 전체 일기 중 해당 감정에 해당하는 일기 목록을 받아오는 API입니다.",
+        "parameters" : [
+          {
+            "name": "providerId",
+            "description": "일기 목록을 받아올 유저의 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "emotion",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "emotion": {
+                  "example": "String"
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "200": {
+            "description": "OK (사용자의 감정별 일기목록을 성공적으로 받아옴)",
+            "schema": {
+              "example": {
+                "getDiaryResult": [
+                  {
+                    "id": 3,
+                    "providerId": "906457842",
+                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "중립",
+                    "hashtag_1": "독서",
+                    "hashtag_2": "청소",
+                    "hashtag_3": "게임",
+                    "written_date": "2022-05-24"
+                  },
+                  {
+                    "id": 4,
+                    "providerId": "906457842",
+                    "content": "그녀는 동에서 서로, 나는 서에서 동으로 걷고 있었다. 제법 기분이 좋은 4월의 아침이다.",
+                    "emotion": "중립",
+                    "hashtag_1": "독서",
+                    "hashtag_2": "청소",
+                    "hashtag_3": "게임",
+                    "written_date": "2022-05-15"
+                  }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request (request body (emotion) 이 존재하지 않음)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 400,
+                "message": "Check Emotion Input."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 providerId에 대한 조회 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get diary by emotion."
+              }
+            }
+          }
+        }
+      }
+    },
     "/diaries/hashtags/{id}": {
       "patch": {
         "tags": ["Diary"],
@@ -1094,7 +1185,7 @@
         }
       }
     },
-    "/diaries/emotioncounts/:providerId":{
+    "/diaries/emotioncounts/{providerId}":{
       "get" : {
         "tags" : ["Diary"],
         "summary" : "사용자별 감정별 일기 개수 Count - Frontend",

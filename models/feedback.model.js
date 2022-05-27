@@ -1,5 +1,6 @@
 const { pool } = require("./db.js");
 
+// 전체 감정 피드백
 exports.getEmotionFeedbackInfo = async function () {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -22,6 +23,7 @@ exports.getEmotionFeedbackInfo = async function () {
   }
 };
 
+// 전체 해시태그 피드백
 exports.getHashtagFeedbackInfo = async function () {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -44,6 +46,7 @@ exports.getHashtagFeedbackInfo = async function () {
   }
 };
 
+// 감정 피드백 등록
 exports.postEmotionFeedback = async function (
   content,
   emotion_original,
@@ -73,6 +76,7 @@ exports.postEmotionFeedback = async function (
   }
 };
 
+// 해시태그 피드백 등록
 exports.postHashtagFeedback = async function (
   content,
   hashtag1_original,
