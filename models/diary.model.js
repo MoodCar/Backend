@@ -1,6 +1,5 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
-const { response } = require("../index.js");
 
 function sleep(ms) {
   const wakeUpTime = Date.now() + ms;
@@ -472,9 +471,8 @@ exports.getDiaryToday = async function(providerId){
     console.log(`##### Connection_pool_GET #####`);
     try{
       const getDiaryWrittenTodayQuery = "select d.id,d.providerId,d.content,d.emotion,d.contents_id,c.type,c.name,c.publisher,c.url from diary as d left join content as c on d.contents_id = c.id where d.providerId = ? and d.written_date = curdate();"
-      let params = providerId
+      let params = providerId;
       const [row] = await connection.query(getDiaryWrittenTodayQuery,params);
-      console.log(row);
       if(Array.isArray(row) && row.length === 0){
         connection.release();
         return "Success";
@@ -483,6 +481,44 @@ exports.getDiaryToday = async function(providerId){
         connection.release();
         return row;
       }
+    }catch(err){
+      console.error(`##### Query error ##### `);
+      connection.release();
+      return false;
+    }
+  }catch(err){
+    console.error(`##### DB error #####`);
+    return false;
+  }
+}
+
+exports.getEmotionCount = async function(providerId){
+  try{
+    const connection = await pool.getConnection(async (conn) => conn);
+    console.log(`##### Connection_pool_GET #####`);
+    try{
+      const getEmotionCountQuery = "SELECT e.emotion, IFNULL(d.CNT, 0) AS 'count' FROM emotion AS e LEFT OUTER JOIN ( SELECT emotion, COUNT(*) AS CNT FROM diary where providerId = ? GROUP BY emotion ) AS d ON e.emotion = d.emotion ORDER BY e.emotion";
+      let params = providerId;
+      const [row] = await connection.query(getEmotionCountQuery,params);
+      let fearCount =  await row[0].count;
+      let surpriseCount = await row[1].count;
+      let angryCount = await row[2].count;
+      let sadCount = await row[3].count;
+      let neutralCount = await row[4].count;
+      let happyCount = await row[5].count;
+      let disgustCount = await row[6].count;
+      let countResult = [];
+      countResult.push({
+        "공포" : fearCount,
+        "놀람" : surpriseCount,
+        "분노" : angryCount,
+        "슬픔" : sadCount,
+        "중립" : neutralCount,
+        "행복" : happyCount,
+        "혐오" : disgustCount
+      })
+      connection.release();
+      return countResult;
     }catch(err){
       console.error(`##### Query error ##### `);
       connection.release();

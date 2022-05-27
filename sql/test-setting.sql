@@ -37,6 +37,10 @@ CREATE TABLE diary (
     REFERENCES user (providerId) on delete cascade
 );
 
+CREATE TABLE emotion(
+    emotion varchar(20)
+);
+
 CREATE TABLE emotion_score(
     id INT NOT NULL AUTO_INCREMENT,
     diary_id INT NOT NULL,
@@ -84,6 +88,14 @@ CREATE TABLE content(
     url varchar(300),
     PRIMARY KEY(id)
 );
+
+insert into emotion(emotion) values ("행복");
+insert into emotion(emotion) values ("중립");
+insert into emotion(emotion) values ("공포");
+insert into emotion(emotion) values ("혐오");
+insert into emotion(emotion) values ("분노");
+insert into emotion(emotion) values ("놀람");
+insert into emotion(emotion) values ("슬픔");
 
 insert into user(email,name,provider,providerId,token) values ("asd123@gmail.com","테스트1","google","123124435","qeklnklviqoebbzscklb12312445");
 insert into user(email,name,provider,providerId,token) values ("qwesad123@gmail.com","테스트2","google","435624563","snklfnalknk123ehilg123756i1z");
