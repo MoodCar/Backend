@@ -10,6 +10,9 @@ let updateContent = { content: "너와 함께라면 나는 언제나 행복해" 
 let emotion = {
   emotion: "슬픔",
 };
+let emotion2 = {
+  emotion : "중립"
+};
 
 let hashtag = {
     hashtag_1 : "김밥",
@@ -529,6 +532,85 @@ describe("POST /diaries/searchresults/:providerId", () => {
       });
   });
 });
+
+describe("POST /diaries/emotions/:providerId", () => {
+  it("존재하지 않는 사용자의 감정별 일기목록을 가져오는 Test", (done) => {
+    request(app)
+      .post("/diaries/emotions/90614412523")
+      .send(emotion2)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(404);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Check id value.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("POST /diaries/emotions/:providerId", () => {
+  it("사용자의 감정별 일기목록을 가져오는데 실패하는 Test(body 존재 x)", (done) => {
+    request(app)
+      .post("/diaries/emotions/906457842")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(400);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Check Emotion Input.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("POST /diaries/emotions/:providerId", () => {
+  it("사용자의 감정별 일기목록을 가져오는데 실패하는 Test(잘못된 감정 입력)", (done) => {
+    request(app)
+      .post("/diaries/emotions/906457842")
+      .send({"emotion" : "죽음"})
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(400);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Check Emotion Input.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("POST /diaries/emotions/:providerId", () => {
+  it("사용자의 감정별 일기목록을 가져오는데 성공하는 Test", (done) => {
+    request(app)
+      .post("/diaries/emotions/906457842")
+      .send(emotion2)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(200);
+        res.body.isSuccess.should.be.equal(true);
+        res.body.should.have.property("getDiaryResult");
+        should.exist(res.body.getDiaryResult[0].id);
+        should.exist(res.body.getDiaryResult[0].emotion);
+        should.exist(res.body.getDiaryResult[0].content);
+        should.exist(res.body.getDiaryResult[0].providerId);
+        should.exist(res.body.getDiaryResult[0].hashtag_1);
+        should.exist(res.body.getDiaryResult[0].hashtag_2);
+        should.exist(res.body.getDiaryResult[0].hashtag_3);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
 
 describe("POST /diaries/searchresults/:providerId", () => {
   it("존재하지 않는 값 검색 Test", (done) => {

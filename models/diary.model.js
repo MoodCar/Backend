@@ -547,7 +547,7 @@ exports.getDiaryByEmotion = async function (emotion, providerId) {
     console.log(`##### Connection_pool_GET #####`);
     try {
       const getDiaryByEmotionQuery =
-        "SELECT * from diary where providerId = ? and emotion = ?";
+        "SELECT id,providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,written_date from diary where providerId = ? and emotion = ?";
       let params = [providerId, emotion];
       const [row] = await connection.query(getDiaryByEmotionQuery, params);
       connection.release();
