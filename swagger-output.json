@@ -1094,6 +1094,56 @@
         }
       }
     },
+    "/diaries/emotioncounts/:providerId":{
+      "get" : {
+        "tags" : ["Diary"],
+        "summary" : "사용자별 감정별 일기 개수 Count - Frontend",
+        "description" : "해당 providerId가 작성한 전체 일기 중 어떤 감정에 몇개가 해당하는지에 대한 정보를 리턴합니다.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "description": "통계 정보를 얻고 싶은 providerId Value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses":{
+          "200": {
+            "description": "OK (통계 정보가 성공적으로 리턴됨)" ,
+            "schema": {
+              "example": {
+                "emotionCountResult": [
+                  { "공포": 1, "놀람": 4, "분노": 2, "슬픔": 3, "중립": 3, "행복": 6, "혐오": 0 }
+                ],
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 providerId에 대한 조회 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get emotion count.(getEmotionCount)"
+              }
+            }
+          }
+        }
+      }
+    },
     "/feedbacks/emotions":{
       "post": {
         "tags": ["Feedback"],

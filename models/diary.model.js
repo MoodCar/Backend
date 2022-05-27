@@ -1,6 +1,5 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
-const { response } = require("../index.js");
 
 function sleep(ms) {
   const wakeUpTime = Date.now() + ms;
