@@ -396,3 +396,36 @@ exports.getTodayInfo = async function (req, res) {
     code: 200,
   });
 };
+
+
+exports.fetchEmotionCount = async function(req,res){
+  const providerIdCheck = await Diary.providerIdCheck(req.params.providerId);
+  if (!providerIdCheck) {
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get today's diary info.(providerIdCheck)",
+    });
+  } else if (providerIdCheck == "idCheck") {
+    return res.status(404).send({
+      isSuccess: false,
+      code: 404,
+      message: "Check id value.",
+    });
+  }
+
+  const emotionCountResult = await Diary.getEmotionCount(req.params.providerId);
+  if(!emotionCountResult){
+    return res.status(500).send({
+      isSuccess: false,
+      code: 500,
+      message: "Failed to get emotion count.(getEmotionCount)",
+    });
+  }
+  return res.status(200).send({
+    emotionCountResult,
+    isSuccess: true,
+    code: 200,
+  });
+
+}

@@ -201,6 +201,40 @@ describe("GET /diaries/today/:providerId", () => {
   });
 });
 
+describe("GET /diaries/emotioncounts/:providerId", () => {
+  it("emotioncounts 실패 Test (존재하지 않는 providerId에 대한 요청)", (done) => {
+    request(app)
+      .get("/diaries/emotioncounts/5346872398047")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.code.should.be.equal(404);
+        res.body.isSuccess.should.be.equal(false);
+        res.body.message.should.be.equal("Check id value.");
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("GET /diaries/emotioncounts/:providerId", () => {
+  it("emotioncounts 성공 Test ", (done) => {
+    request(app)
+      .get("/diaries/emotioncounts/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        res.body.should.have.property("emotionCountResult");
+        res.body.code.should.be.equal(200);
+        res.body.isSuccess.should.be.equal(true);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
 describe("POST /diaries/:providerId", () => {
   it("일기 중복 작성 Test", (done) => {
     request(app)

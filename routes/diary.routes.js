@@ -11,4 +11,5 @@ module.exports = app =>{
     app.get("/diaries/today/:providerId", diary.getTodayInfo);
     app.patch("/diaries/emotions/:id",diary.updateEmotion);
     app.patch("/diaries/hashtags/:id",diary.updateHashtag);
+    app.get("/diaries/emotioncounts/:providerId",diary.fetchEmotionCount);
 };
