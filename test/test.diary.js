@@ -6,9 +6,9 @@ let Content = {
   content:
     "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
 };
-let updateContent = { content: "너와 함께했던 행복한 시간들" };
+let updateContent = { content: "오늘은 정말 피곤해서 죽을것 같아요." };
 let emotion = {
-  emotion: "슬픔",
+  emotion: "혐오",
 };
 let emotion2 = {
   emotion : "중립"
@@ -368,6 +368,20 @@ describe("PATCH /diaries/emotions/:Id", () => {
         );
         res.body.code.should.be.equal(200);
         res.body.isSuccess.should.be.equal(true);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("GET /diaries/:providerId", () => {
+  it("일기 목록을 성공적으로 가져오는 Test", (done) => {
+    request(app)
+      .get("/diaries/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
         console.log(res.body);
         done();
       });

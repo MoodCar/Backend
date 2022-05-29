@@ -195,7 +195,7 @@ exports.diaryUpdate = async function (Id, content) {
       let disgust_score = response.data.disgust_score;
       let anger_score = response.data.anger_score;
       let neutral_score = response.data.neutral_score;
-      let surprise_score = response.data.surprise_score;
+      let surprise_score = response.data.suprise_score;
       let sad_score = response.data.sad_score;
       try {
         const getEmotionCountQuery =
@@ -223,7 +223,7 @@ exports.diaryUpdate = async function (Id, content) {
         ];
         await connection.query(updateDiaryQuery, params);
         const updateEmotionScoreQuery =
-          " update emotion_score set happy_score = ?,fear_score = ?,disgust_score = ?,anger_score = ?,neutral_score = ?,surprise_score = ?,sad_score = ? where Id = ?";
+          " update emotion_score set happy_score = ?,fear_score = ?,disgust_score = ?,anger_score = ?,neutral_score = ?,surprise_score = ?,sad_score = ? where diary_id = ?";
         params = [
           happy_score,
           fear_score,
@@ -234,7 +234,6 @@ exports.diaryUpdate = async function (Id, content) {
           sad_score,
           Id,
         ];
-        //params = [response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score, Id];
         await connection.query(updateEmotionScoreQuery, params);
         connection.release();
         return "Success";
