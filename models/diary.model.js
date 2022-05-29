@@ -1,31 +1,11 @@
 const { pool } = require("./db.js");
 const axios = require("axios");
 
-function sleep(ms) {
-  const wakeUpTime = Date.now() + ms;
-  while (Date.now() < wakeUpTime) {}
-}
 
-async function test() {
-  await sleep(7000);
-}
 
 function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-// dummy data. 모델 연결 안되어있을 시 사용
-let dummy_emotion = "행복";
-let dummy_hashtag_1 = "강의";
-let dummy_hashtag_2 = "영화";
-let dummy_hashtag_3 = "떡볶이";
-let dummy_happy_score = 56.3;
-let dummy_fear_score = 11.2;
-let dummy_disgust_score = 5.1;
-let dummy_anger_score = 1.3;
-let dummy_neutral_score = 21.1;
-let dummy_surprise_score = 2.7;
-let dummy_sad_score = 2.3;
 
 // providerId 유효성 체크
 exports.providerIdCheck = async function (providerId) {
@@ -121,47 +101,45 @@ exports.diaryWrite = async function (providerId, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      /* 나중에 모델 배포시 실제주소로 변경.
       const response = await axios.post("http://3.39.173.28:5000/prediction", {
         content: content,
-      });*/
-      test();
+      });
+      let emotion = response.data.emotion;
+      let hashtag_1 = response.data.hashtag_0;
+      let hashtag_2 = response.data.hashtag_1;
+      let hashtag_3 = response.data.hashtag_2;
+      let happy_score = response.data.happy_score;
+      let fear_score = response.data.fear_score;
+      let disgust_score = response.data.disgust_score;
+      let anger_score = response.data.anger_score;
+      let neutral_score = response.data.neutral_score;
+      let surprise_score = response.data.suprise_score;
+      let sad_score = response.data.sad_score;
       try {
+
+        console.log("done!");
         const getEmotionCountQuery =
           "SELECT count(*) as count FROM content WHERE emotion = ?";
-        //let params = response.data.emotion;
-        let params = dummy_emotion;
+        let params = emotion;
         let [row] = await connection.query(getEmotionCountQuery, params);
         let count = row[0].count;
         let randNum = rand(1, count) - 1;
         const getContentQuery =
           "SELECT * FROM content WHERE emotion = ? limit ?,1";
-        params = [dummy_emotion, randNum];
-        //params = [response.data.emotion, randNum];
+        params = [emotion, randNum];
         [row] = await connection.query(getContentQuery, params);
         let contentNumber = row[0].id;
 
         const writeDiaryQuery =
           "INSERT INTO diary(providerId,content,emotion,hashtag_1,hashtag_2,hashtag_3,contents_id) values (?,?,?,?,?,?,?)";
-        /* 실제 코드
-          let params = [
+          params = [
           providerId,
           content,
-          response.data.emotion,
-          response.data.hashtag_1,
-          response.data.hashtag_2,
-          response.data.hashtag_3,
+          emotion,
+          hashtag_1,
+          hashtag_2,
+          hashtag_3,
           contentNumber
-        ];*/
-        // 더미데이터
-        params = [
-          providerId,
-          content,
-          dummy_emotion,
-          dummy_hashtag_1,
-          dummy_hashtag_2,
-          dummy_hashtag_3,
-          contentNumber,
         ];
         [row] = await connection.query(writeDiaryQuery, params);
         let insertId = row.insertId;
@@ -169,15 +147,14 @@ exports.diaryWrite = async function (providerId, content) {
           "insert into emotion_score(diary_id,happy_score,fear_score,disgust_score,anger_score,neutral_score,surprise_score,sad_score) values (?,?,?,?,?,?,?,?)";
         params = [
           insertId,
-          dummy_happy_score,
-          dummy_fear_score,
-          dummy_disgust_score,
-          dummy_anger_score,
-          dummy_neutral_score,
-          dummy_surprise_score,
-          dummy_sad_score,
+          happy_score,
+          fear_score,
+          disgust_score,
+          anger_score,
+          neutral_score,
+          surprise_score,
+          sad_score,
         ];
-        // params = [insertId, response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score];
         await connection.query(putEmotionScoreQuery, params);
         connection.release();
         return "Success";
@@ -206,43 +183,41 @@ exports.diaryUpdate = async function (Id, content) {
     const connection = await pool.getConnection(async (conn) => conn);
     console.log(`##### Connection_pool_GET #####`);
     try {
-      /* 나중에 모델 배포시 실제 ngrok 주소 넣어야함.
       const response = await axios.post("http://3.39.173.28:5000/prediction", {
         content: content,
-      });*/
-      test();
+      });
+      let emotion = response.data.emotion;
+      let hashtag_1 = response.data.hashtag_0;
+      let hashtag_2 = response.data.hashtag_1;
+      let hashtag_3 = response.data.hashtag_2;
+      let happy_score = response.data.happy_score;
+      let fear_score = response.data.fear_score;
+      let disgust_score = response.data.disgust_score;
+      let anger_score = response.data.anger_score;
+      let neutral_score = response.data.neutral_score;
+      let surprise_score = response.data.surprise_score;
+      let sad_score = response.data.sad_score;
       try {
         const getEmotionCountQuery =
           "SELECT count(*) as count FROM content WHERE emotion = ?";
-        //let params = response.data.emotion;
-        let params = dummy_emotion;
+        let params = emotion;
         let [row] = await connection.query(getEmotionCountQuery, params);
         let count = row[0].count;
         let randNum = rand(1, count) - 1;
         const getContentQuery =
           "SELECT * FROM content WHERE emotion = ? limit ?,1";
-        params = [dummy_emotion, randNum];
-        //params = [response.data.emotion, randNum];
+        params = [emotion, randNum];
         [row] = await connection.query(getContentQuery, params);
         let contentNumber = row[0].id;
 
         const updateDiaryQuery =
           "update diary set content = ?,emotion = ?, hashtag_1 = ?, hashtag_2 = ?,hashtag_3 = ?,contents_id = ? where Id = ? ";
-        /* let params = [
-          content,
-          response.data.emotion,
-          response.data.hashtag_1,
-          response.data.hashtag_2,
-          response.data.hashtag_3,
-          Id,
-          contentNumber
-        ];*/
         params = [
           content,
-          dummy_emotion,
-          dummy_hashtag_1,
-          dummy_hashtag_2,
-          dummy_hashtag_3,
+          emotion,
+          hashtag_1,
+          hashtag_2,
+          hashtag_3,
           contentNumber,
           Id,
         ];
@@ -250,13 +225,13 @@ exports.diaryUpdate = async function (Id, content) {
         const updateEmotionScoreQuery =
           " update emotion_score set happy_score = ?,fear_score = ?,disgust_score = ?,anger_score = ?,neutral_score = ?,surprise_score = ?,sad_score = ? where Id = ?";
         params = [
-          dummy_happy_score,
-          dummy_fear_score,
-          dummy_disgust_score,
-          dummy_anger_score,
-          dummy_neutral_score,
-          dummy_surprise_score,
-          dummy_sad_score,
+          happy_score,
+          fear_score,
+          disgust_score,
+          anger_score,
+          neutral_score,
+          surprise_score,
+          sad_score,
           Id,
         ];
         //params = [response.data.happy_score, response.data.fear_score,response.data.disgust_score,response.data.anger_score,response.data.neutral_score,response.data.surprise_score,response.data.sad_score, Id];
@@ -422,7 +397,7 @@ exports.diaryEmotionUpdate = async function (id, emotion) {
       let randNum = rand(1, count) - 1;
       const getContentQuery =
         "SELECT * FROM content WHERE emotion = ? limit ?,1";
-      params = [dummy_emotion, randNum];
+      params = [emotion, randNum];
       //params = [response.data.emotion, randNum];
       [row] = await connection.query(getContentQuery, params);
       let contentNumber = row[0].id;

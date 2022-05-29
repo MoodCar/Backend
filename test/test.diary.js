@@ -6,7 +6,7 @@ let Content = {
   content:
     "그녀의 모습을 목격하는 순간부터 내 가슴은 땅울림처럼 떨리고, 입안은 사막처럼 바싹 말라버린다.",
 };
-let updateContent = { content: "너와 함께라면 나는 언제나 행복해" };
+let updateContent = { content: "너와 함께했던 행복한 시간들" };
 let emotion = {
   emotion: "슬픔",
 };
@@ -177,6 +177,20 @@ describe("POST /diaries/:providerId", () => {
   });
 });
 
+describe("GET /diaries/:providerId", () => {
+  it("일기 목록을 성공적으로 가져오는 Test", (done) => {
+    request(app)
+      .get("/diaries/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
 describe("GET /diaries/today/:providerId", () => {
   it("TodayResult 성공 Test (오늘 작성된 일기 존재)", (done) => {
     request(app)
@@ -285,6 +299,20 @@ describe("PATCH /diaries/:providerId", () => {
         res.body.message.should.be.equal("Updating diary is successfully done");
         res.body.code.should.be.equal(200);
         res.body.isSuccess.should.be.equal(true);
+        console.log(res.body);
+        done();
+      });
+  });
+});
+
+describe("GET /diaries/:providerId", () => {
+  it("일기 목록을 성공적으로 가져오는 Test", (done) => {
+    request(app)
+      .get("/diaries/785681234")
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
         console.log(res.body);
         done();
       });
