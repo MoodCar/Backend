@@ -98,4 +98,41 @@ module.exports = (app) => {
         console.log("error: ", error);
       });
   });
+
+
+  app.get("/admin/contents", (req, res) => {
+    axios.get("http://localhost:3000/contents")
+        .then(response => {
+            if(response.data.getAllResult.length === 0){
+                return res.status(404).send({
+                    isSuccess : false,
+                    code : 404,
+                    message : "There is no content."
+                  });
+            }
+            res.render('contentList', {
+                title: 'Content List',
+                contents: response.data.getAllResult
+            })
+        })
+        .catch(error => {
+            console.log('error: ', error);
+        })
+}
+);
+
+
+  app.get("/admin/contents/details/:id", (req, res) => {
+    axios.delete(`http://localhost:3000/contents/${req.params.id}`)
+        .then(response => {
+            console.log(response.data.deleteResult);
+            res.redirect('/admin/contents');
+        })
+        .catch(error => {
+            console.log('error: ', error);
+        })
+});
+
+
+
 };

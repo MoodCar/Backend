@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha --timeout 10000 --exit",
-    "testsetting" : "NODE_ENV=test node ",
+    "testsetting": "NODE_ENV=test node ",
     "teststart": "NODE_ENV=test nodemon server.js",
     "start": "NODE_ENV=development nodemon server.js"
   },

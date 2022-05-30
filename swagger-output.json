@@ -1464,6 +1464,104 @@
           }
         }
       }
+    },
+    "/contents": {
+      "get": {
+        "tags": ["Content"],
+        "summary": "전체 콘텐츠",
+        "description": "서비스에 등록된 모든 콘텐츠를 가져오는 API입니다.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "getAllResult": [
+                  {
+                    "id": 1,
+                    "type": "음악",
+                    "emotion": "공포",
+                    "name": "The Mole",
+                    "publisher": "Christoffer Moe Ditlevsen",
+                    "url": "https://www.youtube.com/watch?v=VstBuh1ZqqE&ab_channel=Epidemic"
+                  }
+                ],
+                "message": "Getting all Contents is successfully done.",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (서비스에 등록된 콘텐츠가 없는 경우)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Failed to get all contents(empty)"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to get all contents."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{id}": {
+      "delete": {
+        "tags": ["Content"],
+        "summary": "콘텐츠 삭제",
+        "description": "콘텐츠를 삭제하는 API입니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "삭제할 콘텐츠의 ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "example": {
+                "deleteResult": true,
+                "message": "Deleting content is successfully done",
+                "isSuccess": true,
+                "code": 200
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (존재하지 않는 콘텐츠 삭제 요청)",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 404,
+                "message": "Check Content id value."
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "example": {
+                "isSuccess": false,
+                "code": 500,
+                "message": "Failed to delete content."
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
