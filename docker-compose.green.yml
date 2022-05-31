@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  node-app:
+     image: moodcar:node
+     ports:
+          - "3002:3000"

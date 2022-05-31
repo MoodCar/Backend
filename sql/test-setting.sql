@@ -3,6 +3,7 @@ SET foreign_key_checks = 0;
 DROP TABLE if exists user;
 DROP TABLE if exists diary;
 DROP TABLE if exists emotion_score;
+DROP TABLE if exists emotion;
 DROP TABLE if exists feedback_emotion;
 DROP TABLE if exists feedback_hashtag;
 
@@ -79,7 +80,7 @@ CREATE TABLE feedback_hashtag(
 );
 
 
-CREATE TABLE content(
+/*CREATE TABLE content(
     id INT NOT NULL AUTO_INCREMENT,
     type varchar(30),
     emotion varchar(30),
@@ -87,7 +88,7 @@ CREATE TABLE content(
     publisher varchar(50),
     url varchar(300),
     PRIMARY KEY(id)
-);
+);*/
 
 insert into emotion(emotion) values ("행복");
 insert into emotion(emotion) values ("중립");
