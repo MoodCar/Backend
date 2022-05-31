@@ -80,7 +80,7 @@ CREATE TABLE feedback_hashtag(
 );
 
 
-/*CREATE TABLE content(
+/* CREATE TABLE content(
     id INT NOT NULL AUTO_INCREMENT,
     type varchar(30),
     emotion varchar(30),
