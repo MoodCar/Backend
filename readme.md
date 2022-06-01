@@ -3,8 +3,8 @@
 <div align="center">
 <img src="./.github/images/logo4.png"><br/>
 
-## 2022-1 SW캡스톤디자인 Team Project
-## 감정 일기 서비스 Moodcar   
+### 2022-1 SW캡스톤디자인 Team Project
+### 감정 일기 서비스 Moodcar   
 [Moodcar Github](https://github.com/MoodCar)
 <br/>
 </div>
